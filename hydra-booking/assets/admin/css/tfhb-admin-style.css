@@ -1,0 +1,20 @@
+.tfhb-setup-wizard-body #wpadminbar,
+.tfhb-setup-wizard-body #adminmenuwrap,
+.tfhb-setup-wizard-body #adminmenuback,
+.tfhb-setup-wizard-body #wpfooter {
+    display: none;
+}
+
+
+.tfhb-setup-wizard-body #wpcontent {
+    margin-left: 0;
+    padding: 0;
+}
+
+.tfhb-setup-wizard-body #wpbody-content,
+.tfhb-admin-app {
+    padding: 0;
+}
+.tfhb-setup-wizard-body #tfhb-admin-app {
+    margin-top: 0 !important; 
+}

@@ -1,0 +1,4013 @@
+# Copyright (C) 2025 Themefic
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Hydra Booking - All in One Appointment Booking System with Automated Appointment Scheduling. 1.1.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hydra-booking\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-05-29T15:31:11+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: hydra-booking\n"
+
+#. Plugin Name of the plugin
+#: hydra-booking.php
+msgid "Hydra Booking - All in One Appointment Booking System with Automated Appointment Scheduling."
+msgstr ""
+
+#. Plugin URI of the plugin
+#: hydra-booking.php
+msgid "https://hydrabooking.com/"
+msgstr ""
+
+#. Description of the plugin
+#: hydra-booking.php
+msgid "Appointment Booking Plugin with Automated Scheduling - Apple/Outlook/ Google Calendar, WooCommerce, Zoom, Fluent Forms, Zapier, Mailchimp & CRM Integration."
+msgstr ""
+
+#. Author of the plugin
+#: hydra-booking.php
+msgid "Themefic"
+msgstr ""
+
+#. Author URI of the plugin
+#: hydra-booking.php
+msgid "https://themefic.com/"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:32
+#: admin/Controller/AdminMenu.php:33
+#: app/FrontendDashboard/FrontendDashboard.php:221
+#: app/FrontendDashboard/FrontendDashboard.php:483
+msgid "Hydra Booking"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:44
+#: admin/Controller/AdminMenu.php:45
+#: admin/Controller/TransStrings.php:12
+msgid "Dashboard"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:54
+#: admin/Controller/TransStrings.php:172
+msgid "Meetings"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:59
+#: admin/Controller/TransStrings.php:329
+msgid "Bookings"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:64
+#: admin/Controller/TransStrings.php:122
+msgid "Hosts"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:69
+#: admin/Controller/TransStrings.php:302
+#: admin/Controller/TransStrings.php:497
+msgid "Settings"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:74
+msgid "Setup Wizard"
+msgstr ""
+
+#: admin/Controller/AdminMenu.php:103
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: admin/Controller/AuthController.php:104
+msgid "ERROR"
+msgstr ""
+
+#: admin/Controller/AuthController.php:104
+msgid "Your account is not Activate !"
+msgstr ""
+
+#: admin/Controller/BookingController.php:311
+#: admin/Controller/BookingController.php:439
+#: admin/Controller/BookingController.php:535
+#: admin/Controller/BookingController.php:568
+msgid "You are not allowed to access this page"
+msgstr ""
+
+#: admin/Controller/BookingController.php:842
+#: admin/Controller/BookingController.php:1321
+#: admin/Controller/BookingController.php:1411
+msgid "Booking Data Successfully Retrieve!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:890
+msgid "Error while creating Booking"
+msgstr ""
+
+#: admin/Controller/BookingController.php:920
+msgid "Booking Updated Successfully"
+msgstr ""
+
+#: admin/Controller/BookingController.php:920
+msgid "Booking Created Successfully"
+msgstr ""
+
+#: admin/Controller/BookingController.php:937
+#: admin/Controller/BookingController.php:1016
+#: admin/Controller/BookingController.php:1037
+#: admin/Controller/BookingController.php:1209
+#: admin/Controller/BookingController.php:1384
+#: admin/Controller/BookingController.php:1400
+#: admin/Controller/BookingController.php:1435
+#: admin/Controller/BookingController.php:1572
+#: app/Shortcode/HydraBookingShortcode.php:96
+msgid "Invalid Booking"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1002
+msgid "Booking Data Successfully Deleted!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1046
+#: admin/Controller/BookingController.php:1099
+msgid "This Booking is not Confirmed"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1057
+#: admin/Controller/BookingController.php:1109
+msgid "Reminder Email Sent Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1071
+#: admin/Controller/BookingController.php:1090
+#: admin/Controller/BookingController.php:1125
+#: admin/Controller/BookingController.php:1145
+#: admin/Controller/BookingController.php:1497
+msgid "Invalid Attendee"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1153
+msgid "Attendee Status Already Updated!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1183
+#: admin/Controller/BookingController.php:1520
+msgid "Attendee Status Updated Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1225
+msgid "Internal Note Updated Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1240
+msgid "Internal Note Added Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1470
+msgid "Booking Status Updated Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1538
+msgid "A attendee has been canceled by host"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1553
+msgid "Error while updating Attendee Status"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1620
+#: admin/Controller/BookingController.php:1718
+msgid "Booking Updated Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1716
+msgid "Booking Deleted Successfully!"
+msgstr ""
+
+#: admin/Controller/BookingController.php:1815
+#: admin/Controller/BookingController.php:1829
+msgid "Booking Data Exported Successfully!"
+msgstr ""
+
+#: admin/Controller/FrontendDashboard.php:388
+#: app/FrontendDashboard/FrontendDashboard.php:275
+#: app/FrontendDashboard/Shortcode/Signup.php:278
+msgid "Please enter your password"
+msgstr ""
+
+#: admin/Controller/FrontendDashboard.php:393
+#: app/FrontendDashboard/FrontendDashboard.php:277
+#: app/FrontendDashboard/Shortcode/Signup.php:280
+msgid "Password must be include at least one uppercase letter"
+msgstr ""
+
+#: admin/Controller/FrontendDashboard.php:397
+#: app/FrontendDashboard/FrontendDashboard.php:279
+#: app/FrontendDashboard/Shortcode/Signup.php:282
+msgid "Password must be include at least one number"
+msgstr ""
+
+#: admin/Controller/FrontendDashboard.php:401
+#: app/FrontendDashboard/FrontendDashboard.php:281
+#: app/FrontendDashboard/Shortcode/Signup.php:284
+msgid "Password must be include at least one special character"
+msgstr ""
+
+#: admin/Controller/FrontendDashboard.php:405
+#: app/FrontendDashboard/FrontendDashboard.php:283
+#: app/FrontendDashboard/Shortcode/Signup.php:286
+msgid "Password must be at least 8 characters"
+msgstr ""
+
+#: admin/Controller/HostsController.php:183
+msgid "Create new user"
+msgstr ""
+
+#: admin/Controller/HostsController.php:204
+#: admin/Controller/HostsController.php:220
+#: admin/Controller/SettingsController.php:246
+#: admin/Controller/SetupWizard.php:157
+msgid "General Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:234
+#: admin/Controller/TransStrings.php:162
+msgid "Select User"
+msgstr ""
+
+#: admin/Controller/HostsController.php:245
+msgid "Please fill all the fields"
+msgstr ""
+
+#: admin/Controller/HostsController.php:274
+msgid "Invalid User"
+msgstr ""
+
+#: admin/Controller/HostsController.php:287
+msgid "This User is already a host"
+msgstr ""
+
+#: admin/Controller/HostsController.php:328
+#: admin/Controller/HostsController.php:1106
+#: admin/Controller/SetupWizard.php:195
+msgid "Error while creating host"
+msgstr ""
+
+#: admin/Controller/HostsController.php:353
+msgid "Host Created Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:369
+#: admin/Controller/HostsController.php:416
+#: admin/Controller/HostsController.php:431
+#: admin/Controller/HostsController.php:485
+#: admin/Controller/HostsController.php:497
+#: admin/Controller/HostsController.php:556
+#: admin/Controller/HostsController.php:570
+#: admin/Controller/MeetingController.php:1378
+#: admin/Controller/MeetingController.php:1416
+msgid "Invalid Host"
+msgstr ""
+
+#: admin/Controller/HostsController.php:380
+msgid "Error while deleting host"
+msgstr ""
+
+#: admin/Controller/HostsController.php:401
+msgid "Host Deleted Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:469
+msgid "Host Data"
+msgstr ""
+
+#: admin/Controller/HostsController.php:523
+#: admin/Controller/HostsController.php:585
+msgid "Error while updating host"
+msgstr ""
+
+#: admin/Controller/HostsController.php:536
+msgid "Host Information Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:604
+msgid "Host Status Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:816
+#: admin/Controller/SettingsController.php:533
+#: admin/Controller/SettingsController.php:758
+msgid "Integration Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:829
+#: admin/Controller/SettingsController.php:552
+msgid "Google Calendar Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:842
+msgid "Outlook Calendar Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:855
+#: admin/Controller/SettingsController.php:566
+msgid "Apple Calendar Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:866
+#: admin/Controller/SettingsController.php:581
+msgid "Mailchimp Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:877
+#: admin/Controller/SettingsController.php:614
+msgid "Telegram Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:891
+#: admin/Controller/SettingsController.php:633
+msgid "Twilio Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:901
+#: admin/Controller/SettingsController.php:648
+msgid "Slack Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:917
+msgid "Zoho Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:955
+msgid "Host id is Empty"
+msgstr ""
+
+#: admin/Controller/HostsController.php:1007
+msgid "Availability Settings Deleted Successfully"
+msgstr ""
+
+#: admin/Controller/HostsController.php:1023
+#: admin/Controller/SettingsController.php:298
+msgid "Something Went Wrong, Please Try Again Later."
+msgstr ""
+
+#: admin/Controller/HostsController.php:1144
+#: admin/Controller/SettingsController.php:385
+msgid "Availability Updated Successfully"
+msgstr ""
+
+#: admin/Controller/ImportExport.php:100
+msgid "Booking Data Imported Successfully"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:246
+#: admin/Controller/MeetingController.php:634
+msgid "Meeting Data Successfully Retrieve!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:275
+msgid "Meeting Category Data Successfully Retrieve!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:293
+msgid "Invalid taxonomy."
+msgstr ""
+
+#: admin/Controller/MeetingController.php:364
+msgid "Meeting Category Successfully Added!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:364
+msgid "Meeting Category Successfully Updated!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:422
+msgid "Webhook Successfully Updated!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:461
+msgid "Webhook Successfully Deleted!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:468
+msgid "Webhook key does not exist!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:530
+msgid "Integrations Successfully Updated!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:569
+msgid "Integrations Successfully Deleted!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:576
+msgid "Integrations key does not exist!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:590
+msgid "Term ID is required."
+msgstr ""
+
+#: admin/Controller/MeetingController.php:618
+msgid "Meeting Category Successfully Deleted!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:655
+msgid "Host not found"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:664
+msgid "Please activate the pro version to create one to group meeting"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:699
+#: admin/Controller/SetupWizard.php:281
+msgid "Error while creating meeting"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:716
+msgid "Meeting Created Successfully!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:732
+#: admin/Controller/MeetingController.php:832
+#: admin/Controller/MeetingController.php:847
+#: admin/Controller/MeetingController.php:1148
+#: admin/Controller/MeetingController.php:1160
+msgid "Invalid Meeting"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:750
+msgid "Error while deleting meeting"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:770
+msgid "Meeting Deleted Successfully!"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:979
+msgid "Install and activate the Fluent CRM plugin."
+msgstr ""
+
+#: admin/Controller/MeetingController.php:982
+msgid "Activate the Fluent CRM plugin."
+msgstr ""
+
+#: admin/Controller/MeetingController.php:1133
+msgid "Meeting Data"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:1279
+msgid "Error while updating meeting"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:1298
+msgid "Meeting Updated Successfully"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:1364
+msgid "Meeting Cloned Successfully"
+msgstr ""
+
+#: admin/Controller/MeetingController.php:1431
+msgid "Host Availability Data"
+msgstr ""
+
+#: admin/Controller/Notification.php:115
+msgid "Notification Marked as Read"
+msgstr ""
+
+#: admin/Controller/ScheduleController.php:45
+#: admin/Controller/ScheduleController.php:51
+msgid "Hydra After booking Completed"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:350
+msgid "Availability Not Inserted"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:365
+msgid "Availability Not Updated"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:411
+msgid "Availability Deleted Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:598
+msgid "Paypal Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:662
+msgid "Webhook Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:676
+msgid "FluentCRM Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:690
+msgid "Zoho CRM Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:703
+msgid "Pabbly Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:716
+msgid "Zapier Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:732
+msgid " Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:736
+msgid "Install and activate the Gravity Forms plugin if it is not already installed or active."
+msgstr ""
+
+#: admin/Controller/SettingsController.php:740
+msgid "Install and activate the Contact Form 7 plugin if it is not already installed or active."
+msgstr ""
+
+#: admin/Controller/SettingsController.php:747
+msgid "Install and activate the Fluent Forms plugin if it is not already installed or active."
+msgstr ""
+
+#: admin/Controller/SettingsController.php:795
+msgid "WooCommerce Installed Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:800
+msgid "WooCommerce Not Installed"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:950
+msgid "Notification Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:1028
+msgid "Hosts Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/SettingsController.php:1058
+msgid "Appearance Settings Updated Successfully"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:13
+msgid "Booking Overview"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:14
+msgid "A complete view of all your bookings at a glance."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:15
+msgid "Today"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:16
+msgid "Last 7 week"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:17
+msgid "Last 30 Days"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:18
+msgid "Last 3 months"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:19
+msgid "Apply"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:20
+msgid "Total Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:21
+msgid "VS"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:22
+msgid "Last"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:23
+msgid "days"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:24
+msgid "Total Earnings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:25
+msgid "Completed Bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:26
+msgid "Canceled Bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:27
+msgid "Recent Bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:28
+msgid "Free"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:29
+msgid "No Upcoming Meetings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:30
+msgid "Upcoming Meetings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:31
+msgid "No Recent Bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:32
+msgid "Booking Statistics"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:33
+msgid "Last 7 Days"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:34
+msgid "This month"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:35
+msgid "This Year"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:38
+msgid "Back to Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:39
+msgid "Customer name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:40
+msgid "Jhon Deo"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:41
+msgid "Customer email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:42
+msgid "name@yourmail.com"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:43
+msgid "Client Time zone"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:44
+msgid "Select Time Zone"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:45
+msgid "Select Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:46
+msgid "Select Your Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:47
+msgid "Select Team Member"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:48
+msgid "Select Location"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:49
+msgid "Select Date"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:50
+msgid "Enter schedule title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:51
+msgid "Select Time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:52
+msgid "Select Booking Time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:53
+#: includes/license/HydraBooking.php:176
+msgid "Status"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:54
+msgid "Select Booking status"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:55
+msgid "Create Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:56
+msgid "Has booked a meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:57
+msgid "Re-Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:58
+msgid "You are Re-book the booking:"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:59
+msgid "Re-book"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:60
+msgid "Select Status"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:61
+msgid "Re-book Now"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:62
+msgid "Select Time Slot"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:63
+#: admin/Controller/TransStrings.php:104
+#: app/Content/Template/meeting-confirmation.php:44
+msgid "Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:66
+msgid "Delete"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:67
+msgid "Export as CSV"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:68
+msgid "Add New Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:69
+msgid "Are you absolutely sure?"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:70
+msgid "Data and bookings associated with this meeting will be deleted. It will not affect previously scheduled meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:71
+msgid "Cancel"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:72
+msgid "Export Bookings as CSV"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:73
+msgid "Date Range"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:74
+msgid "Select Date Range"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:75
+msgid "From"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:76
+msgid "To"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:77
+msgid "Export Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:78
+#: app/Content/Template/meeting-cencel.php:43
+msgid "Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:79
+msgid "Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:80
+msgid "Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:81
+msgid "Meeting Location"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:82
+msgid "Date"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:83
+msgid "Time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:84
+msgid "Date & Time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:85
+msgid "Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:86
+msgid "Duration"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:87
+msgid "Action"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:88
+msgid "minutes"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:89
+msgid "Confirmed"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:90
+msgid "Pending"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:91
+msgid "Re-schedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:92
+msgid "Canceled"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:93
+msgid "Previous"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:94
+msgid "Next"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:95
+msgid "No Booking Created"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:97
+msgid "Your Previous Booking Time:"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:98
+msgid "Update Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:99
+msgid "Meeting Details"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:100
+msgid "Timezone"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:101
+msgid "Durations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:102
+msgid "Attendee Details"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:103
+msgid "Booked At"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:105
+msgid "Timeframe:"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:106
+msgid "Total Payment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:107
+msgid "Mark as Complete"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:108
+msgid "Re-Schedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:109
+msgid "No, Don't cancel"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:110
+msgid "Yes, Cancel"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:111
+msgid "Cancel Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:112
+msgid "Minutes"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:113
+#: app/Content/Template/meeting-info.php:142
+msgid "Google Meet"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:114
+#: admin/Controller/TransStrings.php:599
+#: app/Content/Template/meeting-info.php:140
+msgid "Zoom"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:115
+msgid "Internal Note"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:116
+msgid "Name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:117
+msgid "Activity Details"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:118
+msgid "N/A"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:123
+msgid "Use existing availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:124
+msgid "Custom availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:125
+msgid "Choose Schedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:126
+msgid "Availability title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:127
+msgid "Weekly hours"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:128
+msgid "Add date overrides"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:129
+msgid "Add dates when your availability changes from your daily hours"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:130
+msgid "Availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:131
+msgid "Set up booking times when you are available"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:132
+msgid "Add New Availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:133
+msgid "Save & Continue"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:135
+msgid "Before connecting make sure you provide the necessary credentials to"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:136
+msgid "Settings  Integrations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:137
+msgid "Change"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:138
+msgid "Profile image"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:139
+msgid "Cover image"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:140
+msgid "Cover image is displayed in the meeting forms."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:141
+msgid "Recommended Image Size: 120x120px"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:142
+msgid "General Information"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:143
+msgid "First name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:144
+msgid "Type your first name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:145
+msgid "Last name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:146
+msgid "Type your last name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:147
+msgid "Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:148
+msgid "Type your email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:149
+msgid "Time zone"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:150
+msgid "Mobile"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:151
+msgid "Type your mobile no"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:152
+msgid "Others Information"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:153
+msgid "Deleting the host from settings will remove all data and bookings linked to this meeting. Previously scheduled meetings will not be impacted."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:154
+msgid "Active"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:155
+msgid "Disable"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:156
+msgid "Edit"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:157
+msgid "Profile"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:158
+msgid "Information"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:159
+msgid "Calendars"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:160
+msgid "Integrations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:161
+msgid "Add New Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:163
+msgid "Username"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:164
+msgid "Type Username"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:165
+msgid "Type User Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:166
+#: app/FrontendDashboard/Shortcode/Login.php:96
+msgid "Password"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:167
+msgid "Type User Password"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:168
+msgid "Create Hosts"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:169
+msgid "Not Connected"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:173
+msgid "Availability Range for this Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:174
+msgid "How many days can the invitee schedule?"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:175
+msgid "Indefinitely into the future"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:176
+msgid "Meeting will be go for indefinitely into the future"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:177
+msgid "Specific date range"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:178
+msgid "Meeting will be only available on specific dates"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:179
+msgid "Start"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:180
+msgid "End"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:181
+msgid "Select Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:182
+msgid "Create Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:183
+msgid "Schedule Preview"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:184
+msgid "Unavailable"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:185
+msgid "Which hours are you free?"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:186
+msgid "Mark unavailable (All day)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:187
+msgid "Add override"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:188
+msgid "Add an override"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:189
+msgid "Create One-to-One booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:190
+msgid "Create One-to-Group booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:191
+msgid "Meeting title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:192
+msgid "Type meeting title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:193
+msgid "Description"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:194
+msgid "Describe about meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:195
+msgid "Select Meetings Duration"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:196
+msgid "Type Custom Duration"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:197
+msgid "Location"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:198
+msgid "Address"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:199
+msgid "Enter Address"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:200
+msgid "Add Custom Location"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:201
+msgid "Phone Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:202
+msgid "Enter Phone Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:203
+msgid "Zoom is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:204
+msgid "Please Configure"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:205
+msgid "Google Meet is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:206
+msgid "Add Another Location"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:207
+msgid "Max invitees in a spot"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:208
+msgid "Display remaining spots on booking page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:209
+msgid "Share"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:210
+#: app/Content/Template/meeting-form.php:42
+msgid "Details"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:211
+msgid "Limits"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:212
+msgid "Questions"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:213
+msgid "Notifications"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:214
+msgid "Payment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:215
+msgid "Select Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:216
+msgid "Create Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:217
+msgid "Create Meeting Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:218
+msgid "Category Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:219
+msgid "Save Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:220
+msgid "Webhook Integration"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:221
+msgid "Webhook integration enables automated data transfer between apps, allowing real-time communication and custom API interactions."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:222
+msgid "Add New Integrations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:223
+msgid "Buffer time before meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:224
+msgid "Buffer time after meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:225
+msgid "Booking frequency"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:226
+msgid "Limit how many times this meeting can be booked"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:227
+msgid "Meeting interval"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:228
+msgid "Default interval"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:229
+msgid "Recurring Event"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:230
+msgid "Set up a repeating schedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:231
+msgid "Repeats every"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:232
+msgid "Maximum number of bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:233
+msgid "Use meeting length (default)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:234
+msgid "Attendee can cancel this meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:235
+msgid "Attendee can reschedule this meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:236
+msgid "Filter"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:237
+msgid "All Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:238
+msgid "All Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:239
+msgid "Reset Filter"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:240
+msgid "Create New Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:241
+msgid "One to One"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:242
+msgid "One host with one invitee. Good for: 1:1 interview, coffee chats"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:243
+msgid "Pro"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:244
+msgid "One to Group"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:245
+msgid "One host with group of invitee. Good for: webinars, online clasess"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:246
+msgid "Booked"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:247
+msgid "Clone"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:248
+msgid "Preview"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:249
+msgid "No Meeting Created"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:250
+msgid "To Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:251
+msgid "To Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:252
+msgid "Booking Confirmation"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:253
+msgid "Booking Pending"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:254
+msgid "Send Email to Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:255
+msgid "Booking Cancel"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:256
+msgid "Booking Reschedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:257
+msgid "Booking Reminder"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:258
+msgid "Send Email to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:259
+msgid "Payment for this Meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:260
+msgid "Securely process payment for this meeting using WooCommerce Payments, Stripe, or PayPal for a seamless transaction experience."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:261
+msgid "Payment Method"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:262
+msgid "Payment ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:263
+msgid "Select Payment Method"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:264
+msgid "Woocommerce is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:265
+msgid "Paypal is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:266
+msgid "Stripe is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:267
+msgid "Selecte Product"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:268
+msgid "Price"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:269
+msgid "Currency"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:270
+msgid "Save & Finish"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:271
+msgid "Meeting Questions for Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:272
+msgid "Create your own booking page questions"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:273
+msgid "Create custom form"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:274
+msgid "Use existing form"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:275
+msgid "Add more questions"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:276
+msgid "Add Question for Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:277
+msgid "Select Form Types"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:278
+msgid "Select Form"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:279
+msgid "Contact Form 7 is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:280
+msgid "Fluent Forms is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:281
+msgid "Gravity Forms is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:282
+msgid "Add New Webhook"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:283
+msgid "Back"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:284
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:285
+msgid "Webhook URL"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:286
+msgid "Type your Webhook URL"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:287
+msgid "Request Method"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:288
+msgid "Request Format"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:289
+msgid "Event Triggers"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:290
+msgid "Request Header"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:291
+msgid "Request Headers"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:292
+msgid "Header Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:293
+msgid "Header Value"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:294
+msgid "Request Body"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:295
+msgid "Request Fields"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:296
+msgid "Enter Name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:297
+msgid "Enter Value"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:298
+msgid "Enable this Webhook"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:299
+msgid "Save Webhook"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:303
+msgid "Appearance"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:304
+msgid "Set up your appearance settings for bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:305
+msgid "View Documentation"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:306
+msgid "Custom brand colors"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:307
+msgid "Customize your own brand color into your booking page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:308
+msgid "Primary Color"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:309
+msgid "Select Color"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:310
+msgid "Secondary Color"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:311
+msgid "Paragraph Color"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:312
+msgid "Typography"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:313
+msgid "Set your own typography for your brand"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:314
+msgid "For title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:315
+msgid "Save"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:316
+msgid "Meeting Category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:317
+msgid "Create and edit Meeting Category to organize your meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:318
+msgid "General Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:319
+msgid "Manage your time zone settings and bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:320
+msgid "Date and Time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:321
+msgid "Configure your date and time"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:322
+msgid "Admin Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:323
+msgid "Type your Admin Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:324
+msgid "Time format"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:325
+msgid "Select Time Format"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:326
+msgid "Week start from"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:327
+msgid "Select country for phone code"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:328
+msgid "Select Country"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:330
+msgid "Manage your bookings and reservations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:331
+msgid "Bookings will be completed automatically after"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:332
+msgid "Minimum time required before Booking/Cancel/Reschedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:333
+msgid "Confirmed bookings by default."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:334
+msgid "Confirmed reschedule by default."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:335
+msgid "Update General Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:336
+msgid "Host Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:337
+msgid "Manage the settings and preferences for the hosts"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:338
+msgid "Information Builder"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:339
+msgid "Permissions"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:340
+msgid "Update Host Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:341
+msgid "Configure integration for conferencing, calendar and payment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:342
+msgid "License Management"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:343
+msgid "Manage your HydraBooking Pro license"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:344
+msgid "Unlock Advanced Capabilities with HydraBooking Pro !"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:345
+msgid "Please upgrade to get all the advanced features."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:346
+msgid "License Info"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:347
+msgid "Explore licensing options and benefits for advanced features."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:348
+#: includes/license/HydraBooking.php:179
+msgid "Valid"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:349
+#: includes/license/HydraBooking.php:181
+msgid "Invalid"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:350
+#: includes/license/HydraBooking.php:188
+msgid "License Type"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:351
+#: includes/license/HydraBooking.php:195
+msgid "License Expired on"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:352
+msgid "Renew"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:353
+#: includes/license/HydraBooking.php:208
+msgid "Support Expired on"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:354
+#: includes/license/HydraBooking.php:221
+msgid "Your License Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:355
+msgid "Deactivate"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:356
+msgid "Confirm License Deactivation!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:357
+msgid "Deactivating the license will remove access to all premium features."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:358
+msgid "License Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:359
+msgid "Enter your License key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:360
+msgid "Insert your license key here. You can get it from our Client Portal -> Support -> License keys."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:361
+msgid "License Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:362
+msgid "Please enter the email address you used for purchasing the plugin."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:363
+msgid "Activate"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:364
+msgid "Organize booking confirmation/cancel/reschedule/reminder notification for host and attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:365
+msgid "Send Email to Host for Booking Pending"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:366
+msgid "Send Email to Host for Booking Cancels"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:367
+msgid "General"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:368
+msgid "All"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:369
+msgid "Conference"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:370
+msgid "Payments"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:371
+msgid "Marketing Tools"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:372
+msgid "Forms"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:373
+msgid "License"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:374
+msgid "Frontend Dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:375
+msgid "Frontend Dashboard Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:376
+msgid "Select Color Palette for Dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:377
+msgid "Customize your brand colors for the Frontend Dashboard."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:378
+msgid "Manage the settings and preferences for the frontend dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:379
+msgid "Signup"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:380
+msgid "LogIn"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:381
+msgid "Manage the general settings and preferences for the frontend dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:382
+msgid "Dashboard Logo"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:383
+msgid "Mobile Logo"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:384
+msgid "This logo is used for the mobile version of the dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:385
+msgid "This logo serves as the main header image of the dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:386
+msgid "Signup Page Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:387
+msgid "Customize the settings for the signup page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:388
+msgid "Choose a page that will be used as the Registration Page."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:389
+msgid "Registration Page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:390
+msgid "Select the destination for users after they register."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:391
+msgid "Choose your Page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:392
+msgid "Select the destination page for users after they log in."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:393
+msgid "Login Page Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:394
+msgid "Customize the settings for the login page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:395
+msgid "Choose a page to serve as the Login Page."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:396
+msgid "Login Page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:397
+msgid "Select Login Page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:398
+msgid "Select the destination for users after they log in."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:399
+msgid "Login Redirect Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:400
+msgid "Select Login Redirect Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:401
+msgid "Logo preference"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:402
+msgid "JPG, JPEG, PNG. Max 5 MB."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:403
+msgid "Choose images or drag & drop it here."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:404
+msgid "This only applies to your Frontend Dashboard."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:405
+msgid "Color Palette for Dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:406
+msgid "Default Palette"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:407
+msgid "Custom Palette"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:408
+msgid "Primary Color (Default)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:409
+msgid "Primary Color (Hover)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:410
+msgid "Secondary Color (Default)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:411
+msgid "Secondary Color (Hover)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:412
+msgid "Text Color (Title)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:413
+msgid "Text Color (Paragraph)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:414
+msgid "Surface Color (Primary)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:415
+msgid "Surface Color (Background)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:416
+msgid "Surface Color (Border)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:417
+msgid "Surface Color (Border Hover)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:418
+msgid "Surface Color (Input Field)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:419
+msgid "Use shortcode [hydra_signup_form] to show Sign up form in post/page/widget."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:420
+msgid "Sign up Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:421
+msgid "Sign up Sub-title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:422
+msgid "Sign up Page"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:423
+msgid "Enable Email Verification"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:424
+msgid "Use shortcode [hydra_login_form] to show login form in post/page/widget."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:425
+msgid "Login Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:426
+msgid "Login Sub-title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:427
+msgid "Upload logo"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:428
+msgid "Upload Responsive logo"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:429
+msgid "Type login sub-title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:430
+msgid "Header Background"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:437
+msgid "Hi,"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:438
+msgid "My Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:441
+msgid "Select Currency"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:444
+msgid "Welcome to HydraBooking!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:445
+msgid "Thank you for choosing HydraBooking, the premier solution for effortless appointment and booking scheduling"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:446
+msgid "Enter your email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:447
+msgid "Receive updates and promotions"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:448
+msgid "Get Started in a Minute"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:449
+msgid "Congratulations! You are All Set Up!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:450
+msgid "You have successfully installed and activated Hydrabooking, configured your settings, connected your calendar, customized your booking forms, and embedded them on your website."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:451
+msgid "All Integrations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:452
+msgid "Visit Dashboard"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:453
+msgid "Your Meeting is ready!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:454
+msgid "Simplify Your Work with HydraBooking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:455
+msgid "Our intuitive setup process makes HydraBooking a breeze to use, even for non-technical users."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:456
+msgid "Your business type?"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:457
+msgid "Skip"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:458
+msgid "Experience HydraBooking in Action (Instantly!)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:459
+msgid "It helps you customize the booking process to fit your workflow and make things run more smoothly."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:460
+msgid "Create demo meeting"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:461
+msgid "Take control of your schedule"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:462
+msgid "Make your appointment booking process even easier by simply setting your availability."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:463
+msgid "You’re currently using HydraBooking in limited mode. To access advanced features, provide your license key now!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:464
+msgid "Let’s Get Started!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:465
+msgid "Enter your email address"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:466
+msgid "Unlock this Feature"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:467
+msgid "Please provide your email address. We’ll send your key directly to your inbox."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:468
+msgid "Send me the License key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:469
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:470
+msgid "Perfect"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:471
+msgid "Create a Free License Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:472
+msgid "Please Install the HydraBooking Pro !"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:473
+msgid "You already activated the HydraBooking Pro License, Install the Hydra Booking Pro Plugin."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:474
+msgid "Already used!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:475
+msgid "You already used this email. Use another email address or click on the following link to obtain the previous license key."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:476
+msgid "Check your inbox and set a password for your security then paste the license key below."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:477
+msgid "Sent successfully!"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:478
+msgid "Unlock Features"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:481
+msgid "Mark as read"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:482
+msgid "Save Availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:483
+msgid "Update Availability"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:484
+msgid "Default"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:487
+msgid "Apple Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:488
+msgid "New standard in online payment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:489
+msgid "Enable the calendars you want to check for conflicts to prevent double bookings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:490
+msgid "Apple ID (Email)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:491
+msgid "Enter Apple ID (Email)"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:492
+msgid "App Specific Password"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:493
+msgid "Enter App Specific Password"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:494
+msgid "Google Calendar/Meet"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:495
+msgid "Connect your Google Calendar/Meet to sync your booked events."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:496
+msgid "Go To Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:498
+msgid "Get Access Token"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:499
+msgid "Google Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:500
+msgid "Outlook Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:501
+msgid "Connect your Outlook Calendar to sync your booked events."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:502
+msgid "Upcoming"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:503
+msgid "Completed"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:504
+msgid "Latest"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:505
+msgid "Events"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:506
+msgid "Attendees"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:507
+msgid "Type"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:508
+msgid "Zoho"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:509
+msgid "Connect"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:510
+msgid "Connect Your Zoho Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:511
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Zoho Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:512
+msgid "Zoho Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:513
+msgid "Enter Your Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:514
+msgid "Zoho Client Secret"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:515
+msgid "Enter Your Client Secret"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:516
+msgid "Zoho Redirect URL"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:517
+msgid "Enter Your Redirect URL"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:518
+msgid "Save & Validate"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:519
+msgid "Shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:520
+msgid "Shortcodes"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:521
+msgid "Shortcodes Settings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:522
+msgid "Manage and customize your shortcodes for Hydrabooking."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:523
+msgid "Meetings Shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:524
+msgid "Generate a shortcode to embed your meetings on your website."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:525
+msgid "Shortcode title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:526
+msgid "Shortcode sub-title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:527
+msgid "Type a title for your shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:528
+msgid "Type a sub-title for your shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:529
+msgid "Select meeting category"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:530
+msgid "Sort By"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:531
+msgid "Order By"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:532
+msgid "Reset"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:533
+msgid "Generate"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:534
+msgid "Display Limit"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:535
+msgid "Meeting category : All"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:536
+msgid "Select host : All"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:537
+msgid "Hosts Shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:538
+msgid "Generate a shortcode to embed your meeting hosts list on your website."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:539
+msgid "Categories Shortcode"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:540
+msgid "Generate a shortcode to embed your meetings categories list on your website."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:541
+msgid "Meeting Categories"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:542
+msgid "Export as .ics"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:543
+msgid "Download as .ics"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:544
+msgid "More"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:545
+msgid "Embed code"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:546
+msgid "Copy Link"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:549
+msgid "Contact Form 7"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:550
+msgid "Install and enable Contact Form 7 for meeting forms."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:551
+msgid "Fluent CRM"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:552
+msgid "Integrate FluentCRM to manage and track customer data easily."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:553
+msgid "Fluent Forms"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:554
+msgid "Install and enable Fluent Forms for meeting forms."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:555
+msgid "Forminator"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:556
+msgid "Install and enable Forminator for meeting forms."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:557
+msgid "Connect Google Calendar/Meet API to add events and create video calls."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:558
+msgid "Add Google Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:559
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Google Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:560
+msgid "Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:561
+msgid "Enter Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:562
+msgid "Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:563
+msgid "Enter Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:564
+msgid "Redirect Url"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:565
+msgid "Enter Redirect Url"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:566
+msgid "Copy URL"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:567
+msgid "Gravity Forms"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:568
+msgid "Install and enable Gravity Forms for meeting forms."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:569
+msgid "Mailchimp"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:570
+msgid "Integrate Mailchimp API to collect attendee emails and info."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:571
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Mailchimp Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:572
+msgid "Mailchimp API Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:573
+msgid "Enter Your API Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:574
+msgid "Connect Outlook Calendar/Teams API for event creation."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:575
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Outlook Calendar"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:576
+msgid "PayPal"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:577
+msgid "Connect PayPal API for easy online payment solutions."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:578
+msgid "Connect Your Paypal Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:579
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Paypal Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:580
+msgid "Environment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:581
+msgid "Paypal Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:582
+msgid "Paypal Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:583
+msgid "Enter Your Paypal Secret"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:584
+msgid "Stripe"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:585
+msgid "Integrate Stripe API for secure payment processing."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:586
+msgid "Connect Your Stripe Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:587
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:588
+msgid "Stripe Public Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:589
+msgid "Enter Your Public Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:590
+msgid "Stripe Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:591
+msgid "Enter Your Stripe Secret"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:592
+msgid "Webhook"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:593
+msgid "Set up webhook integration to send data via custom API."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:594
+msgid "Woo Payment"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:595
+msgid "Connect WooCommerce for manage booking payment."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:596
+msgid "Connected"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:597
+msgid "Zoho CRM"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:598
+msgid "Implement Zoho CRM for comprehensive sales and marketing automation."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:600
+msgid "Connect Zoom API to configure virtual meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:601
+msgid "Add New Zoom User Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:602
+msgid "Please read the documentation here for step by step guide to know how you can get api credentials from Zoom Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:603
+msgid "Zoom Account ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:604
+msgid "Enter Your Account ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:605
+msgid "Zoom App Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:606
+msgid "Enter Your App Client ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:607
+msgid "Zoom App Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:608
+msgid "Enter Your App Secret Key"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:609
+msgid "Telegram"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:610
+msgid "Connect Telegram API to configure virtual meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:611
+msgid "Add New Telegram Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:612
+msgid "Please read the documentation here for step by step guide to know how you can get BOT Token and Chat ID from Telegram Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:613
+msgid "Telegram BOT Token"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:614
+msgid "Enter Your Telegram BOT Token"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:615
+msgid "Telegram Chat ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:616
+msgid "Enter Your Telegram Chat ID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:617
+msgid "Whatsapp"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:618
+msgid "Connect Whatsapp API to configure virtual meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:619
+msgid "Add Whatsapp Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:620
+msgid "Please read the documentation here for step by step guide to know how you can get Access Token from Whatsapp Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:621
+msgid "Whatsapp Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:622
+msgid "Enter Your Whatsapp Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:623
+msgid "Access Token"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:624
+msgid "Enter Your Access Token"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:625
+msgid "Twilio"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:626
+msgid "Connect Twilio API to configure virtual meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:627
+msgid "Add Twilio Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:628
+msgid "Please read the documentation here for step by step guide to know how you can get Access Token from Twilio Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:629
+msgid "Account SID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:630
+msgid "Enter Your Account SID"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:631
+msgid "From Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:632
+msgid "Enter Your From Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:633
+msgid "Receiver Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:634
+msgid "Enter Your Receiver Number"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:635
+msgid "Slack"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:636
+msgid "Connect Slack API to configure virtual meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:637
+msgid "Add Slack Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:638
+msgid "Please read the documentation here for step by step guide to know how you can get Access Token from Slack Account"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:639
+msgid "Channel Name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:640
+msgid "Enter Your Channel Name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:644
+msgid "Integration"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:645
+msgid "Integrate Mailchimp, FluentCRM, and Zoho for managing emails, tracking leads, and enhancing customer engagement."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:646
+msgid "Integrations Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:647
+msgid "Type your Integrations Title"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:648
+msgid "Select Audience"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:649
+msgid "FluentCRM Lists"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:650
+msgid "Select FluentCRM List"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:651
+msgid "Contact Tags"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:652
+msgid "Select Contact Tag"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:653
+msgid "Modules"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:654
+msgid "Select Modules"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:655
+msgid "Select integrations"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:656
+msgid "Mailchimp is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:657
+msgid "ZohoCRM is not connected."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:658
+msgid "Share link"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:659
+msgid "Short code"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:660
+msgid "Copy Code"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:663
+msgid "Select Template"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:664
+msgid "Enter From Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:665
+msgid "Enter Mail Subject"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:666
+msgid "Subject"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:667
+msgid "Mail Body"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:668
+msgid "Update"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:669
+msgid "Greetings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:670
+msgid "Buttons"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:673
+msgid "Booking has been completed"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:674
+msgid "Confirmation Email Sent"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:675
+msgid "Confirmation Email Sent to Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:676
+msgid "Confirmation Email Sent to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:677
+msgid "Pending Email Sent"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:678
+msgid "Pending Email Sent to Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:679
+msgid "Pending Email Sent to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:680
+msgid "Canceled Email Sent"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:681
+msgid "Canceled Email Sent to Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:682
+msgid "Canceled Email Sent to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:683
+msgid "ReSchedule Email Sent"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:684
+msgid "ReSchedule Email Sent to Host"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:685
+msgid "ReSchedule Email Sent to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:686
+msgid "Reminder Email Sent"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:687
+msgid "Reminder Email Sent to Attendee"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:688
+msgid "Booking Has Been Confirmed"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:689
+msgid "Booking Has Been Pending"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:690
+msgid "Booking Has Been Canceled"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:691
+msgid "Booking Has Been Rescheduled"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:694
+msgid "Import bookings from a CSV file"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:695
+msgid "This tool allows you to import or merge booking data to your store from a CSV file."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:696
+msgid "Map CSV fields to Booking"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:697
+msgid "elect fields from your CSV file to map against booking fields, or to ignore during import."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:698
+msgid "Run The Import"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:699
+msgid "Create and customize the information fields for your hosts"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:700
+msgid "Add more Information"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:701
+msgid "Add Information for Hosts"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:702
+msgid "Allow host to manage the dashboard."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:703
+msgid "Allow host to create and manage meetings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:704
+msgid "Allow host to manage bookings and reservations."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:705
+msgid "Allow host to adjust system and personal settings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:706
+msgid "Allow host to manage custom availability settings."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:707
+msgid "Allow host to manage integrations and external services."
+msgstr ""
+
+#: admin/Controller/TransStrings.php:708
+msgid "default content"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:709
+msgid "Field type"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:710
+msgid "Label"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:711
+msgid "Enter field Label"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:712
+msgid "Placeholder"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:713
+msgid "Options"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:714
+msgid "Add New Option"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:726
+msgctxt "Calendar full month"
+msgid "January"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:727
+msgctxt "Calendar full month"
+msgid "February"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:728
+msgctxt "Calendar full month"
+msgid "March"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:729
+msgctxt "Calendar full month"
+msgid "April"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:730
+msgctxt "Calendar full month"
+msgid "May"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:731
+msgctxt "Calendar full month"
+msgid "June"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:732
+msgctxt "Calendar full month"
+msgid "July"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:733
+msgctxt "Calendar full month"
+msgid "August"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:734
+msgctxt "Calendar full month"
+msgid "September"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:735
+msgctxt "Calendar full month"
+msgid "October"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:736
+msgctxt "Calendar full month"
+msgid "November"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:737
+msgctxt "Calendar full month"
+msgid "December"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:738
+msgctxt "Calendar day"
+msgid "Sunday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:739
+msgctxt "Calendar day"
+msgid "Monday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:740
+msgctxt "Calendar day"
+msgid "Tuesday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:741
+msgctxt "Calendar day"
+msgid "Wednesday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:742
+msgctxt "Calendar day"
+msgid "Thursday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:743
+msgctxt "Calendar day"
+msgid "Friday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:744
+msgctxt "Calendar day"
+msgid "Saturday"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:745
+msgctxt "Calendar short day"
+msgid "Sun"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:746
+msgctxt "Calendar short day"
+msgid "Mon"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:747
+msgctxt "Calendar short day"
+msgid "Tue"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:748
+msgctxt "Calendar short day"
+msgid "Wed"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:749
+msgctxt "Calendar short day"
+msgid "Thu"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:750
+msgctxt "Calendar short day"
+msgid "Fri"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:751
+msgctxt "Calendar short day"
+msgid "Sat"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:752
+msgctxt "Calendar today"
+msgid "Today"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:753
+msgctxt "Calendar seats left"
+msgid "seats left"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:754
+msgctxt "Calendar previous"
+msgid "Previous"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:755
+msgctxt "Calendar next"
+msgid "Next"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:756
+msgctxt "Calendar form name field"
+msgid "Name"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:757
+msgctxt "Calendar form email field"
+msgid "Email"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:758
+msgctxt "Calendar Time Format AM"
+msgid "AM"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:759
+msgctxt "Calendar Time Format PM"
+msgid "PM"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:760
+msgctxt "Calendar bookings"
+msgid "Bookings"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:761
+msgctxt "Calendar add new"
+msgid "Add New"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:762
+msgctxt "Calendar view details"
+msgid "View Details"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:764
+msgctxt "Calendar number"
+msgid "0"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:765
+msgctxt "Calendar number"
+msgid "1"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:766
+msgctxt "Calendar number"
+msgid "2"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:767
+msgctxt "Calendar number"
+msgid "3"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:768
+msgctxt "Calendar number"
+msgid "4"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:769
+msgctxt "Calendar number"
+msgid "5"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:770
+msgctxt "Calendar number"
+msgid "6"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:771
+msgctxt "Calendar number"
+msgid "7"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:772
+msgctxt "Calendar number"
+msgid "8"
+msgstr ""
+
+#: admin/Controller/TransStrings.php:773
+msgctxt "Calendar number"
+msgid "9"
+msgstr ""
+
+#: app/Content/Archive/archive-page-tfhb-host.php:30
+msgid "Host: "
+msgstr ""
+
+#: app/Content/Archive/archive-tfhb_meeting.php:19
+msgid "Meeting Archive"
+msgstr ""
+
+#: app/Content/Archive/taxonomy-meeting_category.php:22
+msgid "Category: "
+msgstr ""
+
+#: app/Content/calendar.php:37
+msgid "Host is not selected"
+msgstr ""
+
+#: app/Content/calendar.php:40
+msgid "Timezone is not valid"
+msgstr ""
+
+#: app/Content/calendar.php:65
+msgid "You are rescheduling the booking:"
+msgstr ""
+
+#: app/Content/Template/meeting-cencel.php:32
+msgid "Your meeting has been"
+msgstr ""
+
+#: app/Content/Template/meeting-cencel.php:33
+msgid "Please check your email for more information. Now you can reschedule or cancel booking from here."
+msgstr ""
+
+#: app/Content/Template/meeting-cencel.php:104
+msgid "Reason for Cancellation"
+msgstr ""
+
+#: app/Content/Template/meeting-form.php:177
+msgid "Reason for Reschedule"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:100
+msgid "See more"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:109
+msgid "See less"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:145
+msgid "Attendee Phone Number"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:147
+msgid "Organizer Phone Number"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:150
+msgid "In Person (Organizer Address)"
+msgstr ""
+
+#: app/Content/Template/meeting-info.php:153
+msgid "In Person (Attendee Address)"
+msgstr ""
+
+#: app/Content/Template/meeting-times.php:68
+msgid "12h"
+msgstr ""
+
+#: app/Content/Template/meeting-times.php:73
+msgid "24h"
+msgstr ""
+
+#: app/Content/Template/meeting-times.php:93
+#: app/Shortcode/HydraBookingShortcode.php:963
+msgid "No time slots are currently available."
+msgstr ""
+
+#: app/Content/Template/reschedule.php:28
+msgid "You are not allowed to reschedule this meeting"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:182
+msgid "Username or email is required."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:195
+msgid "User not found."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:207
+msgid "Password Reset Request"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:209
+#: app/FrontendDashboard/Shortcode/Signup.php:440
+#: app/FrontendDashboard/Shortcode/Signup.php:464
+#: app/FrontendDashboard/Template/email-verification.php:70
+msgid "Hi"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:211
+msgid "You have requested to reset your password."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:213
+msgid "Please click the link below to reset your password:"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:217
+msgid "If you did not request this, please ignore this email."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:219
+#: app/FrontendDashboard/Shortcode/Signup.php:443
+msgid "Thank you"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:228
+msgid "Password reset link sent to your email."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:270
+#: app/FrontendDashboard/Shortcode/Login.php:164
+#: app/FrontendDashboard/Shortcode/Signup.php:267
+msgid "Sorry, your nonce did not verify."
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:287
+#: app/FrontendDashboard/Shortcode/Signup.php:290
+msgid "Please re-enter your password"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:289
+#: app/FrontendDashboard/Shortcode/Signup.php:292
+msgid "Passwords doesn't match"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:292
+#: app/FrontendDashboard/Shortcode/Signup.php:295
+msgid "The field is required"
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:305
+msgid "Password changed successfully. you can <a href=\""
+msgstr ""
+
+#: app/FrontendDashboard/FrontendDashboard.php:307
+msgid "User not found"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:48
+msgid "Welcome back"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:49
+#: app/FrontendDashboard/Shortcode/Signup.php:54
+#: app/FrontendDashboard/Template/forgot-password.php:70
+#: app/FrontendDashboard/Template/forgot-password.php:152
+msgid "Please enter your details."
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:61
+#: app/FrontendDashboard/Shortcode/Signup.php:62
+#: app/FrontendDashboard/Template/email-verification.php:43
+#: app/FrontendDashboard/Template/forgot-password.php:26
+msgid "You are already logged in"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:64
+#: app/FrontendDashboard/Shortcode/Signup.php:66
+#: app/FrontendDashboard/Template/email-verification.php:46
+#: app/FrontendDashboard/Template/forgot-password.php:29
+msgid "Go to dashboard"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:83
+#: app/FrontendDashboard/Template/forgot-password.php:160
+msgid "Username or Email"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:117
+msgid "Forget Passwords?"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:122
+#: app/FrontendDashboard/Template/forgot-password.php:53
+#: app/FrontendDashboard/Template/forgot-password.php:135
+#: app/FrontendDashboard/Template/forgot-password.php:191
+msgid "Login"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:139
+msgid "Need an account ?"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Login.php:139
+#: app/FrontendDashboard/Shortcode/Signup.php:53
+#: app/FrontendDashboard/Template/forgot-password.php:55
+#: app/FrontendDashboard/Template/forgot-password.php:137
+#: app/FrontendDashboard/Template/forgot-password.php:193
+msgid "Sign up"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:84
+msgid "First Name"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:96
+msgid "Last Name"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:272
+msgid "Please enter your email address"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:274
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:303
+msgid "Email already exist"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:307
+msgid "Username already exist"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:347
+msgid "You are already a host"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:399
+msgid "Your account has been created successfully. You can login using your email and password."
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:404
+msgid "Your account has been created successfully. A confirmation email has been sent to your email address."
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:438
+msgid "Email Verification"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:441
+msgid "Please click the link below to activate your account:"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:463
+#: app/FrontendDashboard/Template/email-verification.php:69
+msgid "Your account has been activated"
+msgstr ""
+
+#: app/FrontendDashboard/Shortcode/Signup.php:465
+#: app/FrontendDashboard/Template/email-verification.php:71
+msgid "Your account has been successfully activated."
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:56
+msgid "%1$sYour email has been successfully verified! %2$sLogin here%3$s"
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:81
+msgid "%1$s Invalid email verification url! %2$sResend email%3$"
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:85
+msgid "%1$sYour email is already verified. %2$sLogin here%3$s"
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:89
+msgid "%1$s No email verification url found! %2$sResend email%3$"
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:93
+msgid "%1$s Invalid or not found email verification url! %2$s"
+msgstr ""
+
+#: app/FrontendDashboard/Template/email-verification.php:97
+msgid "%1$s Verification failed! %2$s"
+msgstr ""
+
+#: app/FrontendDashboard/Template/forgot-password.php:69
+msgid "Reset Password ?"
+msgstr ""
+
+#: app/FrontendDashboard/Template/forgot-password.php:119
+msgid "Reset Password"
+msgstr ""
+
+#: app/FrontendDashboard/Template/forgot-password.php:151
+msgid "Forgot Password ?"
+msgstr ""
+
+#: app/FrontendDashboard/Template/forgot-password.php:174
+msgid "Reset my Password"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:55
+msgid "Please provide a valid Meeting id"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:262
+#: app/Shortcode/HydraBookingShortcode.php:907
+#: app/Shortcode/HydraBookingShortcode.php:974
+#: app/Shortcode/HydraBookingShortcode.php:1048
+msgid "Nonce verification failed"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:267
+#: app/Shortcode/HydraBookingShortcode.php:912
+#: app/Shortcode/HydraBookingShortcode.php:979
+#: app/Shortcode/HydraBookingShortcode.php:1053
+msgid "Invalid request method"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:272
+#: app/Shortcode/HydraBookingShortcode.php:917
+#: app/Shortcode/HydraBookingShortcode.php:984
+#: app/Shortcode/HydraBookingShortcode.php:1058
+msgid "Invalid request"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:276
+msgid "Invalid Meeting ID"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:314
+#: app/Shortcode/HydraBookingShortcode.php:925
+msgid "Please upgrade to pro version for group meeting"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:559
+msgid "Already Booked"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:602
+#: app/Shortcode/HydraBookingShortcode.php:836
+msgid "Booking Failed"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:611
+msgid "Fialed to add Attendee"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:714
+msgid " Meeting frequency limit reached. Try  another Date"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:762
+msgid "Booking is already rescheduled"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:765
+msgid "Booking is already Canceled"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:778
+#: app/Shortcode/HydraBookingShortcode.php:1004
+msgid "Invalid Booking ID"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:781
+msgid "Booking is already completed"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:784
+msgid "Booking is already cancelled"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:807
+msgid "You can not reschedule the meeting before "
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:807
+msgid " minutes"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:865
+msgid "Rescheduled Successfully"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:1033
+msgid "Booking Cancelled Successfully"
+msgstr ""
+
+#: app/Shortcode/HydraBookingShortcode.php:1111
+msgid "Payment Completed Successfully"
+msgstr ""
+
+#: includes/license/HydraBooking.php:171
+msgid "Hydra Booking License Info"
+msgstr ""
+
+#: includes/license/HydraBooking.php:240
+msgid "Hydra Booking Licensing"
+msgstr ""
+
+#: includes/license/HydraBooking.php:251
+msgid "Enter your license key here, to activate the product, and get full feature updates and premium support."
+msgstr ""
+
+#: includes/license/HydraBooking.php:253
+msgid "Write your licnese key details"
+msgstr ""
+
+#: includes/license/HydraBooking.php:254
+msgid "How buyer will get this license key?"
+msgstr ""
+
+#: includes/license/HydraBooking.php:255
+msgid "Describe other info about licensing if required"
+msgstr ""
+
+#: includes/license/HydraBookingBase.php:65
+msgid "Update Checking.."
+msgstr ""
+
+#: includes/post-type/Post_Type.php:39
+msgid "Add New"
+msgstr ""
+
+#. translators: %s: post type singular name
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:41
+#: includes/post-type/Post_Type.php:120
+msgid "Add New %s"
+msgstr ""
+
+#. translators: %s: post type singular name
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:43
+#: includes/post-type/Post_Type.php:114
+msgid "Edit %s"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:45
+msgid "New %s"
+msgstr ""
+
+#. translators: %s: post type name
+#. translators: %s: taxonomy name
+#: includes/post-type/Post_Type.php:47
+#: includes/post-type/Post_Type.php:112
+msgid "All %s"
+msgstr ""
+
+#. translators: %s: post type singular name
+#. translators: %s: post type name
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:49
+#: includes/post-type/Post_Type.php:51
+#: includes/post-type/Post_Type.php:116
+msgid "View %s"
+msgstr ""
+
+#. translators: %s: post type name
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:53
+#: includes/post-type/Post_Type.php:128
+msgid "Search %s"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:55
+msgid "No %s found"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:57
+msgid "No %s found in Trash"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:61
+msgid "%s Image"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:63
+msgid "Set %s Image"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:65
+msgid "Remove %s Image"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:67
+msgid "Use as %s Image"
+msgstr ""
+
+#. translators: %s: post type singular name
+#: includes/post-type/Post_Type.php:69
+msgid "%s Attributes"
+msgstr ""
+
+#. translators: %s: post type name
+#: includes/post-type/Post_Type.php:71
+msgid "Filter %s list"
+msgstr ""
+
+#. translators: %s: post type singular name
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:73
+#: includes/post-type/Post_Type.php:142
+msgid "%s list navigation"
+msgstr ""
+
+#. translators: %s: post type name
+#. translators: %s: taxonomy name
+#: includes/post-type/Post_Type.php:75
+#: includes/post-type/Post_Type.php:144
+msgid "%s list"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:118
+msgid "Update %s name"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:122
+msgid "New %s name"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:124
+msgid "Parent %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:126
+msgid "Parent : %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:130
+msgid "Popular %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:132
+msgid "Separate %s with commas"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:134
+msgid "Add or remove %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:136
+msgid "Choose from the most used %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:138
+msgid "No %s found."
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:140
+msgid "No %s"
+msgstr ""
+
+#. translators: %s: taxonomy singular name
+#: includes/post-type/Post_Type.php:146
+msgid "Back to %s"
+msgstr ""
+
+#: includes/services/Integrations/Woocommerce/WooBooking.php:41
+msgid "Appointment "
+msgstr ""
+
+#: assets/app/js/app.js:40
+#: sass/js/app.js:693
+msgid "Payment Method Required"
+msgstr ""
