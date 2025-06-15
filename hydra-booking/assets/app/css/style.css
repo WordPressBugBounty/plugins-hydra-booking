@@ -258,6 +258,21 @@ button.tfhb-btn.tfhb-preloader:before {
 .tfhb-booking-cencel input {
   box-sizing: border-box;
 }
+.tfhb-meeting-box #reason,
+.tfhb-booking-cencel #reason {
+  border-radius: 8px;
+  border: 0.5px solid var(--tfhb-surface-background-color);
+  background: #FFFFFF;
+  height: 40px;
+  width: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+.tfhb-meeting-box #reason:focus,
+.tfhb-booking-cencel #reason:focus {
+  outline: none;
+  box-shadow: none;
+}
 .tfhb-meeting-box .tfhb-reschedule-box,
 .tfhb-booking-cencel .tfhb-reschedule-box {
   margin-bottom: 25px;
@@ -1180,6 +1195,7 @@ button.tfhb-btn.tfhb-preloader:before {
   height: 40px;
   width: 100%;
   padding: 8px 12px;
+  box-sizing: border-box;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form .tfhb-single-form input[type=text]:focus,
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form .tfhb-single-form input[type=email]:focus,

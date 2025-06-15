@@ -133,7 +133,7 @@ $tfhb_stripe = isset( $_tfhb_integration_settings['stripe'] ) ? $_tfhb_integrati
 
 					} elseif ( $question['type'] == 'textarea' ) {
 
-						echo '<textarea name="' . esc_attr($name) . '" id="' . esc_attr($name) . '" ' . esc_attr($disable) . ' ' . esc_attr($required) . 'placeholder="' . esc_attr(TransStrings::tfhbTranslate($placehoder)) . '">' . esc_html($value) . '</textarea>';
+						echo '<textarea name="' . esc_attr($name) . '" id="' . esc_attr($name) . '" ' . esc_attr($disable) . ' ' . esc_attr($required) . ' placeholder="' . esc_attr(TransStrings::tfhbTranslate($placehoder)) . '">' . esc_html($value) . '</textarea>';
 
 					} elseif ( $question['type'] == 'checkbox' ) { 
 						echo '<div class="tfhb-checkbox-group">';

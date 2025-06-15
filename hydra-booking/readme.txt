@@ -4,7 +4,7 @@ Tags: appointments, booking, booking system, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.13
+Stable tag: 1.1.14
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt  
 
@@ -210,6 +210,10 @@ Although there are some good WordPress appointment plugin like "Amelia Booking p
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.14 – June 15, 2025 =
+
+- Fixed: Required validation issue with the textarea field on the booking form.
 
 = 1.1.13 – June 03, 2025 =
 
