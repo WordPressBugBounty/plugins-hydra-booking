@@ -96,16 +96,19 @@ class Meeting {
 			$request
 		);
 
- 
-
+		
+		 
 		if ( $result === false ) {
 			return false;
 		} else {
+			
 			return array(
 				'status'    => true,
 				'insert_id' => $wpdb->insert_id,
 			);
 		}
+
+		
 	}
 	/**
 	 * Update the database meeting.
@@ -120,28 +123,28 @@ class Meeting {
 		unset( $request['id'] );
 
 		// encode json in array data
-		if ( $request['meeting_locations'] ) {
+		if ( isset($request['meeting_locations']) && is_array($request['meeting_locations']) ) {
 			$request['meeting_locations'] = wp_json_encode( $request['meeting_locations'] );
 		}
-		if ( $request['availability_range'] ) {
+		if ( isset($request['availability_range'] ) && is_array($request['availability_range'] )) {
 			$request['availability_range'] = wp_json_encode( $request['availability_range'] );
 		}
-		if ( $request['availability_custom'] ) {
+		if ( isset( $request['availability_custom']) && is_array( $request['availability_custom']) ) {
 			$request['availability_custom'] = wp_json_encode( $request['availability_custom'] );
 		}
-		if ( $request['booking_frequency'] ) {
+		if ( isset($request['booking_frequency']) && is_array($request['booking_frequency']) ) {
 			$request['booking_frequency'] = wp_json_encode( $request['booking_frequency'] );
 		}
-		if ( $request['recurring_repeat'] ) {
+		if ( isset($request['recurring_repeat']) && is_array($request['recurring_repeat']) ) {
 			$request['recurring_repeat'] = wp_json_encode( $request['recurring_repeat'] );
 		}
-		if ( $request['questions'] ) {
+		if ( isset($request['questions'] ) && is_array($request['questions'] )) { 
 			$request['questions'] = wp_json_encode( $request['questions'] );
 		}
-		if ( $request['notification'] ) {
+		if ( isset($request['notification']) && is_array($request['notification']) ) {
 			$request['notification'] = wp_json_encode( $request['notification'] );
 		}
-		if ( $request['payment_meta'] ) {
+		if ( isset($request['payment_meta']) && is_array($request['payment_meta']) ) {
 			$request['payment_meta'] = wp_json_encode( $request['payment_meta'] );
 		}
 
@@ -227,6 +230,92 @@ class Meeting {
 		// Get all data
 
 		return $data;
+	}
+
+	// Get Booking with all attendees in one query
+	public function getMeetings($where = null, $limit = null, $orderBy = null) {
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . $this->table;
+		// $attendee_table = $wpdb->prefix . 'tfhb_attendees';
+		// $meeting_table = $wpdb->prefix . 'tfhb_meetings';
+		// $host_table    = $wpdb->prefix . 'tfhb_hosts';
+
+		// echo $where;
+		// Define the SQL query
+		$sql = "SELECT * FROM  {$table_name} ";
+
+			$data = [];
+			if($where != null) {
+				
+				foreach ($where as $condition) {
+					$field =  $condition[0]; 
+					// if(strpos($field, '.') === false){
+					// 	$field = 'booking.'.$condition[0];
+					// } 
+
+					$operator = $condition[1];
+					$value = $condition[2]; 
+					if($operator == 'BETWEEN'){  
+						$sql .= " AND $field $operator %s AND %s";
+						$data[] = $value[0];
+						$data[] = $value[1]; 
+					}elseif($operator == 'IN'){   
+						// value is array 
+						$in = implode(',', array_fill(0, count($value), '%s')); 
+						$sql .= " AND $field $operator ($in)";
+						$data = array_merge($data, $value);
+					}elseif($operator == 'LIKE'){   
+						// if operator is like 
+						$like_conditions[] = "$field $operator %s";
+						$data[] = $value; 
+					}else{
+
+						$sql .= " AND $field $operator %s";
+						$data[] = $value;
+					}
+				} 
+			} 
+
+			// Add grouped `LIKE` conditions
+			if (!empty($like_conditions)) {
+				$sql .= " AND (" . implode(' OR ', $like_conditions) . ")";
+			}
+			
+			$sql .= "GROUP BY id ";
+			
+			if($orderBy != null) {
+				$sql .= " ORDER BY id $orderBy";
+			} else {
+				$sql .= " ORDER BY id DESC";
+			}
+
+			if($limit != null && $limit > 1) {
+				$sql .= " LIMIT $limit";
+			}   
+	
+			
+			// Prepare the SQL query 
+			$query = $wpdb->prepare($sql, $data);
+		
+			// Get the results
+			if($limit == 1) {
+				$results = $wpdb->get_row($query); 
+				
+			} else {
+				$results = $wpdb->get_results($query);
+			} 
+
+			
+			
+	
+			// echo $wpdb->last_query;
+			
+		// Return the results
+		return $results;
+
+
 	}
 
 	/**
@@ -345,6 +434,53 @@ class Meeting {
 
 		$data = $wpdb->get_results( $wpdb->prepare( $sql )); 
 		return $data;
+	}
+	
+	// Get Only column list as array
+	public function getColumns() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table;
+		$sql        = "SHOW COLUMNS FROM $table_name";
+		$data       = $wpdb->get_results( $sql );
+		$columns    = array();
+
+	 
+		foreach ( $data as $key => $value ) {
+			// if ( $value->Field == 'id' ) {
+			// 	continue;
+			// }  
+			$columns[] = array(
+				'name'  => $value->Field,
+				'value' => $value->Field,
+			);
+		}
+		return $columns;
+	}
+
+	
+	public function importMeeting( $data ){
+		global $wpdb;
+		
+		$table_name = $wpdb->prefix . $this->table;
+		// Define column names (ensure these match your database table structure)
+		 
+		$columns = $data[0]; 
+		unset($data[0]);  
+		// Build the SQL query
+		$values = [];
+		foreach ($data as $row) { 
+			$escaped_values = array_map([$wpdb, 'prepare'], array_values($row));
+			$values[] = '(' . implode(',', $escaped_values) . ')';
+		} 
+		$sql = "
+			INSERT INTO $table_name (" . implode(',', $columns) . ")
+			VALUES " . implode(', ', $values);
+
+			echo $sql;
+			exit;
+		// Execute the query
+		$wpdb->query($sql); 
+		
 	}
 
 

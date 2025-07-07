@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * @subpackage HydraBooking/app
  */
 
- use HydraBooking\Admin\Controller\TransStrings;
+use HydraBooking\Admin\Controller\TransStrings;
 $meeting             = isset( $args['meeting'] ) ? $args['meeting'] : array();
 $questions           = isset( $meeting['questions'] ) ? $meeting['questions'] : array();
 $questions_type      = isset( $meeting['questions_type'] ) ? $meeting['questions_type'] : 'custom';

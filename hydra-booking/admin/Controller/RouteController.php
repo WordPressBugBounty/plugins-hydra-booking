@@ -34,7 +34,7 @@ class RouteController {
 		$this->create( new GoogleCalendar(), 'create_endpoint' );
 		$this->create( new DashboardController(), 'create_endpoint' );
 		$this->create( new SetupWizard(), 'create_endpoint' );
-		$this->create( new ImportExport(), 'create_endpoint' );
+		// $this->create( new ImportExport(), 'create_endpoint' );
 		$this->create( new Notification(), 'create_endpoint' );
 		$this->create( new FrontendDashboard(), 'create_endpoint' );
 		$this->create( new licenseController(), 'create_endpoint' ); 

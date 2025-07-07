@@ -66,8 +66,9 @@ class Attendees {
 		$table_name = $wpdb->prefix . $this->table;
 
 		// json encode meeting locations
-		$request['others_info']       = wp_json_encode( $request['others_info'] );  
-
+		if(isset($request['others_info']) && is_array($request['others_info'])){ 
+			$request['others_info']       = wp_json_encode( $request['others_info'] );
+		} 
 		// insert Booking
 		$result = $wpdb->insert(
 			$table_name,
@@ -96,7 +97,7 @@ class Attendees {
 		unset( $request['id'] );
 
 		
-		if(isset($request['others_info'])){ 
+		if(isset($request['others_info']) && is_array($request['others_info'])){ 
 			$request['others_info']       = wp_json_encode( $request['others_info'] );
 		} 
 		 

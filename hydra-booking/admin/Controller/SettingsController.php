@@ -29,6 +29,7 @@ class SettingsController {
 	}
 
 	public function create_endpoint() {
+
 		register_rest_route(
 			'hydra-booking/v1',
 			'/settings/general',

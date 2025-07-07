@@ -22,7 +22,6 @@ $time_zone = isset( $args['time_zone'] ) ? $args['time_zone'] : array();
 $booking_data = isset( $args['booking_data'] ) ? $args['booking_data'] : array();  
 $general_settings = isset( $args['general_settings'] ) ? $args['general_settings'] : array();  
 $calendar_id  = isset( $meeting['id'] ) ? $meeting['id'] : 0;
- 
 
 
 $date_time = new DateTimeController( 'UTC' );

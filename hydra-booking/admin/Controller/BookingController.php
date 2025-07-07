@@ -1788,12 +1788,24 @@ class BookingController {
 			$booking_column = array();
 			foreach ( $bookingsList as $key => $book ) {
 				
+				// unset some data
+				unset($book->title);
+				unset($book->meeting_price);
+				unset($book->payment_currency);
+				unset($book->meeting_payment_status);
+				unset($book->meeting_type);
+				unset($book->host_first_name);
+				unset($book->host_last_name);
+				unset($book->host_email);
+				unset($book->host_time_zone);
+				
 				if ( $key == 0 ) {
 					foreach ( $book as $c_key => $c_value ) {
 						$booking_column[] = $c_key;
 					}
 				}
 				$book->attendees = json_encode($book->attendees); 
+				
 				$booking_array[] = (array) $book;
 			} 
 

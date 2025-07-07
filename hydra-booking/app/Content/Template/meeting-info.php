@@ -28,8 +28,8 @@ $_tfhb_host_integration_settings = get_user_meta( $host['user_id'], '_tfhb_host_
 $stripePublicKey                 = ! empty( $_tfhb_host_integration_settings['stripe']['public_key'] ) ? $_tfhb_host_integration_settings['stripe']['public_key'] : $stripePublicKey;
 $paypalPublicKey                 = ! empty( $_tfhb_host_integration_settings['paypal']['client_id'] ) ? $_tfhb_host_integration_settings['paypal']['client_id'] : $paypalPublicKey;
 
-// display short 
-
+// display short.
+ 
 $selected_timezone = !empty($meeting['availability_custom']['time_zone'])  ? $meeting['availability_custom']['time_zone'] : 'UTC';
 
 if ( 'settings' === $meeting['availability_type'] ) {
@@ -50,9 +50,7 @@ if ( 'settings' === $meeting['availability_type'] ) {
 		$selected_timezone = $_tfhb_availability_settings['availability'][ $meeting['availability_id'] ]['time_zone'];
 	}
 		
-}
-
-
+} 
 $host_feature_image_link = isset($host['featured_image']) && !empty($host['featured_image']) ? $host['featured_image'] : TFHB_URL . 'assets/app/images/meeting-cover.png';
 ?> 
 
@@ -96,7 +94,7 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 
 		<div class="tfhb-short-description">
             <?php 
-            if(strlen($meeting['description']) > 100 ){
+            if(!empty($meeting['description']) && strlen($meeting['description']) > 100 ){
                 echo wp_kses_post(wp_strip_all_tags(tfhb_character_limit_callback($meeting['description'], 100))) . '<span class="tfhb-see-description">'.esc_html(__('See more', 'hydra-booking')).'</span>';
             }else{
                 echo ! empty( $meeting['description'] ) ? '<p>' . wp_kses_post( $meeting['description'] ) . '</p>' : ''; 

@@ -4,7 +4,7 @@ Tags: appointments, booking, booking system, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.15
+Stable tag: 1.1.16
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt  
 
@@ -102,10 +102,14 @@ Track and analyze your business performance directly from your dashboard:
 * **Performance Analytics**: Visual reports provide insights into booking patterns and trends.  
 * **Instant Notifications**: Receive real-time updates on bookings and site activity.
 
-= 🎉 BOOKING VIEWS & EXPORT  =
+= 🎉 BOOKING VIEWS  =
 * **List and Calendar Views**: Display bookings by list or calendar, sorted by daily, weekly, or monthly formats.  
-* **Data Export**: Export bookings to CSV for detailed analysis.  
 * **Custom Filters**: Locate bookings by host, date, or other parameters.
+
+= 🎉 IMPORT & EXPORT  =
+* **Export Options**: Export data in JSON or CSV formats.
+* **Import Support**: Upload files to restore or migrate data with ease.
+* **Settings Control**: Import/export Settings, Hosts, Meetings, and Bookings.
 
 = 🎉 APPOINTMENT BOOKING FORMS =
 Create and customize appointment booking forms to simplify the booking process.
@@ -210,6 +214,12 @@ Although there are some good WordPress appointment plugin like "Amelia Booking p
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.16 – July 07, 2025 =
+
+- New Feature: Import/Export feature added (Pro).
+- Fix: Resolved issue with frontend dashboard notifications.
+- Improved: Refined CSS and optimized code for improved performance.
 
 = 1.1.15 – June 29, 2025 =
 

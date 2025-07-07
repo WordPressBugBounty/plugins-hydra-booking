@@ -172,7 +172,39 @@ class Host {
 
 		return $data;
 	}
+ 
+	// get column 
+	// Get Only column list as array
+	public function getColumns() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table;
+		$sql        = "SHOW COLUMNS FROM $table_name";
+		$data       = $wpdb->get_results( $sql );
+		$columns    = array();
+		
+	 
+		foreach ( $data as $key => $value ) {
+			// if ( $value->Field == 'id' ) {
+			// 	continue;
+			// }  
+			$columns[] = array(
+				'name'  => $value->Field,
+				'value' => $value->Field,
+			);
+		}
 
+		$columns[] = array(
+			'name'  =>'_tfhb_host',
+			'value' => '_tfhb_host',
+		);
+		$columns[] = array(
+			'name'  => '_tfhb_host_integration_settings',
+			'value' => '_tfhb_host_integration_settings',
+		);
+		return $columns;
+	}
+
+ 
 	/**
 	 * Get all  Hosts
 	 */
@@ -241,7 +273,7 @@ class Host {
 		return $data;
 
 	}
-
+ 
 	// delete
 	public function delete( $id ) {
 		global $wpdb;

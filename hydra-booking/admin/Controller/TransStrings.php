@@ -8,6 +8,7 @@ namespace HydraBooking\Admin\Controller;
 
      public static function getTransStrings(){
         return array(
+         
             //  Dashboard 
             'Dashboard' =>  __('Dashboard', 'hydra-booking'),
             'Booking Overview' =>  __('Booking Overview', 'hydra-booking'),
@@ -137,6 +138,7 @@ namespace HydraBooking\Admin\Controller;
             'Change' =>  __('Change', 'hydra-booking'), 
             'Profile image' =>  __('Profile image', 'hydra-booking'), 
             'Cover image' =>  __('Cover image', 'hydra-booking'), 
+            'Edit cover image' =>  __('Edit cover image', 'hydra-booking'), 
             'Cover image is displayed in the meeting forms.' =>  __('Cover image is displayed in the meeting forms.', 'hydra-booking'), 
             'Recommended Image Size: 120x120px' =>  __('Recommended Image Size: 120x120px', 'hydra-booking'), 
             'General Information' =>  __('General Information', 'hydra-booking'), 
@@ -211,6 +213,7 @@ namespace HydraBooking\Admin\Controller;
             'Limits' =>  __('Limits', 'hydra-booking'), 
             'Questions' =>  __('Questions', 'hydra-booking'), 
             'Notifications' =>  __('Notifications', 'hydra-booking'), 
+            'No new notifications' =>  __('No new notifications', 'hydra-booking'), 
             'Payment' =>  __('Payment', 'hydra-booking'), 
             'Select Category' =>  __('Select Category', 'hydra-booking'), 
             'Create Category' =>  __('Create Category', 'hydra-booking'), 
@@ -481,6 +484,7 @@ namespace HydraBooking\Admin\Controller;
             'Mark as read' =>  __('Mark as read', 'hydra-booking'), 
             'Save Availability' =>  __('Save Availability', 'hydra-booking'), 
             'Update Availability' =>  __('Update Availability', 'hydra-booking'), 
+            'Add Availability' =>  __('Add Availability', 'hydra-booking'), 
             'Default' =>  __('Default', 'hydra-booking'), 
 
             // Component : hosts
@@ -711,8 +715,59 @@ namespace HydraBooking\Admin\Controller;
             'Enter field Label' =>  __('Enter field Label', 'hydra-booking'), 
             'Placeholder' =>  __('Placeholder', 'hydra-booking'), 
             'Options' =>  __('Options', 'hydra-booking'), 
+            'Add New Option' =>  __('Add New Option', 'hydra-booking'),
+            'Import/Export' =>  __('Import/Export', 'hydra-booking'),
+            'Export' =>  __('Export', 'hydra-booking'),
+            'Import' =>  __('Import', 'hydra-booking'),
+            'Export Meeting' =>  __('Export Meeting', 'hydra-booking'),
+            'CSV' =>  __('CSV', 'hydra-booking'),
+            'Export Meetings' =>  __('Export Meetings', 'hydra-booking'),
+            'Let’s get your data in!' =>  __('Let’s get your data in!', 'hydra-booking'),
+            'Need a sample template?' =>  __('Need a sample template?', 'hydra-booking'),
+            'Download one' =>  __('Download one', 'hydra-booking'),
+            'here.' =>  __('here.', 'hydra-booking'),
+            'CSV file, Max 5 MB' =>  __('CSV file, Max 5 MB', 'hydra-booking'),
+            'Browse file' =>  __('Browse file', 'hydra-booking'),
+            'Overwrite existing data' =>  __('Overwrite existing data', 'hydra-booking'),
+            'Next step' =>  __('Next step', 'hydra-booking'),
+            'Map properties' =>  __('Map properties', 'hydra-booking'),
+            'Match your file’s columns to our fields. We’ll help you get it right' =>  __('Match your file’s columns to our fields. We’ll help you get it right', 'hydra-booking'),
+            'Column in your file' =>  __('Column in your file', 'hydra-booking'),
+            'Attributes' =>  __('Attributes', 'hydra-booking'),
+            'Importing..' =>  __('Importing..', 'hydra-booking'),
+            'Looks Good, Start Import' =>  __('Looks Good, Start Import', 'hydra-booking'),
+            'Import completed!' =>  __('Import completed!', 'hydra-booking'),
+            'Your data has been successfully added.' =>  __('Your data has been successfully added.', 'hydra-booking'),
+            'Go to meetings' =>  __('Go to meetings', 'hydra-booking'),
+            'Overwrite if booking is already exists' =>  __('Overwrite if booking is already exists', 'hydra-booking'),
+            'Select default meeting if meeting id is not found' =>  __('Select default meeting if meeting id is not found', 'hydra-booking'),
+            'Go to Bookings' =>  __('Go to Bookings', 'hydra-booking'),
+            'Overwrite if host is already exists' =>  __('Overwrite if host is already exists', 'hydra-booking'),
+            'Create new users if user id not exists' =>  __('Create new users if user id not exists', 'hydra-booking'),
+            'Go to Hosts' =>  __('Go to Hosts', 'hydra-booking'),
+            'Easily back up or transfer your booking data' =>  __('Easily back up or transfer your booking data', 'hydra-booking'),
+            'Export Hydra Booking Data as Json' =>  __('Export Hydra Booking Data as Json', 'hydra-booking'),
+            'Select What to Export' =>  __('Select What to Export', 'hydra-booking'),
+            'Which data you want to import ' =>  __('Which data you want to import ', 'hydra-booking'),
+            'Select data which data you want to import in your website' =>  __('Select data which data you want to import in your website', 'hydra-booking'),
+            'Select default meeting if meeting id is not found ' =>  __('Select default meeting if meeting id is not found ', 'hydra-booking'),
+            'Unlock Pro Feature!' =>  __('Unlock Pro Feature!', 'hydra-booking'),
+            'Upgrade to Hydra Booking Pro for smarter booking tools and priority support.' =>  __('Upgrade to Hydra Booking Pro for smarter booking tools and priority support', 'hydra-booking'),
+            'Upgrade to Hydra Booking Pro' =>  __('Upgrade to Hydra Booking Pro', 'hydra-booking'),
+            'Export Now' =>  __('Export Now', 'hydra-booking'),
+            'Take control today!' =>  __('Take control today!', 'hydra-booking'),
+            'Export Meeting as' =>  __('Export Meeting as', 'hydra-booking'),
+            'Export Bookings as' =>  __('Export Bookings as', 'hydra-booking'),
+            'Import' =>  __('Import', 'hydra-booking'),
+            'Go to Import/Export' =>  __('Go to Import/Export', 'hydra-booking'),
             'Add New Option' =>  __('Add New Option', 'hydra-booking'),  
-           
+            'Enable or disable this field.' =>  __('Enable or disable this field.', 'hydra-booking'),  
+            'What would you like to do?' =>  __('What would you like to do?', 'hydra-booking'),  
+            'Json file, Max 5 MB' =>  __('Json file, Max 5 MB', 'hydra-booking'),  
+            'Select Data to Import' =>  __('Select Data to Import', 'hydra-booking'),  
+            'No upcoming booking found' =>  __('No upcoming booking found', 'hydra-booking'),    
+            'Choose which data you would like to to import your website' =>  __('Choose which data you would like to to import your website', 'hydra-booking'),  
+            'hello' =>  __('hello', 'hydra-booking'),
         );
      } 
 
@@ -771,6 +826,8 @@ namespace HydraBooking\Admin\Controller;
             '7' => _x('7', 'Calendar number', 'hydra-booking'),
             '8' => _x('8', 'Calendar number', 'hydra-booking'),
             '9' => _x('9', 'Calendar number', 'hydra-booking'),
+            
+            'Payment Method Required.' =>  __('Payment Method Required.', 'hydra-booking'),  
 
        );
     }
