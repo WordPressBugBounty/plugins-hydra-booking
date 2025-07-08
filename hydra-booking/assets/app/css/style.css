@@ -2006,8 +2006,8 @@ button.tfhb-btn.tfhb-preloader:before {
   font-size: 15px;
   font-weight: 400;
   line-height: 1.6;
-  padding: 8px;
-  padding-left: 40px;
+  padding: 8px !important;
+  padding-left: 40px !important;
   width: 100%;
 }
 .tfhb-frontend-from__field-item__inner input:focus, .tfhb-frontend-from__field-item__inner input:active, .tfhb-frontend-from__field-item__inner input:hover {

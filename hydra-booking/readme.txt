@@ -4,7 +4,7 @@ Tags: appointments, booking, booking system, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.16
+Stable tag: 1.1.17
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt  
 
@@ -214,6 +214,11 @@ Although there are some good WordPress appointment plugin like "Amelia Booking p
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.17 – July 08, 2025 =
+
+- Fixed: The Design issue has been resolved.
+- Improved: System stability for improved performance.
 
 = 1.1.16 – July 07, 2025 =
 

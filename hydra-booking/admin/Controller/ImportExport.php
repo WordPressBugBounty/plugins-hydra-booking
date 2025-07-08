@@ -122,7 +122,7 @@ class ImportExport {
 		$request = json_decode( file_get_contents( 'php://input' ), true );
 		$select_export    = isset( $request['select_export'] ) ? $request['select_export'] : array();
 		$type    = isset( $request['type'] ) ? $request['type'] : array();
-		$file_name = 'hydra-full-data';
+		$file_name = 'hdyra-settings';
 		// check if current user has permission to export all data
 		if ( ! current_user_can( 'tfhb_manage_options' ) ) {
 			return rest_ensure_response( array(
