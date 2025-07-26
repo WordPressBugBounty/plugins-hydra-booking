@@ -196,6 +196,7 @@ namespace HydraBooking\Admin\Controller;
             'Describe about meeting' =>  __('Describe about meeting', 'hydra-booking'),  
             'Select Meetings Duration' =>  __('Select Meetings Duration', 'hydra-booking'), 
             'Type Custom Duration' =>  __('Type Custom Duration', 'hydra-booking'), 
+            'Custom Duration (minutes)' =>  __('Custom Duration (minutes)', 'hydra-booking'), 
             'Location' =>  __('Location', 'hydra-booking'), 
             'Address' =>  __('Address', 'hydra-booking'), 
             'Enter Address' =>  __('Enter Address', 'hydra-booking'), 
