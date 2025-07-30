@@ -61,21 +61,27 @@ class ShortcodeBuilder {
         $order_by = in_array(strtoupper($atts['order_by']), $allowed_order_by, true) ? strtoupper($atts['order_by']) : 'DESC';
         
          // Validate sort_by
-        if (!in_array($sort_by, $allowed_sort_columns, true)) {
+        if (!in_array($sort_by, $allowed_sort_by, true)) {
             return '<p class="tfhb-notice notice-error"><strong>' . esc_html__('Error:', 'hydra-booking') . '</strong> ' 
                 . esc_html__('Invalid sorting parameter.', 'hydra-booking') . '<br>'
                 . '' . esc_html__('Accepted sort_by values:', 'hydra-booking') . ' <code>' 
-                . esc_html(implode(', ', $allowed_sort_columns)) . '</code></p>';
+                . esc_html(implode(', ', $allowed_sort_by)) . '</code></p>';
         }
 
         // Validate order_by
-        if (!in_array($order_by, $allowed_order_directions, true)) {
+        if (!in_array($order_by, $allowed_order_by, true)) {
             return '<p class="tfhb-notice notice-error"><strong>' . esc_html__('Error:', 'hydra-booking') . '</strong> ' 
                 . esc_html__('Invalid order direction.', 'hydra-booking') . '<br>'
                 . '' . esc_html__('Accepted order_by values:', 'hydra-booking') . ' <code>' 
-                . esc_html(implode(', ', $allowed_order_directions)) . '</code></p>';
+                . esc_html(implode(', ', $allowed_order_by)) . '</code></p>';
         }
 
+        if (!in_array($sort_by, $allowed_sort_by, true)) {
+            $sort_by = 'id';
+        }
+        if (!in_array($order_by, $allowed_order_by, true)) {
+            $order_by = 'DESC';
+        }
 
         $limit = intval($atts['limit']);
         if ($limit <= 0) {
@@ -316,19 +322,26 @@ class ShortcodeBuilder {
         $order_by = in_array(strtoupper($atts['order_by']), $allowed_order_by, true) ? strtoupper($atts['order_by']) : 'DESC';
 
                  // Validate sort_by
-        if (!in_array($sort_by, $allowed_sort_columns, true)) {
+        if (!in_array($sort_by, $allowed_sort_by, true)) {
             return '<p class="tfhb-notice notice-error"><strong>' . esc_html__('Error:', 'hydra-booking') . '</strong> ' 
                 . esc_html__('Invalid sorting parameter.', 'hydra-booking') . '<br>'
                 . '' . esc_html__('Accepted sort_by values:', 'hydra-booking') . ' <code>' 
-                . esc_html(implode(', ', $allowed_sort_columns)) . '</code></p>';
+                . esc_html(implode(', ', $allowed_sort_by)) . '</code></p>';
         }
 
         // Validate order_by
-        if (!in_array($order_by, $allowed_order_directions, true)) {
+        if (!in_array($order_by, $allowed_order_by, true)) {
             return '<p class="tfhb-notice notice-error"><strong>' . esc_html__('Error:', 'hydra-booking') . '</strong> ' 
                 . esc_html__('Invalid order direction.', 'hydra-booking') . '<br>'
                 . '' . esc_html__('Accepted order_by values:', 'hydra-booking') . ' <code>' 
-                . esc_html(implode(', ', $allowed_order_directions)) . '</code></p>';
+                . esc_html(implode(', ', $allowed_order_by)) . '</code></p>';
+        }
+
+        if (!in_array($sort_by, $allowed_sort_by, true)) {
+            $sort_by = 'id';
+        }
+        if (!in_array($order_by, $allowed_order_by, true)) {
+            $order_by = 'DESC';
         }
 
         $limit = intval($atts['limit']);
