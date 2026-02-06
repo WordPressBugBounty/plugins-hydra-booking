@@ -75,7 +75,7 @@ if( is_user_logged_in() ) {
                 <div class="tfhb-frontend-from__field-wrap">
 
                     <div class="tfhb-frontend-from__field-item">
-                        <label for="tfhb_password"><?php echo esc_html(__('Password', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_password"><?php echo esc_html(__('Password', 'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +95,7 @@ if( is_user_logged_in() ) {
                     </div>
 
                     <div class="tfhb-frontend-from__field-item">
-                        <label for="tfhb_confirm_password"><?php echo esc_html(__('Confirm Password', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_confirm_password"><?php echo esc_html(__('Confirm Password',  'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

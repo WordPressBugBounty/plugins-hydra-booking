@@ -8,6 +8,20 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
      *  Require all the files in the includes folder
      */
 
+     function tfhb_utm_generator( $url, $utm_params = array() ) {
+        $host_url = parse_url( get_site_url(), PHP_URL_HOST );
+        $utm_params = array_merge( array(
+            'utm_source'   => 'tfhb_' . $host_url,
+            'utm_medium'   => 'plugin',
+            'utm_campaign' => 'tfhb_plugin_installation',
+        ), $utm_params );
+    
+        $query_string = http_build_query( $utm_params );
+        return esc_url( $url . ( strpos( $url, '?' ) === false ? '?' : '&' ) . $query_string );
+    }
+    
+    
+
     // Helper Functions file
     if ( file_exists( TFHB_PATH . '/includes/helper/helper-functions.php' ) ) {
 

@@ -1,18 +1,18 @@
-=== Hydra Booking - All in One Appointment Booking System | Appointment Scheduling, Booking Calendar & WooCommerce Bookings ===  
+=== Hydra Booking — Appointment Scheduling & Booking Calendar ===
 Contributors: themefic, hasanet, mdrejon, kamrul0424, jahidcse, akanda22
-Tags: appointments, booking, booking system, scheduling, appointment booking 
+Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.24
+Stable tag: 1.1.36
 License: GPL-2.0+
-License URI: http://www.gnu.org/licenses/gpl-2.0.txt  
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
-Appointment Booking Plugin with Automated Scheduling - Apple/Outlook/ Google Calendar, Woo, Zoom, Fluent Forms, Zapier, Mailchimp & CRM Integration.
+A complete appointment scheduling and booking calendar for WordPress — integrates with WooCommerce, Google Calendar, Zoom, and more.
 
 == Description ==
 
-## The Best WordPress Booking Plugin with Appointment Calendar - HYDRA BOOKING
+Hydra Booking is a flexible appointment scheduling and calendar management solution for WordPress
 
 👉 Our Official Website: [Click Here](https://hydrabooking.com/?utm_source=wp_readme&utm_medium=hydra_top_slot&utm_campaign=website)
 👉 Live Demo Link: [Click Here](https://demo.hydrabooking.com/?utm_source=wp_readme&utm_medium=hydra_top_slot&utm_campaign=demo_link)
@@ -21,34 +21,35 @@ Appointment Booking Plugin with Automated Scheduling - Apple/Outlook/ Google Cal
 👉 Our [Documentation](https://themefic.com/docs/hydrabooking/?utm_source=wp_readme&utm_medium=hydra_top_slot&utm_campaign=plugin_docs)
 👉 Get Support: [Click Here](https://portal.themefic.com/support/?utm_source=wp_readme&utm_medium=hydra_top_slot&utm_campaign=plugin_support)
 👉 Join Our [Facebook Group](https://www.facebook.com/groups/hydra-booking)
+👉 Join Our [Community](https://community.themefic.com/feed/)
 
-Hydra Booking is a powerful WordPress booking plugin for creating an advanced appointment book option and calendar management system for booking appointment. This WordPress scheduling plugin supports unlimited appointments and integrates with WooCommerce to build a robust WordPress booking system. With a user-friendly WordPress booking calendar, Hydra Booking ensures an intuitive experience for your clients. Perfect for businesses of all sizes, it’s the ideal choice for WordPress appointment booking. 
+Hydra Booking is a WordPress plugin that provides a complete appointment scheduling and calendar management system. It supports unlimited appointments and integrates with WooCommerce for payment processing. With its intuitive interface, Hydra Booking helps businesses of all sizes manage appointments and bookings efficiently.
 
 = 🎉 WHO SHOULD USE HYDRA BOOKING  =
 
-Hydra Booking is a versatile WP Booking system & appointment management solution tailored for a wide range of industries. Here’s how it fits seamlessly into various business needs:
+Hydra Booking is a flexible and powerful WordPress booking system designed to suit a wide range of industries. Whether you’re managing personal appointments, client consultations, or business schedules, Hydra Booking adapts seamlessly to your workflow.
 
-* **Freelancers**: Ideal for freelancers offering personal services such as consulting, coaching, or creative work. Hydra Booking helps manage client appointments, ensuring a professional and hassle-free scheduling experience.
+* **Freelancers**: Ideal for freelancers offering services such as consulting, coaching, or design. Hydra Booking helps manage appointments effortlessly, ensuring a smooth and professional booking experience for clients.
 
-* **IT Agencies**: Perfect for IT firms handling client consultations, project discussions, or support sessions. Hydra Booking simplifies scheduling and allows agencies to focus on delivering top-notch services.
+* **IT Agencies**: Suitable for IT firms that schedule client consultations, demo sessions, or support meetings. Hydra Booking streamlines scheduling so agencies can focus on delivering exceptional service.
 
-* **Health & Wellness**: Perfect for spas, massage studios, wellness centers, baths, aromatherapy, therapists, life coaches, and personal coaches.
+* **Health & Wellness**: Built for spas, wellness centers, massage studios, aromatherapists, therapists, and life coaches — Hydra Booking keeps your client appointments organized and your schedule stress-free.
 
-* **Beauty & Lifestyle**: From barber shops and hair salons to cosmetology centers, nail studios, tanning salons, and manicurists, Hydra Booking can help lifestyle businesses streamline their booking process.
+* **Beauty & Lifestyle**: From hair salons and barber shops to nail studios, cosmetology centers, and tanning salons, Hydra Booking helps lifestyle businesses simplify and automate their booking process.
 
-* **Fitness & Sports**: Ideal for yoga studios, personal trainers, Zumba classes, golf sessions, and dance instructors, Hydra Booking simplifies class bookings, personal training schedules, and studio appointments.
+* **Fitness & Sports**: Suitable for yoga instructors, personal trainers, dance studios, Zumba classes, or golf sessions — Hydra Booking makes managing classes, memberships, and one-on-one sessions easy.
 
-* **Medical & Clinics**: Doctors, dentists, clinics, and healthcare centers can rely on Hydra Booking to manage patient appointments efficiently.
+* **Medical & Clinics**: Doctors, dentists, and healthcare professionals can rely on Hydra Booking for efficient patient appointment management with clear scheduling and calendar views.
 
-* **Professional Services**: Whether you're a consultant, real estate agent, lawyer, gym owner, photographer, wedding planner, plumber, handyman, contractor, or swimming pool service provider, Hydra Booking simplifies scheduling.
+* **Professional Services**: Consultants, lawyers, real estate agents, gym owners, photographers, wedding planners, plumbers, and contractors can manage their client meetings with ease using Hydra Booking.
 
-* **Education**: Coaching centers, private tutors, language schools, seminar organizers, and driving schools can use Hydra Booking to manage classes, private lessons, or educational events, making the learning experience smoother for students.
+* **Education**: Ideal for coaching centers, tutors, language schools, and seminar organizers — Hydra Booking helps educators manage classes, one-on-one lessons, and event registrations efficiently.
 
-* **Service & Maintenance**: Car repair services, cleaning companies, vehicle maintenance shops, bike repair services, and heavy vehicle workshops can streamline appointment scheduling.
+* **Service & Maintenance**: Car repair shops, cleaning services, bike repair centers, and heavy vehicle workshops can streamline bookings and ensure smooth service delivery.
 
-* **Sales & Marketing**: Hydra Booking supports scheduling sales meetings, team sessions, and marketing discussions, enabling teams to achieve their goals effectively and ensure alignment across the board.
+* **Sales & Marketing**: Suitable for scheduling team meetings, marketing sessions, and client consultations — Hydra Booking helps teams stay coordinated and productive.
 
-In short, this appointment booking WordPress plugin empowers your clients appointment scheduler, book events, and make payments directly on your website. With Hydra Booking, building a site like **Calendly or Simply Schedule** Appointments becomes easy and efficient. As a comprehensive tool for booking management, Hydra Booking includes both essential and advanced features to cater to all your appointment and scheduling needs. Here’s what Hydra Booking offers:
+In short, this appointment booking WordPress plugin empowers your clients to schedule, book events, and make payments directly on your website. With Hydra Booking, building a site like **Calendly or Simply Schedule** Appointments becomes easy and efficient. As a comprehensive tool for booking management, Hydra Booking includes both essential and advanced features to cater to all your appointment and scheduling needs. Here’s what Hydra Booking offers:
 
 = 🎉 DIVERSE MEETING TYPES & LOCATIONS =
 Hydra Booking supports various meeting formats:
@@ -56,21 +57,21 @@ Hydra Booking supports various meeting formats:
 * **[One-on-One Meetings](https://demo.hydrabooking.com/one-to-one-meeting-zoom/)**: Personalize appointments with individual clients.
 * **[Group Meetings](https://demo.hydrabooking.com/one-to-group-meeting/)**: Host group sessions and collaborate effectively.
 * **[Recurring Meetings](https://demo.hydrabooking.com/one-to-one-recurring-meeting/)**: Set up recurring sessions for both one-on-one and group meetings
-* **Versatile Formats**: Support for one-on-one, one-to-group sessions.  
-* **Location Flexibility**: Choose virtual, in-person, or phone-based meeting options.  
+* **Versatile Formats**: Support for one-on-one, one-to-group sessions.
+* **Location Flexibility**: Choose virtual, in-person, or phone-based meeting options.
 * **Custom Locations**: Add unique meeting location types.
 
 = 🎉 DIFFERENT MEETING LOCATIONS =
-Choose the best format and location for your appointments:
+Choose the suitable format and location for your appointments:
 
 * **Online Meetings**: Provide direct booking links for virtual appointments.
 * **In-Person Meetings**: Organize face-to-face sessions at physical locations.
 * **Phone Calls**: Offer phone-based consultations for convenience.
 * **Custom Locations**: Tailor location details based on specific needs.
 
-= 🎉 FORM INTEGRATION =  
-* **[Contact Form 7 Compatibility](https://demo.hydrabooking.com/meeting-with-contact-form-7/)**: Enable appointment scheduling with the widely-used Contact Form 7 plugin. 
-* **[Fluent Forms Integration](https://demo.hydrabooking.com/meeting-with-fluent-form-integration/)**: Effortlessly connect Hydra Booking with Fluent Forms for smooth booking management.   
+= 🎉 FORM INTEGRATION =
+* **[Contact Form 7 Compatibility](https://demo.hydrabooking.com/meeting-with-contact-form-7/)**: Enable appointment scheduling with the widely-used Contact Form 7 plugin.
+* **[Fluent Forms Integration](https://demo.hydrabooking.com/meeting-with-fluent-form-integration/)**: Effortlessly connect Hydra Booking with Fluent Forms for smooth booking management.
 * **Gravity Forms Integration**: Extend the functionality of your booking forms with easy integration between Hydra Booking and Gravity Forms.
 * **Upcoming Integrations**: Support for Sure Forms Integration, expanding flexibility and options.
 
@@ -83,27 +84,27 @@ Say goodbye to no-shows and cancellations with automated notifications for all b
 * **Slack & Telegram (Pro)**: Receive booking notifications directly in Slack or Telegram channels.
 
 = 🎉 PAYMENT OPTIONS  =
-* **[WooCommerce Integration](https://demo.hydrabooking.com/woocommerce-demo-meeting/)**: Direct clients to WooCommerce's secure checkout for payments.  
-* **Multiple Payment Options**: Supports PayPal and Stripe for easy transactions.  
+* **[WooCommerce Integration](https://demo.hydrabooking.com/woocommerce-demo-meeting/)**: Direct clients to WooCommerce's secure checkout for payments.
+* **Multiple Payment Options**: Supports PayPal and Stripe for easy transactions.
 * **Flexible Pricing**: Designate certain bookings as free or paid.
 
 = 🎉SEAMLESS INTEGRATIONS =
 Hydra Booking integrates with leading tools to elevate your business:
 
-* **CRM & Email Integration**: Connect with CRMs like Zoho and FluentCRM(upcoming).  
-* **Appointment booking calendar Sync**: Integrate with Google and Outlook calendars to avoid double bookings.  
-* **Video Conferencing**: Automatic [Zoom](https://demo.hydrabooking.com/one-to-one-meeting-zoom/) or [Google Meet](https://demo.hydrabooking.com/one-to-one-meeting-with-google-meet/) links for virtual appointments.  
+* **CRM & Email Integration**: Connect with CRMs like Zoho and FluentCRM(upcoming).
+* **Appointment booking calendar Sync**: Integrate with Google and Outlook calendars to avoid double bookings.
+* **Video Conferencing**: Automatic [Zoom](https://demo.hydrabooking.com/one-to-one-meeting-zoom/) or [Google Meet](https://demo.hydrabooking.com/one-to-one-meeting-with-google-meet/) links for virtual appointments.
 * **Webhook Support (Pro)**: Transfer data across applications with ease.
 
 = 🎉 POWERFUL DASHBOARD & ANALYTICS =
 Track and analyze your business performance directly from your dashboard:
 
-* **Real-Time Booking Insights**: Monitor bookings, earnings, and completed and canceled appointments with options to view data daily, weekly, or monthly.  
-* **Performance Analytics**: Visual reports provide insights into booking patterns and trends.  
+* **Real-Time Booking Insights**: Monitor bookings, earnings, and completed and canceled appointments with options to view data daily, weekly, or monthly.
+* **Performance Analytics**: Visual reports provide insights into booking patterns and trends.
 * **Instant Notifications**: Receive real-time updates on bookings and site activity.
 
 = 🎉 BOOKING VIEWS  =
-* **List and Calendar Views**: Display bookings by list or calendar, sorted by daily, weekly, or monthly formats.  
+* **List and Calendar Views**: Display bookings by list or calendar, sorted by daily, weekly, or monthly formats.
 * **Custom Filters**: Locate bookings by host, date, or other parameters.
 
 = 🎉 IMPORT & EXPORT  =
@@ -140,7 +141,7 @@ Easily manage hosts and accessibility settings
 * Hosts can easily manage meetings, bookings, availability, integrations, and much more
 * Admins now have full control over host access permissions.
 
-To summarize, this appointment online plugin is the all-in-one solution to streamline your scheduling process and take your booking system to the next level which makes it the best WordPress reservation plugin.
+In summary, Hydra Booking provides a complete and flexible system for managing appointments and scheduling in WordPress, making it suitable for a wide range of businesses and service types.
 
 ### Join our Community to stay updated
 Join our [Facebook group](https://www.facebook.com/groups/hydra-booking) to stay informed with latest news and updates about Hydra Booking.
@@ -165,13 +166,17 @@ Hydra Booking uses [Appsero](https://appsero.com/) SDK to collect some telemetry
 
 == Installation ==
 
-1. Download and unzip the plugin. Upload the unzipped folder to the wp-contents/plugins folder of your WordPress installation. Activate the plugin from the WordPress Plugins administration page
+1. Download and unzip the plugin. Upload the unzipped folder to the wp-content/plugins folder of your WordPress installation. Activate the plugin from the WordPress Plugins administration page
 2. OR, Go to WP admin panel, click 'Plugins' -> 'Add new'. In the search input box, type 'Hydra Booking'.
 3. Install and activate the plugin.
 4. Go through the Quick Setup wizard for the basic setup.
 5. Check our Documentation & YouTube videos for further instructions.
 
 == Frequently Asked Questions ==
+
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Hydra Booking plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/725d056b-231b-4012-a3bd-b43dfa7e9246). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 = Can Hydra Booking be used for multiple business types? =
 Yes, Hydra Booking is designed to be versatile, making it suitable for businesses like spas, salons, medical practices, and beyond.
@@ -180,7 +185,7 @@ Yes, Hydra Booking is designed to be versatile, making it suitable for businesse
 Yes, Hydra is a WordPress booking plugin free of cost and available on WordPress.org. The free version will always remain free. However, there is also a Pro version with additional features available for purchase on our official website.
 
 =  Does Hydra Booking integrate with third-party CRM and scheduling calendar services? =
-Yes, it supports CRM integrations such as Zoho and FluentCRM and calendar syncing with Google Calendar, Apple Calendar, and Outlook Calendar. Such versatile integration makes Hydra Booking the best WordPress calendar booking plugin.
+Yes. Hydra Booking supports integrations with popular CRMs like Zoho and FluentCRM, along with calendar synchronization for Google Calendar, Apple Calendar, and Outlook Calendar.
 
 =  Can I create forms with different WordPress Forms plugins? =
 Hydra Booking integrates with popular form plugins like Fluent Forms and Contact Form 7, with support for Gravity Forms and more coming soon for enhanced flexibility.
@@ -188,14 +193,14 @@ Hydra Booking integrates with popular form plugins like Fluent Forms and Contact
 = Are payment options customizable? =
 You can configure bookings as free or paid and accept payments through WooCommerce, PayPal, and Stripe.
 
-= Can I assign different hosts to manage different bookings? = 
+= Can I assign different hosts to manage different bookings? =
 Yes, Hydra Booking allows host assignments with specific roles and permissions for a flexible booking management experience.
 
 =  Can I migrate from other Appointment Booking plugins? =
-Currently, No. But we are working on this to offer seamless migration from Amelia plugin, BookingPress, Fluent Booking, LatePoint, WP Timetics etc. 
+Currently, No. But we are working on this to offer seamless migration from Amelia plugin, BookingPress, Fluent Booking, LatePoint, WP Timetics etc.
 
-=  Suggest some of the best appointment booking plugins for WordPress & Calendar plugin WordPress? =
-Although there are some good WordPress appointment plugins like "Amelia Booking plugin", "Simply Schedule Appointments Booking Plugin" but we would still say Hydra Booking is the best booking plugin for WordPress because it's easy to build, flexible, and have a massive list of integration option with other tools. 
+=  Suggest some of the appointment booking plugins for WordPress & Calendar plugin WordPress? =
+There are several well-known appointment booking plugins available for WordPress, such as "Amelia Booking", "Simply Schedule" Appointments, and others. Hydra Booking is another powerful option that offers a flexible setup, user-friendly interface, and extensive integration capabilities with tools like WooCommerce, Zoom, and Google Calendar.
 
 == Screenshots ==
 
@@ -214,6 +219,64 @@ Although there are some good WordPress appointment plugins like "Amelia Booking 
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.36 – Jan 12, 2025 =
+
+- Fixed: Popup notice issue has been resolved.
+- Fixed: Meeting creation issue has been resolved.
+
+= 1.1.35 – Jan 06, 2025 =
+
+- Tweak: Updated changelog information.
+
+= 1.1.34 – Jan 05, 2025 =
+
+- Added: FAQ information related to security details.
+
+= 1.1.33 – Jan 05, 2025 =
+
+- Fixed: Security vulnerability resolved.
+- Fixed: Notice issue on dashboard. 
+
+= 1.1.32 – Dec 11, 2025 =
+
+- Compatibility: Fully compatible with Contact Form 7 (v6.1.4).
+- Resolved: The booking issue occurring when using Contact Form 7.
+
+= 1.1.31 – Dec 08, 2025 =
+
+- Fixed: Security vulnerability resolved.
+- Improved: Access control and stability updates.
+- Compatibility: Fully compatible with WordPress (v6.9).
+
+= 1.1.30 – Nov 23, 2025 =
+
+- Fixed: Issue with booking after pending confirmation.
+
+= 1.1.29 – Nov 13, 2025 =
+
+- Fixed: Syntax error resolved.
+
+= 1.1.28 – Nov 10, 2025 =
+
+- Improved: Vulnerability issue resolved for security.
+- Improved: Overall system security strengthened.
+
+= 1.1.27 – Nov 09, 2025 =
+
+- Fixed: Zoom host update settings error resolved.
+- Updated: Information in readme.txt file.
+- Compatibility: Fully compatible with WooCommerce v10.3.
+- Improved: System stability and overall performance.
+
+= 1.1.26 – Nov 02, 2025 =
+
+- Updated: readme.txt information.
+
+= 1.1.25 – Nov 02, 2025 =
+
+- Improved: Added “WooCommerce Payment on Hold Until Payment” feature.
+- Improved: Enhanced system stability for better overall performance.
 
 = 1.1.24 – October 05, 2025 =
 
@@ -242,7 +305,7 @@ Although there are some good WordPress appointment plugins like "Amelia Booking 
 
 = 1.1.18 – July 13, 2025 =
 
-- Fixed: Media file uploader issue has been resolved. 
+- Fixed: Media file uploader issue has been resolved.
 
 = 1.1.17 – July 08, 2025 =
 
@@ -366,52 +429,52 @@ Although there are some good WordPress appointment plugins like "Amelia Booking 
 - Improved: Booking question field control options updated.
 - Improved: The Host banner image control settings added.
 
-= 1.0.27 - 09/02/2025 =  
+= 1.0.27 - 09/02/2025 =
 
 - Improved: The mandatory address field has been removed from the booking form.
 - Added: A booking comment/message field with flexible control settings.
 
-= 1.0.26 - 08/02/2025 =  
+= 1.0.26 - 08/02/2025 =
 
 - Updated: Readme.txt file and plugin information.
 - Compatibility: Compatible with WooCommerce (v9.6.1).
 - Compatibility: Compatible with Contact Form 7 (v6.0.3).
 
-= 1.0.25 - 06/02/2025 =  
+= 1.0.25 - 06/02/2025 =
 
 - Fixed: Single meeting host and data migration issues.
 
-= 1.0.24 - 06/02/2025 =  
+= 1.0.24 - 06/02/2025 =
 
 - Fixed: The host availability issue has been resolved.
 
-= 1.0.23 - 06/02/2025 =  
+= 1.0.23 - 06/02/2025 =
 
 - Fixed: Resolved issue with host selection.
 
-= 1.0.22 - 03/02/2025 =  
+= 1.0.22 - 03/02/2025 =
 
 - Updated: Readme.txt file and plugin information.
 - Fixed: Various issues for a smoother experience.
 
-= 1.0.21 - 03/02/2025 =  
+= 1.0.21 - 03/02/2025 =
 
 - Added: Booking details page.
 - Added: Filter feature for the booking list page.
 - Improved: Revamped the booking list page design.
 
-= 1.0.20 - 30/01/2025 =  
+= 1.0.20 - 30/01/2025 =
 
 - Compatibility: Compatible with WooCommerce (v9.6.0).
 - Improved: Woo Payments integration feature.
 
-= 1.0.19 - 19/01/2025 =  
+= 1.0.19 - 19/01/2025 =
 
 - Compatibility: Compatible with Fluent Forms (v5.2.10).
 - Fixed: Resolved minor bugs and design inconsistencies.
 - Improved: Enhanced system stability for improved performance.
 
-= 1.0.0 - 11/11/2024 =  
+= 1.0.0 - 11/11/2024 =
 - Initial stable release
 
 == Upgrade Notice ==

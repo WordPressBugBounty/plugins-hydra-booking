@@ -121,17 +121,31 @@ class Host {
 		if ( is_array( $where ) ) {
 			$sql = "SELECT * FROM $table_name WHERE ";
 			$i   = 0;
+			$prepare_values = array();
+			
+			// Whitelist allowed field names
+			$allowed_fields = array( 'id', 'user_id', 'email', 'status', 'availability_type', 'availability_id' );
+			
 			foreach ( $where as $k => $v ) {
-				if ( $i == 0 ) {
-					$sql .= " $k = $v";
-				} else {
-					$sql .= " AND $k = $v";
+				// Sanitize field name - whitelist only
+				if ( ! in_array( $k, $allowed_fields, true ) ) {
+					continue;
 				}
+				
+				if ( $i == 0 ) {
+					$sql .= " $k = %s";
+				} else {
+					$sql .= " AND $k = %s";
+				}
+				$prepare_values[] = $v;
 				++$i;
 			}
-			$data = $wpdb->get_results(
-				$wpdb->prepare( $sql )
-			);
+			
+			if ( ! empty( $prepare_values ) ) {
+				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
+			} else {
+				$data = array();
+			}
 		} elseif ( $where != null ) {
 			$data = $wpdb->get_row(
 				$wpdb->prepare( "SELECT * FROM {$wpdb->prefix}tfhb_hosts WHERE id = %d",$where )
@@ -252,13 +266,29 @@ class Host {
 				} 
 			} 
 
+		// Sanitize sort_by - whitelist allowed columns
+		$allowed_sort_fields = array( 'id', 'user_id', 'first_name', 'last_name', 'email', 'status', 'created_at', 'updated_at' );
+		if ( ! in_array( $sort_by, $allowed_sort_fields, true ) ) {
+			$sort_by = 'id';
+		}
+
+		// Sanitize order_by - whitelist allowed values
+		$allowed_order = array( 'ASC', 'DESC' );
+		$order_by = strtoupper( $order_by );
+		if ( ! in_array( $order_by, $allowed_order, true ) ) {
+			$order_by = 'DESC';
+		}
 		
 		// Sort and order
 		$sql .= " ORDER BY {$sort_by} {$order_by}";
 
-		// Limit
+		// Sanitize limit - ensure it's a positive integer or false
 		if ($limit !== false) {
-			$sql .= " LIMIT $limit";
+			$limit = absint( $limit );
+			if ( $limit > 0 ) {
+				$sql .= " LIMIT %d";
+				$data[] = $limit;
+			}
 		}
 
 		if(!empty($data)) {

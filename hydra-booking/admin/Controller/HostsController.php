@@ -224,6 +224,19 @@ class HostsController {
 
 	// Create Hosts
 	public function CreateHosts() {
+
+		// Checked current user can manage option
+		if (  ! current_user_can( 'manage_options' ) ) {
+			// woocommerce payment
+			$data = array(
+				'status'  => false,
+				'message' => __( 'You do not have sufficient permissions to create hosts.', 'hydra-booking' ),
+				'data'    => $_tfhb_hosts_settings,
+			);
+			return rest_ensure_response( $data );
+		}
+		
+
 		$request = json_decode( file_get_contents( 'php://input' ), true );
 
 		// Check if user is selected
@@ -235,6 +248,7 @@ class HostsController {
 				)
 			);
 		}
+		
 		$user_id = $request['id'];
 
 		if ( $user_id == 0 ) {
@@ -771,7 +785,7 @@ class HostsController {
 			'telegram'                   => $telegram,
 			'twilio'                     => $twilio,
 			'slack'                      => $slack,
-			'_tfhb_integration_settings' => $_tfhb_integration_settings,
+			// '_tfhb_integration_settings' => $_tfhb_integration_settings,
 		);
 
 		$data = apply_filters( 'tfhb_get_host_integration_settings', $data, $user_id);

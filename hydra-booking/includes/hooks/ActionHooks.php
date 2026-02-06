@@ -52,6 +52,10 @@ class ActionHooks {
 
 			add_action( 'woocommerce_store_api_checkout_order_processed', array( new WooBooking(), 'tfhb_add_booking_data_checkout_order_processed_block_checkout' ) );
 
+			add_action ('woocommerce_cart_loaded_from_session', array( new WooBooking(), 'woocommerce_cart_loaded_from_session_callback' ));
+
+			add_action ('woocommerce_remove_cart_item', array( new WooBooking(), 'woocommerce_remove_cart_item_callback' ), 10, 2);
+
 		}
 		
 	}

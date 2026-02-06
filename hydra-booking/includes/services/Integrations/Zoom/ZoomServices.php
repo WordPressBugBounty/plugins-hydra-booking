@@ -478,6 +478,9 @@ class ZoomServices {
 
 		$_tfhb_host_integration_settings = get_user_meta( $user_id, '_tfhb_host_integration_settings', true );
 
+		if(empty($_tfhb_host_integration_settings) || !is_array($_tfhb_host_integration_settings)){
+			$_tfhb_host_integration_settings = array();
+		} 
 		// return error message if data is not set
 		if ( ! isset( $data['account_id'] ) || ! isset( $data['app_client_id'] ) || ! isset( $data['app_secret_key'] ) ) {
 
@@ -619,9 +622,13 @@ class ZoomServices {
 			'email' => $booking->email,
 			'name'  => $booking->attendee_name,
 		);
+		
+		$buffer_time_before = !empty( $booking->buffer_time_before ) ? $booking->buffer_time_before : 0;
+		$buffer_time_after = !empty( $booking->buffer_time_after ) ? $booking->buffer_time_after : 0;
+		$meeting_interval = !empty( $booking->meeting_interval ) ? $booking->meeting_interval : 0;
 
 		// Calculate duration
-		$duration = $booking->duration + $booking->buffer_time_before + $booking->buffer_time_after + $booking->meeting_interval;
+		$duration = $booking->duration + $buffer_time_before + $buffer_time_after + $meeting_interval;
 		 
 
 

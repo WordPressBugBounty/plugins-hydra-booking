@@ -21,7 +21,6 @@ global $wp_query;
  
 $data    = isset( $args['attendeeBooking'] ) ? $args['attendeeBooking'] : array(); 
 
-// tfhb_print_r($data);
 ?>
 <div class=" tfhb-booking-cencel tfhb-meeting-<?php echo esc_attr( $data->meeting_id ); ?>" data-calendar="<?php echo esc_attr( $data->meeting_id ); ?>">
 	<form method="post" action="" class="tfhb-meeting-cencel-form ajax-submit"  enctype="multipart/form-data">
@@ -88,15 +87,15 @@ $data    = isset( $args['attendeeBooking'] ) ? $args['attendeeBooking'] : array(
 						}
 						?>
 					</ul>
-				</div>
- 
+				</div> 
 				<?php if ( $data->status == 'canceled' ) : ?>
 					<div class="tfhb-notice notice-error" > 
-						<span><?php echo esc_html_( 'This meeting has been cancelled by the ', 'hydra-booking' ) . esc_attr($data->cancelled_by) . '.'; ?></span>
+						<span><?php echo esc_html__( 'This meeting has been cancelled by the ', 'hydra-booking' ) . esc_attr($data->cancelled_by) . '.'; ?></span>
 					</div>
 				<?php else : ?>
 				<div class="hidden-field"> 
-					<input type="hidden" id="attendee_hash" name="attendee_hash" value="<?php echo esc_attr($data->hash); ?>"> 
+					<input type="hidden" id="attendee_hash" name="attendee_hash" value="<?php echo esc_attr($data->hash); ?>">
+					<input type="hidden" name="nonce" value="<?php echo esc_attr( wp_create_nonce( 'tfhb_cancel_' . $data->hash ) ); ?>">
 				</div>  
 				<div class="tfhb-forms" >
 					<div  class="tfhb-single-form">

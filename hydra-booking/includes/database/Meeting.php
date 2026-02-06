@@ -181,32 +181,52 @@ class Meeting {
 				LEFT JOIN $host_table ON $table_name.host_id = $host_table.id 
 				WHERE $table_name.id = %s GROUP BY $table_name.id", $id )
 			);
-		} elseif ( ! empty( $filterData['title'] ) || ! empty( $filterData['fhosts'] ) || ! empty( $filterData['fcategory'] ) || ( ! empty( $filterData['startDate'] ) && ! empty( $filterData['endDate'] ) ) ) {
+		} elseif ( ! empty( $filterData['title'] ) || ! empty( $filterData['fhosts'] ) || ! empty( $filterData['user_id'] ) || ! empty( $filterData['fcategory'] ) || ( ! empty( $filterData['startDate'] ) && ! empty( $filterData['endDate'] ) ) ) {
 			$sql = "SELECT $table_name.*, COUNT($booking_table.id) as total_booking, $host_table.first_name as host_first_name,  $host_table.last_name as host_last_name FROM $table_name LEFT JOIN $booking_table ON $table_name.id = $booking_table.meeting_id LEFT JOIN $host_table ON $table_name.host_id = $host_table.id WHERE";
 
+			$prepare_values = array();
+			$has_condition = false;
+
 			if ( ! empty( $filterData['title'] ) ) {
-				$title = '%' . $filterData['title'] . '%'; // Wrap title with % for LIKE comparison
-				// $sql  .= $wpdb->prepare( $table_name.'.title LIKE %s', $title );
-				$sql  .= " $table_name.title LIKE '$title'";
+				$title = '%' . $wpdb->esc_like( sanitize_text_field( $filterData['title'] ) ) . '%';
+				$sql  .= " $table_name.title LIKE %s";
+				$prepare_values[] = $title;
+				$has_condition = true;
 			}
 
-			if ( isset( $filterData['fhosts'] ) ) {
-				$host_ids = implode( ',', array_map( 'intval', $filterData['fhosts'] ) );
-				$sql     .= ! empty( $filterData['title'] ) ? ' AND' : '';
-				$sql     .= " $table_name.host_id IN ($host_ids)";
+			if ( isset( $filterData['fhosts'] ) && is_array( $filterData['fhosts'] ) ) {
+				$host_ids = array_map( 'absint', $filterData['fhosts'] );
+				$sql     .= $has_condition ? ' AND' : '';
+				$placeholders = implode( ',', array_fill( 0, count( $host_ids ), '%d' ) );
+				$sql     .= " $table_name.host_id IN ($placeholders)";
+				$prepare_values = array_merge( $prepare_values, $host_ids );
+				$has_condition = true;
 			}
 
-			if ( isset( $filterData['fcategory'] ) ) {
-				$category_ids = implode( ',', array_map( 'intval', $filterData['fcategory'] ) );
-				$sql         .= ( ! empty( $filterData['title'] ) || isset( $filterData['fhosts'] ) ) ? ' AND' : '';
-				$sql         .= " $table_name.meeting_category IN ($category_ids)";
+			if ( isset( $filterData['fcategory'] ) && is_array( $filterData['fcategory'] ) ) {
+				$category_ids = array_map( 'absint', $filterData['fcategory'] );
+				$sql         .= $has_condition ? ' AND' : '';
+				$placeholders = implode( ',', array_fill( 0, count( $category_ids ), '%d' ) );
+				$sql         .= " $table_name.meeting_category IN ($placeholders)";
+				$prepare_values = array_merge( $prepare_values, $category_ids );
+				$has_condition = true;
+			}
+			if ( isset( $filterData['user_id'] ) ) { 
+				$sql         .= $has_condition ? ' AND' : '';
+				$sql         .= " $table_name.user_id = %d";
+				$prepare_values[] = absint( $filterData['user_id'] );
+				$has_condition = true;
 			}
 
 			$sql .= " GROUP BY $table_name.id" ;  
 
-			$sql .= " ORDER BY $table_name.id DESC";
+			$sql .= " ORDER BY $table_name.id DESC"; 
 
-			$data = $wpdb->get_results( $sql );
+			if ( ! empty( $prepare_values ) ) {
+				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
+			} else {
+				$data = $wpdb->get_results( $sql );
+			}
 
 		 
 		} elseif ( ! empty( $user_id ) ) {
@@ -214,8 +234,7 @@ class Meeting {
 				$wpdb->prepare( "SELECT $table_name.*, COUNT($booking_table.id) as total_booking, $host_table.first_name as host_first_name,  $host_table.last_name as host_last_name FROM $table_name
 				LEFT JOIN $booking_table ON $table_name.id = $booking_table.meeting_id LEFT JOIN $host_table ON $table_name.host_id = $host_table.id WHERE $table_name.user_id = %s GROUP BY $table_name.id  ORDER BY $table_name.id DESC", $user_id ) 
 			);
-		} else {
-
+		} else {  
 			$data = $wpdb->get_results(
 				"SELECT $table_name.*, COUNT($booking_table.id) as total_booking, $host_table.first_name as host_first_name,  $host_table.last_name as host_last_name  FROM $table_name
 				LEFT JOIN $booking_table ON $table_name.id = $booking_table.meeting_id
@@ -285,14 +304,20 @@ class Meeting {
 			
 			$sql .= "GROUP BY id ";
 			
-			if($orderBy != null) {
-				$sql .= " ORDER BY id $orderBy";
-			} else {
-				$sql .= " ORDER BY id DESC";
+			// Sanitize orderBy - whitelist allowed values
+			$allowed_order = array( 'ASC', 'DESC' );
+			$orderBy = strtoupper( $orderBy );
+			if ( ! in_array( $orderBy, $allowed_order, true ) ) {
+				$orderBy = 'DESC';
 			}
+			
+			$sql .= " ORDER BY id $orderBy";
 
-			if($limit != null && $limit > 1) {
-				$sql .= " LIMIT $limit";
+			// Sanitize limit - ensure it's a positive integer
+			$limit = $limit !== null ? absint( $limit ) : null;
+			if($limit !== null && $limit > 1) {
+				$sql .= " LIMIT %d";
+				$data[] = $limit;
 			}   
 	
 			

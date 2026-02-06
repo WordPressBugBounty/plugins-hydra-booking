@@ -621,8 +621,26 @@ class MeetingController {
 	}
 
 	// Meeting Filter
-	public function filterMeetings( $request ) {
+	public function filterMeetings( $request ) { 
+		// Capability check: only users with tfhb_manage_options may filter
+		if ( ! current_user_can( 'tfhb_manage_meetings' ) ) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __( 'You do not have permission to filter meetings.', 'hydra-booking' ),
+				)
+			);
+		}
 		$filterData = $request->get_param( 'filterData' ); 
+		// Filter meetings by current user if not admin
+		$current_user = wp_get_current_user();
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+		$current_user_id   = $current_user->ID;
+
+		if ( ! empty( $current_user_role ) && 'tfhb_host' == $current_user_role ) { 
+			$filterData['user_id'] = $current_user_id;
+		}
+		
 		// Meeting Lists
 		$meeting      = new Meeting();
 		$MeetingsList = $meeting->get( '', $filterData );
@@ -773,13 +791,15 @@ class MeetingController {
 	}
 
 	private function ensureBuilderKeyExists(&$notifications) {
-        foreach ($notifications as $role => &$notificationsData) {
-            foreach ($notificationsData as $key => &$notification) {
-                if (!isset($notification['builder'])) {
-                    $notification['builder'] = '';
-                }
-            }
-        }
+		if(is_array($notifications)|| is_object($notifications)){
+			foreach ($notifications as $role => &$notificationsData) {
+				foreach ($notificationsData as $key => &$notification) {
+					if (!isset($notification['builder'])) {
+						$notification['builder'] = '';
+					}
+				}
+			}
+		}
     }
 
 	private function ensure_notification_channel_defaults( &$notification, $channel ) {
@@ -870,28 +890,33 @@ class MeetingController {
 
 		$this->ensureBuilderKeyExists($MeetingData->notification);
 		
-
-		if(is_array( $MeetingData->notification)){
-			if(empty($MeetingData->notification['slack'])){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'slack' );
+		// Ensure slack, telegram, twilio default notification channels exist
+		if(isset($MeetingData->notification)){
+			// Work with objects for consistency
+			$isArray = is_array($MeetingData->notification);
+			
+			// Convert to object for processing
+			if($isArray){
+				$MeetingData->notification = json_decode(json_encode($MeetingData->notification));
 			}
-			if(empty($MeetingData->notification['telegram'])){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'telegram' );
+			
+			// Now work with object
+			if(is_object($MeetingData->notification)){
+				if(empty($MeetingData->notification->slack)){
+					$this->ensure_notification_channel_defaults( $MeetingData->notification, 'slack' );
+				}
+				if(empty($MeetingData->notification->telegram)){
+					$this->ensure_notification_channel_defaults( $MeetingData->notification, 'telegram' );
+				}
+				if(empty($MeetingData->notification->twilio)){
+					$this->ensure_notification_channel_defaults( $MeetingData->notification, 'twilio' );
+				}
 			}
-			if(empty($MeetingData->notification['twilio'])){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'twilio' );
-			}
-		}
-		if( is_object($MeetingData->notification) ){
-			if(empty($MeetingData->notification->slack)){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'slack' );
-			}
-			if(empty($MeetingData->notification->telegram)){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'telegram' );
-			}
-			if(empty($MeetingData->notification->twilio)){
-				$this->ensure_notification_channel_defaults( $MeetingData->notification, 'twilio' );
-			}
+			
+			// Convert back to array if it was originally an array
+			if($isArray){
+				$MeetingData->notification = json_decode(json_encode($MeetingData->notification), true);
+			} 
 		}
 		
 

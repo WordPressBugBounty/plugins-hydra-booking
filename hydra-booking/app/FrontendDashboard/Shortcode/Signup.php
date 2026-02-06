@@ -69,8 +69,7 @@ class Signup {
             </div>
         <?php 
             return ob_get_clean();
-        }  ?>
-        
+        }  ?> 
         <div class="tfhb-frontend-from">
             <div class="tfhb-frontend-from__title">
                 <h3><?php echo esc_html($signup_page_title) ?></h3>
@@ -107,7 +106,7 @@ class Signup {
                     </div>
 
                     <div class="tfhb-frontend-from__field-item">
-                        <label for="tfhb_username"><?php echo esc_html(__('Username', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_username"><?php echo esc_html(__('Username', 'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -117,10 +116,9 @@ class Signup {
                             </span>
                             <input type="text" name="tfhb_username" id="tfhb_username" placeholder="Type Username">
                         </div>
-                    </div>
-
+                    </div> 
                     <div class="tfhb-frontend-from__field-item">
-                        <label for="tfhb_email"><?php echo esc_html(__('Email', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_email"><?php echo esc_html(__('Email', 'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,10 +128,9 @@ class Signup {
                             </span>
                             <input type="text" name="tfhb_email" id="tfhb_email" placeholder="Type your email">
                         </div>
-                    </div>
-
+                    </div> 
                     <div class="tfhb-frontend-from__field-item tfhb-password-field">
-                        <label for="tfhb_password"><?php echo esc_html(__('Password', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_password"><?php echo esc_html(__('Password', 'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -151,10 +148,9 @@ class Signup {
                             <input type="password" name="tfhb_password" id="tfhb_password" placeholder="Type your password">
                             <span class="tfhb-frontend-from__field-item__inner__show-password tfhb-show-password">  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></span>
                         </div>
-                    </div>
-
+                    </div> 
                     <div class="tfhb-frontend-from__field-item tfhb-password-field">
-                        <label for="tfhb_confirm_password"><?php echo esc_html(__('Confirm Password', domain: 'hydra-booking')) ?></label> 
+                        <label for="tfhb_confirm_password"><?php echo esc_html(__('Confirm Password', 'hydra-booking')) ?></label> 
                         <div class="tfhb-frontend-from__field-item__inner">
                             <span>
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,11 +168,10 @@ class Signup {
                             <input type="password" name="tfhb_confirm_password" id="tfhb_confirm_password" placeholder="Re-type your password">
                               <span class="tfhb-frontend-from__field-item__inner__show-password tfhb-show-password">  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></span>
                         </div>
-                    </div>
-
+                    </div> 
                     <div class="tfhb-frontend-from__field-item">
                         <button type="submit">
-                            <span class="tfhb-submit-text"><?php echo esc_html(__('Sign up', domain: 'hydra-booking')) ?></span>
+                            <span class="tfhb-submit-text"><?php echo esc_html(__('Sign up', 'hydra-booking')) ?></span>
                             <span class="tfhb-submit-icon">
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6411_13565)">
@@ -190,17 +185,12 @@ class Signup {
                                 </svg>
                             </span>
                         </button>
-                    </div>
-
-                   
-                </div>
-
-               
+                    </div> 
+                </div> 
             </form>
              <div class="tfhb-frontend-from__field-item tfhb-frontend-from__field-item--center">
-                        <p><?php echo esc_html(__('Already have an account?', domain: 'hydra-booking')) ?><a href="<?php echo esc_url( $get_login_page_url ); ?>"> <?php echo esc_html(__('Login', domain: 'hydra-booking')) ?></a></p>
-                        
-                </div>
+                <p><?php echo esc_html(__('Already have an account?', 'hydra-booking')) ?><a href="<?php echo esc_url( $get_login_page_url ); ?>"> <?php echo esc_html(__('Login', 'hydra-booking')) ?></a></p> 
+            </div>
         </div>
         <?php 
 

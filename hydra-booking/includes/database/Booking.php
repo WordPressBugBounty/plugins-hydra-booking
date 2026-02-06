@@ -138,53 +138,92 @@ class Booking {
 		$meeting_table = $wpdb->prefix . 'tfhb_meetings';
 		$host_table    = $wpdb->prefix . 'tfhb_hosts';
 
+		// Sanitize orderBy - whitelist allowed values
+		$allowed_order = array( 'ASC', 'DESC' );
+		$orderBy = strtoupper( $orderBy );
+		if ( ! in_array( $orderBy, $allowed_order, true ) ) {
+			$orderBy = 'DESC';
+		}
+
+		// Sanitize limit - ensure it's a positive integer
+		$limit = $limit !== null ? absint( $limit ) : null;
+
+		// Sanitize user_id - ensure it's an integer
+		$user_id = $user_id !== null ? absint( $user_id ) : null;
+
 		if ( is_array( $where ) && $join == false ) {
 			$sql = "SELECT * FROM $table_name WHERE ";
 			$i   = 0;
+			$prepare_values = array();
+			
+			// Allowed field names whitelist
+			$allowed_fields = array( 'id', 'meeting_id', 'host_id', 'attendee_id', 'post_id', 'meeting_dates', 'start_time', 'end_time', 'status', 'booking_type', 'created_at', 'updated_at' );
+			
 			foreach ( $where as $k => $v ) {
+				// Sanitize field name - whitelist only
+				if ( ! in_array( $k, $allowed_fields, true ) ) {
+					continue;
+				}
+				
 				if ( $i == 0 ) {
 					if ( $k == 'meeting_dates' ) {
-						$sql .= " FIND_IN_SET('$v', $k)";
+						$sql .= " FIND_IN_SET(%s, $k)";
+						$prepare_values[] = $v;
 						continue;
 					}
-					$sql .= " $k = '$v'";
+					$sql .= " $k = %s";
+					$prepare_values[] = $v;
 
 				} else {
 					if ( $k == 'meeting_dates' ) {
-						$sql .= " AND FIND_IN_SET('$v', $k)";
+						$sql .= " AND FIND_IN_SET(%s, $k)";
+						$prepare_values[] = $v;
 						continue;
 					}
-					$sql .= " AND $k = '$v'";
+					$sql .= " AND $k = %s";
+					$prepare_values[] = $v;
 				}
 				++$i;
 			}
 			// Add Order by if exist
-			$sql .= $orderBy != null ? " ORDER BY $orderBy" : ' ORDER BY id DESC';
+			$sql .= " ORDER BY id $orderBy";
 
 			// Add Limit if exist
-			$sql .= $limit != null ? " LIMIT $limit" : '';
+			if ( $limit !== null && $limit > 0 ) {
+				$sql .= " LIMIT %d";
+				$prepare_values[] = $limit;
+			}
  
 			if ( $FirstOrFaill == true ) {
 				// only get first item
-				$data = $wpdb->get_row(
-					$sql
-				);
+				if ( ! empty( $prepare_values ) ) {
+					$data = $wpdb->get_row( $wpdb->prepare( $sql, $prepare_values ) );
+				} else {
+					$data = $wpdb->get_row( $sql );
+				}
 			} else {
-				$data = $wpdb->get_results(
-					$sql 
-				);
+				if ( ! empty( $prepare_values ) ) {
+					$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
+				} else {
+					$data = $wpdb->get_results( $sql );
+				}
 			}
 
 			// echo $sql;
 		} elseif ( $where != null && $join != true ) {
 			if ( $custom == true ) {
-				$sql = "SELECT * FROM $table_name WHERE $where";
-				if ( ! empty( $where ) ) {
-					$sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : '';
+				// For custom queries, $where should be a prepared statement condition
+				// This is a legacy path - it's not safe to use directly
+				// We'll sanitize as integer for backward compatibility
+				$where_int = absint( $where );
+				$sql = "SELECT * FROM $table_name WHERE id = %d";
+				$prepare_values = array( $where_int );
+				
+				if ( $user_id !== null ) {
+					$sql .= " AND $table_name.host_id = %d";
+					$prepare_values[] = $user_id;
 				}
-				$data = $wpdb->get_results(
-					$wpdb->prepare( $sql )
-				);
+				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
 			} else {
 				$sql  = "
                     SELECT $table_name.*, 
@@ -200,7 +239,7 @@ class Booking {
                     INNER JOIN $meeting_table ON $table_name.meeting_id = $meeting_table.id
                     WHERE $table_name.id = %d
                 ";
-				$data = $wpdb->get_row( $wpdb->prepare( $sql, $where ) );
+				$data = $wpdb->get_row( $wpdb->prepare( $sql, absint( $where ) ) );
 			}
 		} else {
 			if ( $join == true ) {
@@ -235,23 +274,37 @@ class Booking {
 				$sql = "SELECT * FROM $table_name";
 
 			}
+			
+			$prepare_values = array();
+			
 			// userwise
-			if ( empty( $where ) ) {
-				$sql .= $user_id != null ? " WHERE $table_name.host_id = $user_id" : '';
+			if ( empty( $where ) && $user_id !== null ) {
+				$sql .= " WHERE $table_name.host_id = %d";
+				$prepare_values[] = $user_id;
 			}
-			// custom where
-			$sql .= $custom != null ? " WHERE $where" : '';
+			
+			// custom where - skip for safety
+			// $sql .= $custom != null ? " WHERE $where" : '';
 
-			if ( ! empty( $where ) ) {
-				$sql .= $user_id != null ? " AND $table_name.host_id = $user_id" : '';
+			if ( ! empty( $where ) && $user_id !== null ) {
+				$sql .= " AND $table_name.host_id = %d";
+				$prepare_values[] = $user_id;
 			}
+			
 			// Add Order by if exist
-			$sql .= $orderBy != null ? " ORDER BY $orderBy" : ' ORDER BY id DESC';
+			$sql .= " ORDER BY id $orderBy";
 
 			// Add Limit if exist
-			$sql .= $limit != null ? " LIMIT $limit" : '';
+			if ( $limit !== null && $limit > 0 ) {
+				$sql .= " LIMIT %d";
+				$prepare_values[] = $limit;
+			}
 
-			$data = $wpdb->get_results( $sql );
+			if ( ! empty( $prepare_values ) ) {
+				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
+			} else {
+				$data = $wpdb->get_results( $sql );
+			}
 		}
 
 		return $data;
@@ -395,14 +448,20 @@ class Booking {
 			
 			$sql .= "GROUP BY booking.id ";
 			
-			if($orderBy != null) {
-				$sql .= " ORDER BY booking.id $orderBy";
-			} else {
-				$sql .= " ORDER BY booking.id DESC";
+			// Sanitize orderBy - whitelist allowed values
+			$allowed_order = array( 'ASC', 'DESC' );
+			$orderBy = strtoupper( $orderBy );
+			if ( ! in_array( $orderBy, $allowed_order, true ) ) {
+				$orderBy = 'DESC';
 			}
+			
+			$sql .= " ORDER BY booking.id $orderBy";
 
-			if($limit != null && $limit > 1) {
-				$sql .= " LIMIT $limit";
+			// Sanitize limit - ensure it's a positive integer
+			$limit = $limit !== null ? absint( $limit ) : null;
+			if($limit !== null && $limit > 1) {
+				$sql .= " LIMIT %d";
+				$data[] = $limit;
 			}   
  
 			
@@ -518,6 +577,27 @@ class Booking {
 
 		// stats != canceled
 		$sql .= " AND status != 'canceled'";
+
+		$data = $wpdb->get_row(
+			$wpdb->prepare( $sql, $meeting_id, $meeting_dates, $start_time, $end_time )
+		);
+
+		return $data;
+		 
+	}
+
+	//CheckHoldBooking
+	public function getHoldBooking( $meeting_id, $meeting_dates, $start_time, $end_time ) {
+
+		// get all bookings order by id desc
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . $this->table;
+
+		$sql = "SELECT * FROM $table_name WHERE meeting_id = %d AND meeting_dates = %s AND start_time = %s AND end_time = %s";
+
+		$sql .= " AND status = 'hold'";
 
 		$data = $wpdb->get_row(
 			$wpdb->prepare( $sql, $meeting_id, $meeting_dates, $start_time, $end_time )

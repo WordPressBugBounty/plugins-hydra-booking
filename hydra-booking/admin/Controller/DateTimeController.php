@@ -160,6 +160,7 @@ class DateTimeController extends \DateTimeZone {
 			],
 			['meeting_dates', '=', $selected_date], 
 			['status', '!=', 'canceled'],
+			['status', '!=', 'hold'],
 		];
 		$bookings = $booking->getBookingWithAttendees( 
 			$where,

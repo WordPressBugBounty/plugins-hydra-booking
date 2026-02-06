@@ -61,6 +61,16 @@ class licenseController {
 
     public function GetLicenseData(){
 
+        // Checked current user can manage option
+		if (  ! current_user_can( 'manage_options' ) ) {
+			// woocommerce payment
+			wp_send_json_error( array( 
+                'status' => false,
+                'message' => ' You do not have permission to access this data.'
+            ) );
+		}
+		
+
         $main_lic_key="HydraBooking_lic_Key";
 	    $lic_key_name =HydraBookingBase::get_lic_key_param($main_lic_key);
         $license_key=get_option($lic_key_name,"");

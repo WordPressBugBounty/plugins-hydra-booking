@@ -179,14 +179,20 @@ class Attendees {
 
 			// $sql .= " GROUP BY booking.id ";
 			
-			if($orderBy != null) {
-				$sql .= " ORDER BY booking.id $orderBy";
-			} else {
-				$sql .= " ORDER BY booking.id DESC";
+			// Sanitize orderBy - whitelist allowed values
+			$allowed_order = array( 'ASC', 'DESC' );
+			$orderBy = strtoupper( $orderBy );
+			if ( ! in_array( $orderBy, $allowed_order, true ) ) {
+				$orderBy = 'DESC';
 			}
+			
+			$sql .= " ORDER BY booking.id $orderBy";
 
-			if($limit != null && $limit > 1) {
-				$sql .= " LIMIT $limit";
+			// Sanitize limit - ensure it's a positive integer
+			$limit = $limit !== null ? absint( $limit ) : null;
+			if($limit !== null && $limit > 1) {
+				$sql .= " LIMIT %d";
+				$data[] = $limit;
 			}   
  
 			

@@ -11,8 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * 
  * @author Sydur Rahman
  */
-class Login {
-
+class Login { 
     /**
      * Constructor
      * 
@@ -21,8 +20,7 @@ class Login {
     public function __construct() { 
        
         // Add Shortcode
-        add_shortcode( 'hydra_login_form', array( $this, 'hydra_login_form_shortcode' ) );
-
+        add_shortcode( 'hydra_login_form', array( $this, 'hydra_login_form_shortcode' ) ); 
         // Sign In section 
         add_action( 'wp_ajax_nopriv_tfhb_sign_in', array( $this, 'tfhb_sign_in_callback' ) );
  

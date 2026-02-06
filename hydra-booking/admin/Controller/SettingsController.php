@@ -233,6 +233,7 @@ class SettingsController {
 		$_tfhb_general_settings['country']                                 = sanitize_text_field( $request['country'] );
 		$_tfhb_general_settings['currency']                                 = sanitize_text_field( $request['currency'] );
 		$_tfhb_general_settings['after_booking_completed']                 = sanitize_text_field( $request['after_booking_completed'] );
+		$_tfhb_general_settings['after_cart_expire']                 = sanitize_text_field( $request['after_cart_expire'] );
 		$_tfhb_general_settings['booking_status']                          = sanitize_text_field( $request['booking_status'] );
 		$_tfhb_general_settings['reschedule_status']                       = sanitize_text_field( $request['reschedule_status'] );
 		$_tfhb_general_settings['allowed_reschedule_before_meeting_start'] = sanitize_text_field( $request['allowed_reschedule_before_meeting_start'] );
@@ -975,6 +976,17 @@ class SettingsController {
 		$request              = json_decode( file_get_contents( 'php://input' ), true );
 		$_tfhb_hosts_settings = ! empty( get_option( '_tfhb_hosts_settings' ) ) ? get_option( '_tfhb_hosts_settings' ) : array();
 
+		// Checked current user can manage option
+		if (  ! current_user_can( 'manage_options' ) ) {
+			// woocommerce payment
+			$data = array(
+				'status'  => false,
+				'message' => __( 'You do not have permission to access this page', 'hydra-booking' ),
+				'data'    => $_tfhb_hosts_settings,
+			);
+			return rest_ensure_response( $data );
+		}
+		
 
 
 		if ( isset( $request['hosts_settings']['others_information']['enable_others_information'] ) ) {

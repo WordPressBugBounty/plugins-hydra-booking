@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 use HydraBooking\DB\Booking;
+use HydraBooking\DB\Attendees;
 use HydraBooking\Admin\Controller\DateTimeController;
 
 class ScheduleController {
@@ -15,7 +16,9 @@ class ScheduleController {
 		$this->tfhb_create_cron_job();
 
 		add_action( 'tfhb_after_booking_completed_schedule', array( $this, 'tfhb_after_booking_completed_schedule_callback' ) );
-		// $this->tfhb_after_booking_completed_schedule_callback();
+
+		add_action( 'tfhb_cart_auto_remover_schedule', array( $this, 'tfhb_cart_auto_remover_schedule_callback' ) );
+		
 	}
 	public function tfhb_create_cron_job() {
 
@@ -24,6 +27,13 @@ class ScheduleController {
 		if ( ! wp_next_scheduled( 'tfhb_after_booking_completed_schedule' ) ) {
 			// Create custom interverl for 60 minutes
 			wp_schedule_event( time(), 'tfhb_after_booking_status', 'tfhb_after_booking_completed_schedule' );
+		}
+
+		add_filter( 'cron_schedules', array( $this, 'tfhb_custom_cart_cron_job_schedule' ) );
+		// Schedule Cron Job Before Booking Completed specific time
+		if ( ! wp_next_scheduled( 'tfhb_cart_auto_remover_schedule' ) ) {
+			// Create custom interverl for 60 minutes
+			wp_schedule_event( time(), 'tfhb_cart_remover', 'tfhb_cart_auto_remover_schedule' );
 		}
 	}
 
@@ -54,7 +64,6 @@ class ScheduleController {
 
 		return $schedules;
 	}
-
 
 	function tfhb_after_booking_completed_schedule_callback() {
 
@@ -106,6 +115,89 @@ class ScheduleController {
 		return true;
 	}
 
+	public function tfhb_custom_cart_cron_job_schedule( $schedules ) {
+
+		$general_settings = get_option( '_tfhb_general_settings', true ) ? get_option( '_tfhb_general_settings', true ) : array();
+		$every_minute     = ! empty( $general_settings['after_cart_expire'] ) ? $general_settings['after_cart_expire'] : 60; // minutes
+
+		$every_minute = $every_minute * 60;
+
+		if ( isset( $schedules['tfhb_cart_remover'] ) ) {
+			// Remove the old schedule
+
+			unset( $schedules['tfhb_cart_remover'] );
+			// Convert into seconds
+
+			$schedules['tfhb_cart_remover'] = array(
+				'interval' => $every_minute,
+				'display'  => __( 'Hydra Cart Remover after Expire', 'hydra-booking' ),
+			);
+		} else {
+
+			$schedules['tfhb_cart_remover'] = array(
+				'interval' => $every_minute,
+				'display'  => __( 'Hydra Cart Remover after Expire', 'hydra-booking' ),
+			);
+		}
+
+		return $schedules;
+	}
+	function tfhb_cart_auto_remover_schedule_callback() {
+
+		// Get all WooCommerce sessions
+		global $wpdb;
+		$table = $wpdb->prefix . 'woocommerce_sessions';
+		$sessions = $wpdb->get_results("SELECT session_key, session_value FROM $table");
+	
+		$general_settings = get_option( '_tfhb_general_settings', true ) ? get_option( '_tfhb_general_settings', true ) : array();
+		$every_minute     = ! empty( $general_settings['after_cart_expire'] ) ? $general_settings['after_cart_expire'] : 60; // minutes
+
+		$every_minute = intval($every_minute * 60);
+
+		foreach ($sessions as $session) {
+			$session_data = maybe_unserialize($session->session_value);
+	
+			if (! empty($session_data['cart'])) {
+				$cart = maybe_unserialize($session_data['cart']);
+
+				foreach ($cart as $key => $item) {
+					$added_time = !empty($item['tfhb_order_meta']['added_time']) ? intval($item['tfhb_order_meta']['added_time']) : 0;
+					if ( !empty($added_time) && (time() - $added_time) > $every_minute ) {
+
+						// Update Booking
+						if( !empty($item['tfhb_order_meta']['booking_id']) ){
+							$booking = new Booking();
+							$booking_id = $item['tfhb_order_meta']['booking_id'];
+							$updat_booking['id'] = $booking_id;
+							$updat_booking['status'] = 'canceled';
+							$booking->update( $updat_booking );
+						}
+
+						// Attendees update
+						if( !empty($item['tfhb_order_meta']['attendee_id']) ){
+							$Attendees = new Attendees();
+							$attendee_id = $item['tfhb_order_meta']['attendee_id'];
+							$updat_attendee['id'] = $attendee_id;
+							$updat_attendee['status'] = 'canceled';
+							$Attendees->update( $updat_attendee );
+						}
+	
+						unset($cart[$key]);
+					}
+				}
+	
+				// Save updated session
+				$session_data['cart'] = $cart;
+				$wpdb->update(
+					$table,
+					[ 'session_value' => maybe_serialize($session_data) ],
+					[ 'session_key' => $session->session_key ]
+				);
+			}
+		}
+
+	}
+
 	// Update Booking Cron Job
 	public function tfhb_after_booking_completed_schedule_update() {
 		// Make custom Shedule intervel
@@ -115,5 +207,14 @@ class ScheduleController {
 		// Create custom interverl for 60 minutes
 
 		wp_schedule_event( time(), 'tfhb_after_booking_status', 'tfhb_after_booking_completed_schedule' );
+
+
+		// Make custom Shedule intervel
+		add_filter( 'cron_schedules', array( $this, 'tfhb_custom_cart_cron_job_schedule' ) );
+
+		wp_clear_scheduled_hook( 'tfhb_cart_auto_remover_schedule' );
+		// Create custom interverl for 60 minutes
+
+		wp_schedule_event( time(), 'tfhb_cart_remover', 'tfhb_cart_auto_remover_schedule' );
 	}
 }
