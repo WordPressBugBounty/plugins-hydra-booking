@@ -62,8 +62,7 @@ class Transactions {
 		$result = $wpdb->insert(
 			$table_name,
 			$request
-		);
- 
+		); 
 		if ( $result === false ) {
 			return false;
 		} else {
@@ -154,8 +153,6 @@ class Transactions {
 		}else{ 
 			$data = $wpdb->get_results( $wpdb->prepare( $sql, $data ) );
 		}
-	 
-
 
 		return $data;
  

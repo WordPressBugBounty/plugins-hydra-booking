@@ -599,7 +599,7 @@ class HydraBookingShortcode {
 			// if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
 			$this->tfhb_reschedule_booking( $data, $attendee_data,$meeting_hash, $meta_data,  $general_settings, $check_booking ); 
 		}
-		$this->tfhb_create_new_booking($data, $attendee_data, $meta_data, $MeetingData, $host_meta);
+		$this->tfhb_create_new_booking($data, $attendee_data, $meta_data, $MeetingData, $host_meta, $general_settings );
 
 
 
@@ -610,7 +610,7 @@ class HydraBookingShortcode {
 	 * @param $data
 	 * @return void
 	 */
-	public function tfhb_create_new_booking( $data, $attendee_data, $meta_data, $MeetingData, $host_meta  ) {
+	public function tfhb_create_new_booking( $data, $attendee_data, $meta_data, $MeetingData, $host_meta, $general_settings  ) {
 		// Get Booking Data
 		$booking = new Booking();
 
@@ -822,21 +822,44 @@ class HydraBookingShortcode {
 		if ( isset( $general_settings['allowed_reschedule_before_meeting_start'] ) && ! empty( $general_settings['allowed_reschedule_before_meeting_start'] ) ) {
 			$allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
 			if ( isset( $general_settings['allowed_reschedule_before_meeting_start'] ) && ! empty( $general_settings['allowed_reschedule_before_meeting_start'] ) ) {
-				$allowed_reschedule_before_meeting_start = $general_settings['allowed_reschedule_before_meeting_start']; // 100 minutes
-				$DateTime                                = new DateTimeController( $attendeeBooking->attendee_time_zone );
-				// Time format if has AM and PM into start time
-				$time_format  = strpos( $attendeeBooking->start_time, 'AM' ) || strpos( $attendeeBooking->start_time, 'PM' ) ? '12' : '24';
-				
-	
-				$current_time = strtotime( $DateTime->convert_time_based_on_timezone( '', gmdate( 'Y-m-d H:i:s' ), 'UTC', $attendeeBooking->attendee_time_zone, $time_format ) );
-				
-				$meeting_time = strtotime( $attendeeBooking->meeting_dates . ' ' . $attendeeBooking->start_time );
-				$time_diff    = $meeting_time - $current_time;
-				$time_diff    = $time_diff / 60; // convert to minutes
+				$allowed_reschedule_before_meeting_start = isset($general_settings['allowed_reschedule_before_meeting_start']) && !empty($general_settings['allowed_reschedule_before_meeting_start']) 
+				? $general_settings['allowed_reschedule_before_meeting_start'] 
+				: 10;
 
-				if ( $time_diff < $allowed_reschedule_before_meeting_start ) {
-					wp_send_json_error( array( 'message' => esc_html(__('You can not reschedule the meeting before ', 'hydra-booking')) . $allowed_reschedule_before_meeting_start . esc_html(__(' minutes', 'hydra-booking')) ) );
+				if (is_array($allowed_reschedule_before_meeting_start)) {
+					$skip_before_meeting_start = $allowed_reschedule_before_meeting_start[0]['limit'];
+					$skip_before_format = $allowed_reschedule_before_meeting_start[0]['times']; // minutes or hours
+				} else {
+					$skip_before_meeting_start = $allowed_reschedule_before_meeting_start;
+					$skip_before_format = 'minutes';
 				}
+
+
+				if ($skip_before_meeting_start > 0) {
+
+					$meeting_date = $attendeeBooking->meeting_dates;  // Example: '2025-07-05'
+					$meeting_time = $attendeeBooking->start_time;     // Example: '14:00' (24-hour format)
+
+					$meeting_datetime = $meeting_date . ' ' . $meeting_time; // Combine to '2025-07-05 14:00'
+
+					$current_time = current_time('Y-m-d H:i:s'); // Current datetime with WordPress timezone
+
+					$meeting_timestamp = strtotime($meeting_datetime);
+					$current_timestamp = strtotime($current_time);
+
+					$time_difference = $meeting_timestamp - $current_timestamp; // Seconds left until meeting starts
+
+					// Convert allowed limit to seconds
+					$allowed_gap_in_seconds = ($skip_before_format === 'hours') ? ($skip_before_meeting_start * 3600) : ($skip_before_meeting_start * 60);
+
+					if ($time_difference < $allowed_gap_in_seconds) {
+						// Not enough time left, deny cancel
+						wp_send_json_error( array( 'message' => esc_html(__('You can not reschedule the meeting before ', 'hydra-booking')) . $skip_before_meeting_start .' '. esc_html($skip_before_format)  ) );
+					}
+					
+				// Else, allow cancel
+				}
+
 			}
 		}
 		
@@ -1035,6 +1058,47 @@ class HydraBookingShortcode {
 			1,
 			'DESC'
 		);   
+
+		
+		$_tfhb_general_settings = get_option('_tfhb_general_settings');
+
+		$allowed_reschedule_before_meeting_start = isset($_tfhb_general_settings['allowed_reschedule_before_meeting_start']) && !empty($_tfhb_general_settings['allowed_reschedule_before_meeting_start']) 
+			? $_tfhb_general_settings['allowed_reschedule_before_meeting_start'] 
+			: 10;
+
+		if (is_array($allowed_reschedule_before_meeting_start)) {
+			$skip_before_meeting_start = $allowed_reschedule_before_meeting_start[0]['limit'];
+			$skip_before_format = $allowed_reschedule_before_meeting_start[0]['times']; // minutes or hours
+		} else {
+			$skip_before_meeting_start = $allowed_reschedule_before_meeting_start;
+			$skip_before_format = 'minutes';
+		}
+
+		if ($skip_before_meeting_start > 0) {
+
+			$meeting_date = $attendeeBooking->meeting_dates;  // Example: '2025-07-05'
+			$meeting_time = $attendeeBooking->start_time;     // Example: '14:00' (24-hour format)
+
+			$meeting_datetime = $meeting_date . ' ' . $meeting_time; // Combine to '2025-07-05 14:00'
+
+			$current_time = current_time('Y-m-d H:i:s'); // Current datetime with WordPress timezone
+
+			$meeting_timestamp = strtotime($meeting_datetime);
+			$current_timestamp = strtotime($current_time);
+
+			$time_difference = $meeting_timestamp - $current_timestamp; // Seconds left until meeting starts
+
+			// Convert allowed limit to seconds
+			$allowed_gap_in_seconds = ($skip_before_format === 'hours') ? ($skip_before_meeting_start * 3600) : ($skip_before_meeting_start * 60);
+
+			if ($time_difference < $allowed_gap_in_seconds) {
+				// Not enough time left, deny cancel
+				wp_send_json_error( array( 'message' => esc_html(__('You can not cencel the meeting before ', 'hydra-booking')) . $skip_before_meeting_start .' '. esc_html($skip_before_format)  ) );
+			}
+			
+			// Else, allow cancel
+		}
+
  
 		if ( ! $attendeeBooking || ! hash_equals( $attendeeBooking->hash, $hash ) ) {
 			wp_send_json_error( array( 'message' => esc_html(__('Invalid Booking ID', 'hydra-booking')) ) );

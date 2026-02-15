@@ -209,6 +209,15 @@ class SettingsController {
 		$country_list           = $country->country_list();
 		$currency_list           = $country->currency_list();
 		$_tfhb_general_settings = get_option( '_tfhb_general_settings' );
+		if( isset($_tfhb_general_settings['allowed_reschedule_before_meeting_start']) && !is_array($_tfhb_general_settings['allowed_reschedule_before_meeting_start'])){
+			$old_value = $_tfhb_general_settings['allowed_reschedule_before_meeting_start'];
+			unset($_tfhb_general_settings['allowed_reschedule_before_meeting_start']); 
+			$old_value = empty( $old_value ) ? 10 : $old_value;
+			$_tfhb_general_settings['allowed_reschedule_before_meeting_start'][] = [
+				'limit' => $old_value,
+				'times' => 'minutes',
+			]; 
+		}
 		$data                   = array(
 			'status'           => true,
 			'time_zone'        => $time_zone,
@@ -223,7 +232,7 @@ class SettingsController {
 	public function UpdateGeneralSettings() {
 		$request                = json_decode( file_get_contents( 'php://input' ), true );
 		$_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
-		
+
 
 		// senitaized
 		$_tfhb_general_settings['time_zone']                               = sanitize_text_field( $request['time_zone'] );
@@ -236,8 +245,7 @@ class SettingsController {
 		$_tfhb_general_settings['after_cart_expire']                 = sanitize_text_field( $request['after_cart_expire'] );
 		$_tfhb_general_settings['booking_status']                          = sanitize_text_field( $request['booking_status'] );
 		$_tfhb_general_settings['reschedule_status']                       = sanitize_text_field( $request['reschedule_status'] );
-		$_tfhb_general_settings['allowed_reschedule_before_meeting_start'] = sanitize_text_field( $request['allowed_reschedule_before_meeting_start'] );
-
+		$_tfhb_general_settings['allowed_reschedule_before_meeting_start'] =  $request['allowed_reschedule_before_meeting_start'];
 		// update option
 		update_option( '_tfhb_general_settings', $_tfhb_general_settings );
 		$ScheduleController = new ScheduleController();

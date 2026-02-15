@@ -6,6 +6,7 @@ class ActivationHooks {
 	public function __construct() {
 
 		register_activation_hook( TFHB_PATH . 'hydra-booking.php', array( $this, 'tfhb_activate' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( TFHB_PATH . 'hydra-booking.php' ), array( $this, 'tfhb_plugin_action_links' ) );
 	}
 
 	public function tfhb_activate() {
@@ -80,5 +81,39 @@ class ActivationHooks {
 
 		// Activation date
 		update_option( 'tfhb_hydra_activation_date', time() );
+	}
+
+	/**
+	 * Add plugin action links
+	 *
+	 * @param array $links Existing plugin action links.
+	 * @return array Modified plugin action links.
+	 */
+	public function tfhb_plugin_action_links( $links ) {
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			admin_url( 'admin.php?page=hydra-booking#/settings/general' ),
+			__( 'Settings', 'hydra-booking' )
+		);
+
+		$docs_link = sprintf(
+			'<a href="%s" target="_blank">%s</a>',
+			'https://themefic.com/docs/hydrabooking/',
+			__( 'Docs', 'hydra-booking' )
+		);
+
+		// Only show "GO PRO" link if pro version is not active
+		if ( ! is_plugin_active( 'hydra-booking-pro/hydra-booking-pro.php' ) ) {
+			$pro_link = sprintf(
+				'<a href="%s" style="color: #b32d2e; font-weight: bold;" target="_blank">%s</a>',
+				'https://hydrabooking.com/pricing/',
+				__( 'GET PRO', 'hydra-booking' )
+			);
+			array_unshift( $links, $settings_link, $pro_link, $docs_link );
+		} else {
+			array_unshift( $links, $settings_link, $docs_link );
+		}
+
+		return $links;
 	}
 }

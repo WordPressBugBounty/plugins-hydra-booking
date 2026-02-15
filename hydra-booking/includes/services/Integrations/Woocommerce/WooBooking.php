@@ -200,7 +200,13 @@ class WooBooking {
 				$notification = new Notification();
 				$notification->AddNotification($attendeeBooking);
 
-				$get_attendee = $Attendees->getAttendeeWithBooking( $attendee_id  ); 
+				$get_attendee = $Attendees->getAttendeeWithBooking( 
+					array(
+						array('id', '=', $attendee_id),
+					),
+					1,
+					'DESC'
+				); 
 								
 				$transactions = new Transactions();
 				$transation_history = array(
@@ -303,7 +309,14 @@ class WooBooking {
 
 				
 				// Update Transaction ID Data 
-				$get_attendee = $Attendees->getAttendeeWithBooking( $attendee_id  ); 
+				$get_attendee = $Attendees->getAttendeeWithBooking( 
+					array(
+						array('id', '=', $attendee_id),
+					),
+					1,
+					'DESC'
+				); 
+		
 								
 				$transactions = new Transactions();
 				$transation_history = array(
@@ -323,8 +336,7 @@ class WooBooking {
 					'transation_history' => json_encode($transation_history, true),
 				); 
 
-		
-
+		 
 				// add transaction
 				$transactions->add( $transactionData );  
 
