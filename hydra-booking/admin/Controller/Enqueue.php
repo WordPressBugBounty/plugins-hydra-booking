@@ -121,17 +121,18 @@ class Enqueue {
 
 		if($front_end_dashboard == true){
 			$settings = !empty(get_option('_tfhb_frontend_dashboard_settings')) ? get_option('_tfhb_frontend_dashboard_settings') : array();
-			$primery_default  = isset($settings['general']['primery_default']) ? $settings['general']['primery_default'] : '#2E6B38'; 
-			$primery_hover  = isset($settings['general']['primery_hover']) ? $settings['general']['primery_hover'] : '#4C9959'; 
-			$secondary_default  = isset($settings['general']['secondary_default']) ? $settings['general']['secondary_default'] : '#273F2B'; 
-			$secondary_hover  = isset($settings['general']['secondary_hover']) ? $settings['general']['secondary_hover'] : '#E1F2E4'; 
-			$text_title  = isset($settings['general']['text_title']) ? $settings['general']['text_title'] : '#141915'; 
-			$text_paragraph  = isset($settings['general']['text_paragraph']) ? $settings['general']['text_paragraph'] : '#273F2B';  
-			$surface_primary  = isset($settings['general']['surface_primary']) ? $settings['general']['surface_primary'] : '#F9FBF9';  
-			$surface_background  = isset($settings['general']['surface_background']) ? $settings['general']['surface_background'] : '#C0D8C4';  
-			$surface_border  = isset($settings['general']['surface_border']) ? $settings['general']['surface_border'] : '#C0D8C4';  
-			$surface_border_hover  = isset($settings['general']['surface_border_hover']) ? $settings['general']['surface_border_hover'] : '#211319';  
-			$surface_input_field  = isset($settings['general']['surface_input_field']) ? $settings['general']['surface_input_field'] : '#56765B';  
+			// Validate color values - only allow valid hex colors (#RGB or #RRGGBB format)
+			$primery_default  = $this->validate_hex_color( $settings['general']['primery_default'] ?? '#2E6B38', '#2E6B38' );
+			$primery_hover  = $this->validate_hex_color( $settings['general']['primery_hover'] ?? '#4C9959', '#4C9959' );
+			$secondary_default  = $this->validate_hex_color( $settings['general']['secondary_default'] ?? '#273F2B', '#273F2B' );
+			$secondary_hover  = $this->validate_hex_color( $settings['general']['secondary_hover'] ?? '#E1F2E4', '#E1F2E4' );
+			$text_title  = $this->validate_hex_color( $settings['general']['text_title'] ?? '#141915', '#141915' );
+			$text_paragraph  = $this->validate_hex_color( $settings['general']['text_paragraph'] ?? '#273F2B', '#273F2B' );
+			$surface_primary  = $this->validate_hex_color( $settings['general']['surface_primary'] ?? '#F9FBF9', '#F9FBF9' );
+			$surface_background  = $this->validate_hex_color( $settings['general']['surface_background'] ?? '#C0D8C4', '#C0D8C4' );
+			$surface_border  = $this->validate_hex_color( $settings['general']['surface_border'] ?? '#C0D8C4', '#C0D8C4' );
+			$surface_border_hover  = $this->validate_hex_color( $settings['general']['surface_border_hover'] ?? '#211319', '#211319' );
+			$surface_input_field  = $this->validate_hex_color( $settings['general']['surface_input_field'] ?? '#56765B', '#56765B' );
 			$custom_css = "
 				:root {
 					--tfhb-admin-primary-default: $primery_default; 
@@ -153,5 +154,30 @@ class Enqueue {
 		if ( function_exists( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
 		}
+	}
+
+	/**
+	 * Validate and sanitize hex color values.
+	 * Only allows valid hex color format (#RRGGBB or #RGB).
+	 *
+	 * @param mixed  $color        The color value to validate.
+	 * @param string $default_color The default color to use if validation fails.
+	 * @return string Valid hex color or default color.
+	 */
+	private function validate_hex_color( $color, $default_color = '#000000' ) {
+		if ( empty( $color ) ) {
+			return $default_color;
+		}
+		
+		// Remove any whitespace
+		$color = trim( $color );
+		
+		// Validate hex color format (#RGB or #RRGGBB)
+		if ( preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
+			return $color;
+		}
+		
+		// Return default color if invalid
+		return $default_color;
 	}
 }

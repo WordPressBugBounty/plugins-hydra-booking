@@ -12,6 +12,8 @@ use HydraBooking\Admin\Controller\AuthController;
 class AdminMenu {
 
 	private $auth;
+	 
+
 
 	// constaract
 	public function __construct() {
@@ -19,6 +21,7 @@ class AdminMenu {
 		$this->auth = new AuthController();
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 	}
+
 
 
 	public function admin_menu() {
@@ -35,8 +38,9 @@ class AdminMenu {
 			// array($this, 'hydra_booking_access'),
 			'hydra-booking',
 			array( $this, 'hydra_booking_page' ),
-			'dashicons-calendar-alt',
-			6
+			// load faveconn
+			 plugin_dir_url( __FILE__ ) . '../../assets/images/hydra-booking-logo.png',
+			25
 		);
 
 		add_submenu_page(

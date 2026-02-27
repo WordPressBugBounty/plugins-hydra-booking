@@ -877,6 +877,7 @@ class MeetingController {
 			);
 		}
 
+		
 		// Notification
 		if ( empty( $MeetingData->notification ) ) {
 			$_tfhb_notification_settings = get_option( '_tfhb_notification_settings' );
@@ -884,12 +885,95 @@ class MeetingController {
 			if(empty($_tfhb_notification_settings)){
 				$default_notification =  new Helper();
 				$_tfhb_notification_settings = $default_notification->get_default_notification_template(); 
+		 
 			}
 			$MeetingData->notification   = $_tfhb_notification_settings;
+		}else{
+			// Decode notification data
+			$decoded_notification = json_decode( $MeetingData->notification, true );
+			$decoded_notification = is_array( $decoded_notification ) ? $decoded_notification : array();
+ 
+			$default_notification = new Helper();
+			$default_templates    = $default_notification->get_default_notification_template();
+
+ 
+
+			$has_updates = false;
+
+			foreach ( array( 'host', 'attendee' ) as $role ) {
+				if ( empty( $decoded_notification[ $role ] ) || ! is_array( $decoded_notification[ $role ] ) ) {
+					continue;
+				}
+
+				foreach ( $decoded_notification[ $role ] as $template_key => &$template ) {
+					if ( ! is_array( $template ) ) {
+						$template = array();
+					}
+
+					// Backfill old flag (disabled)
+					if ( ! array_key_exists( 'add_to_calender', $template ) ) {
+						$template['add_to_calender'] = 0;
+						$has_updates = true;
+					}
+
+					// Ensure builder exists
+					if ( ! isset( $template['builder'] ) || ! is_array( $template['builder'] ) ) {
+						$template['builder'] = array();
+						$has_updates = true;
+					}
+
+					// Ensure builder add_to_calendar section exists (disabled)
+					$found_add_to_calendar  = false;
+					$add_to_calendar_index  = -1;
+					$footer_index           = -1;
+					foreach ( $template['builder'] as $builder_index => $builder_section ) {
+						if ( isset( $builder_section['id'] ) && 'add_to_calendar' === $builder_section['id'] ) {
+							$found_add_to_calendar = true;
+							$add_to_calendar_index = $builder_index;
+						}
+
+						if ( isset( $builder_section['id'] ) && 'footer' === $builder_section['id'] ) {
+							$footer_index = $builder_index;
+						}
+					}
+
+				 
+
+					if ( ! $found_add_to_calendar ) {
+						if ( isset( $default_templates[ $role ][ $template_key ]['builder'] ) && is_array( $default_templates[ $role ][ $template_key ]['builder'] ) ) {
+							foreach ( $default_templates[ $role ][ $template_key ]['builder'] as $default_section ) {
+								if ( isset( $default_section['id'] ) && 'add_to_calendar' === $default_section['id'] ) {
+									$default_section['status'] = 0; // disabled for existing users
+
+									$footer_index = -1;
+									foreach ( $template['builder'] as $builder_index => $builder_section ) {
+										if ( isset( $builder_section['id'] ) && 'footer' === $builder_section['id'] ) {
+											$footer_index = $builder_index;
+											break;
+										}
+									}
+
+									if ( $footer_index > -1 ) {
+										array_splice( $template['builder'], $footer_index, 0, array( $default_section ) );
+									} else {
+										$template['builder'][] = $default_section;
+									}
+									$has_updates = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				unset( $template );
+			}
+		
+
+			$MeetingData->notification = $decoded_notification; 
+
 		}
 
-		$this->ensureBuilderKeyExists($MeetingData->notification);
-		
 		// Ensure slack, telegram, twilio default notification channels exist
 		if(isset($MeetingData->notification)){
 			// Work with objects for consistency
@@ -1214,7 +1298,8 @@ class MeetingController {
 		}else{
 			$availability_custom = '';
 		}
-
+ 
+		
 		// Update Meeting
 		$data = array(
 			'id'                       => $request['id'],

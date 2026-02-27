@@ -57,6 +57,13 @@ class App {
 			'top'
 		);
 
+		// Rewrite rool for add to calendar 
+		add_rewrite_rule(
+			'^booking/([0-9]+)/?$',
+			'index.php?hydra-booking=add-to-calendar&hash=$matches[1]&type=download_ics',
+			'top'
+		);
+
 		add_action( 'pre_get_posts', array( $this, 'tfhb_remove_posttype_request' ) );
 		add_filter( 'single_template', array( $this, 'tfhb_single_meeting_template' ) );
 		
@@ -111,7 +118,8 @@ class App {
 	}
 
 	public function tfhb_single_query_vars( $query_vars ) {
-		$query_vars[] = 'hydra-booking';
+		$query_vars[] = 'hydra-booking'; 
+		$query_vars[] = 'hydra-add-to-calendar'; 
 		$query_vars[] = 'username';
 		$query_vars[] = 'meeting';
 		$query_vars[] = 'meeting-id';
@@ -133,6 +141,13 @@ class App {
 			 
 			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/single-meeting.php', false );
 			return $custom_template;
+		} 
+		if ( get_query_var( 'hydra-add-to-calendar' )) {
+			
+			
+			$Bookmark = new BookingBookmarks();
+			$getBookmark = $Bookmark->sendBookmarkFormEmail(get_query_var( 'hydra-add-to-calendar' ));
+
 		} 
 
  

@@ -6,7 +6,7 @@ use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Attendees;
 use HydraBooking\DB\Host;
 use HydraBooking\DB\BookingMeta;
-use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\Admin\Controller\DateTimeController; 
 
 
 class MailHooks {
@@ -55,6 +55,7 @@ class MailHooks {
 		$Meeting_meta                = $this->getMeetingData( $attendees->meeting_id );
 		$_tfhb_notification_settings = ! empty( $Meeting_meta['notification'] ) ? $Meeting_meta['notification'] : '';
 		$hostData                    = $this->getHostData( $attendees->host_id );  
+
 		
 		if ( ! empty( $_tfhb_notification_settings ) ) {
 
@@ -74,13 +75,15 @@ class MailHooks {
 				
 				// Setting Body
 				$mailbody = ! empty( $_tfhb_notification_settings['host']['booking_confirmation']['body'] ) ? $_tfhb_notification_settings['host']['booking_confirmation']['body'] : ''; 
-
+ 	 
 				// Replace Shortcode to Values
 				$finalbody = $this->replace_mail_tags( $mailbody, $attendees->id );
+		 
 			
 				// Result after Shortcode replce
 				$body = wp_kses_post( $this->email_body_open() . $finalbody . $this->email_body_close() );
- 
+
+
 				// Host Email
 				$mailto = ! empty( $hostData->email ) ? $hostData->email : '';
 
@@ -652,7 +655,7 @@ class MailHooks {
 
 					// Replace Shortcode to Values
 					$finalbody = $this->replace_mail_tags( $mailbody, $attendee_data->id );
-
+				
 					// Result after Shortcode replce
 					$body = wp_kses_post( $this->email_body_open() . $finalbody . $this->email_body_close() );
 
@@ -765,7 +768,7 @@ class MailHooks {
 	/**
 	 * Replace all available mail tags
 	 */
-	public function replace_mail_tags( $template, $attendee_id ) {
+	public function replace_mail_tags( $template, $attendee_id ) { 
 		
 		$Attendee = new Attendees();
 		$attendeeBooking =  $Attendee->getAttendeeWithBooking( 
@@ -774,7 +777,53 @@ class MailHooks {
 			),
 			1,
 			'DESC'
-		);  
+		); 
+
+
+		$google_calendar_link  = '#';
+		$outlook_calendar_link = '#';
+		$yahoo_calendar_link   = '#';
+		$other_calendar_link   = '#';
+
+		// Query-arg based add-to-calendar links
+		if ( ! empty( $attendeeBooking->hash ) && ! empty( $attendeeBooking->meeting_id ) ) {
+			$google_base_hash = [
+				'attendee_id' => $attendeeBooking->id,
+				'type' => 'google', // This can be used to identify the calendar type in the add-to-calendar handler
+			];  
+			$google_base_hash = base64_encode( wp_json_encode( $google_base_hash ) );  
+			$google_calendar_link  =home_url( '?hydra-add-to-calendar=' . $google_base_hash );
+
+			// outlook base hash
+			$outlook_base_hash = [
+				'attendee_id' => $attendeeBooking->id,
+				'type' => 'outlook', // This can be used to identify the calendar type in the add-to-calendar handler
+			];
+			$outlook_base_hash = base64_encode( wp_json_encode( $outlook_base_hash ) );
+			$outlook_calendar_link = home_url( '?hydra-add-to-calendar=' . $outlook_base_hash );
+
+			// yahoo base hash
+			$yahoo_base_hash = [
+				'attendee_id' => $attendeeBooking->id,
+				'type' => 'yahoo', // This can be used to identify the calendar type in the add-to-calendar handler
+			];
+			$yahoo_base_hash = base64_encode( wp_json_encode( $yahoo_base_hash ) );
+			$yahoo_calendar_link = home_url( '?hydra-add-to-calendar=' . $yahoo_base_hash );
+			 
+			// other calendar base hash
+			$other_base_hash = [
+				'attendee_id' => $attendeeBooking->id,
+				'type' => 'other', // This can be used to identify the calendar type in the add-to-calendar handler
+			];
+			$other_base_hash = base64_encode( wp_json_encode( $other_base_hash ) );
+			$other_calendar_link = home_url( '?hydra-add-to-calendar=' . $other_base_hash );
+		}
+ 
+  
+			// $google_calendar_link = 'https://calendar.google.com/calendar/r/eventedit?dates=20260223T122000/20260223T130000&text=Maiores aut sed rati Between admin  and Lillith Mccarty&details';
+			// $outlook_calendar_link = '#';
+			// $yahoo_calendar_link = '#';
+			// $other_calendar_link = '#';
 		 
 		// Meeting Location Check
 		$meeting_locations =  !is_array($attendeeBooking->meeting_locations) ?  json_decode( $attendeeBooking->meeting_locations ) : $attendeeBooking->meeting_locations;
@@ -786,11 +835,11 @@ class MailHooks {
 				}
 			}
 		}
-		// 
+		 
 
 		$replacements = array(
 			'{{meeting.title}}'    => ! empty( $attendeeBooking->meeting_title ) ? $attendeeBooking->meeting_title : '',
-			'{{meeting.content}}'    => ! empty( $attendeeBooking->meeting_content ) ? $attendeeBooking->meeting_content : '',
+			'{{meeting.content}}'  => ! empty( $attendeeBooking->meeting_content ) ? $attendeeBooking->meeting_content : '',
 			'{{meeting.date}}'     => ! empty( $attendeeBooking->meeting_dates ) ? $attendeeBooking->meeting_dates : '',
 			'{{meeting.location}}' => implode( ', ', $locations ),
 			'{{meeting.duration}}' => $attendeeBooking->duration,
@@ -799,9 +848,14 @@ class MailHooks {
 			'{{host.email}}'       => ! empty( $attendeeBooking->host_email ) ? $attendeeBooking->host_email : '',
 			'{{host.phone}}'       => ! empty( $attendeeBooking->host_phone ) ? $attendeeBooking->host_phone : '',
 			'{{attendee.name}}'    => ! empty( $attendeeBooking->attendee_name ) ? $attendeeBooking->attendee_name : '',
-			'{{attendee.email}}'   => ! empty( $attendeeBooking->attendee_email ) ? $attendeeBooking->attendee_email : '', 
-
+			'{{attendee.email}}'   => ! empty( $attendeeBooking->email ) ? $attendeeBooking->email : '', 
+			'{{booking.add_to_calendar.google}}'   => ! empty( $google_calendar_link ) ? htmlspecialchars($google_calendar_link, ENT_QUOTES, 'UTF-8') : '#', 
+			'{{booking.add_to_calendar.outlook}}'   => ! empty( $outlook_calendar_link ) ? htmlspecialchars($outlook_calendar_link, ENT_QUOTES, 'UTF-8') : '#', 
+			'{{booking.add_to_calendar.yahoo}}'   => ! empty( $yahoo_calendar_link ) ? htmlspecialchars($yahoo_calendar_link, ENT_QUOTES, 'UTF-8') : '#', 
+			'{{booking.add_to_calendar.other}}'   => ! empty( $other_calendar_link ) ? htmlspecialchars($other_calendar_link, ENT_QUOTES, 'UTF-8') : '#',
+	
 		);
+		// tfhb_print_r($replacements);
 		
 		// Additional Data
 		if( !empty($attendeeBooking->others_info) && $attendeeBooking->others_info != NULL ){

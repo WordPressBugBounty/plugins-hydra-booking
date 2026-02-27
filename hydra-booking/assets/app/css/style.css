@@ -789,7 +789,7 @@ button.tfhb-btn.tfhb-preloader:before {
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.inactive,
 .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.inactive {
-  color: var(--tfhb-secondary-color);
+  color: #C0D8C4;
   cursor: not-allowed !important;
   background-color: transparent !important;
 }
@@ -802,6 +802,7 @@ button.tfhb-btn.tfhb-preloader:before {
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current,
 .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-calendar .tfhb-calendar-body ul.tfhb-calendar-dates li.current {
+  color: var(--tfhb-secondary-color);
   position: relative;
   z-index: 0;
   cursor: pointer;

@@ -3,6 +3,9 @@ namespace HydraBooking\Services\Integrations\BookingBookmarks;
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+
+use HydraBooking\DB\Attendees;
+use HydraBooking\Services\Integrations\BookingBookmarks\BookingBookmarks; 
 /**
  * 
  * BookingBookmarks
@@ -71,11 +74,11 @@ class BookingBookmarks {
                 'dates'    => $start_time_google . '/' . $end_time_google,
                 'text'     => $bookingTitle,
                 'details'  => $details,
-                'location' => ''.$location.'',
-                'ctz'      => $availability_time_zone // Time Zone Parameter for Google
+                'location' => $location,
+                'ctz'      => $availability_time_zone
             ], 'https://calendar.google.com/calendar/r/eventedit'),
-           
-            'icon' => esc_url(TFHB_URL . 'assets/app/images/google-calendar.svg'), 
+
+            'icon' => esc_url(TFHB_URL . 'assets/app/images/google-calendar.svg'),
         ];
 
         // Format for Outlook (ISO 8601 format with time zone)
@@ -319,6 +322,48 @@ class BookingBookmarks {
         $datetime->setTimezone(new \DateTimeZone("UTC"));
 
         return $datetime->format("Ymd\THis\Z");
+    }
+
+    // sent bookmark add to calender link in email notification
+    public function sendBookmarkFormEmail($hash){ 
+        // allowed types: download_ics, confirmation, cancel
+   
+        // decode hash to get booking data
+        // encoded format: $hash = base64_encode( wp_json_encode( $hash ) );
+        $decoded_hash = base64_decode($hash, true); 
+        if ($decoded_hash === false) {
+            return false; // Invalid base64 string
+        }
+        $booking_data = json_decode($decoded_hash, true);
+        $type = $booking_data['type'] ?? '';
+        $allowed_types = ['google', 'outlook', 'yahoo', 'other'];
+        if ( !in_array($type, $allowed_types) ) {
+            return false;
+        }
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return false; // Invalid JSON
+        }
+        $Attendee = new Attendees();
+		$attendeeBooking =  $Attendee->getAttendeeWithBooking( 
+			array(
+				array('id', '=',$booking_data['attendee_id']),
+			),
+			1,
+			'DESC'
+		); 
+        if(!$attendeeBooking){
+            return false;
+        }
+        // Get bookmarks
+        $bookmarks = $this->getMeetingBookmarks($attendeeBooking);
+
+        if (empty($bookmarks[$type]['url'])) {
+            return false;
+        }
+
+        wp_redirect($bookmarks[$type]['url']);
+        exit;
     }
 
  

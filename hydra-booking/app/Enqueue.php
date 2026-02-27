@@ -29,14 +29,15 @@ class Enqueue {
 		$tfhb_paypal = isset( $_tfhb_integration_settings['paypal'] ) ? $_tfhb_integration_settings['paypal'] : array();
 		 
 		
-		$tfhb_primary_color   = ! empty( $_tfhb_appearance_settings['primary_color'] ) ? $_tfhb_appearance_settings['primary_color'] : '#2E6B38';
-		$tfhb_primary_hover   = ! empty( $_tfhb_appearance_settings['primary_hover'] ) ? $_tfhb_appearance_settings['primary_hover'] : '#4C9959';
-		$tfhb_secondary_color = ! empty( $_tfhb_appearance_settings['secondary_color'] ) ? $_tfhb_appearance_settings['secondary_color'] : '#273F2B';
-		$tfhb_secondary_hover = ! empty( $_tfhb_appearance_settings['secondary_hover'] ) ? $_tfhb_appearance_settings['secondary_hover'] : '#E1F2E4';
-		$tfhb_text_title_color = ! empty( $_tfhb_appearance_settings['text_title_color'] ) ? $_tfhb_appearance_settings['text_title_color'] : '#141915';
-		$tfhb_paragraph_color = ! empty( $_tfhb_appearance_settings['paragraph_color'] ) ? $_tfhb_appearance_settings['paragraph_color'] : '#273F2B';
-		$tfhb_surface_primary = ! empty( $_tfhb_appearance_settings['surface_primary'] ) ? $_tfhb_appearance_settings['surface_primary'] : '#C0D8C4';
-		$tfhb_surface_background = ! empty( $_tfhb_appearance_settings['surface_background'] ) ? $_tfhb_appearance_settings['surface_background'] : '#EEF6F0';
+		// Validate and use color values - only allow valid hex colors
+		$tfhb_primary_color   = $this->validate_hex_color( $_tfhb_appearance_settings['primary_color'] ?? '#2E6B38', '#2E6B38' );
+		$tfhb_primary_hover   = $this->validate_hex_color( $_tfhb_appearance_settings['primary_hover'] ?? '#4C9959', '#4C9959' );
+		$tfhb_secondary_color = $this->validate_hex_color( $_tfhb_appearance_settings['secondary_color'] ?? '#273F2B', '#273F2B' );
+		$tfhb_secondary_hover = $this->validate_hex_color( $_tfhb_appearance_settings['secondary_hover'] ?? '#E1F2E4', '#E1F2E4' );
+		$tfhb_text_title_color = $this->validate_hex_color( $_tfhb_appearance_settings['text_title_color'] ?? '#141915', '#141915' );
+		$tfhb_paragraph_color = $this->validate_hex_color( $_tfhb_appearance_settings['paragraph_color'] ?? '#273F2B', '#273F2B' );
+		$tfhb_surface_primary = $this->validate_hex_color( $_tfhb_appearance_settings['surface_primary'] ?? '#C0D8C4', '#C0D8C4' );
+		$tfhb_surface_background = $this->validate_hex_color( $_tfhb_appearance_settings['surface_background'] ?? '#EEF6F0', '#EEF6F0' );
 		$tfhb_theme_css       = "
         :root {
             --tfhb-primary-color: $tfhb_primary_color;
@@ -49,7 +50,7 @@ class Enqueue {
             --tfhb-surface-background-color: $tfhb_surface_background;
           }
         ";
-		wp_add_inline_style( 'tfhb-style', $tfhb_theme_css ); 
+		wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
 		// register script
 		wp_register_script( 'tfhb-stripe-script', '//checkout.stripe.com/checkout.js', array( 'jquery' ), '1.0.0' );
 		if(isset($tfhb_paypal['status']) && $tfhb_paypal['status'] == 1){
@@ -86,5 +87,29 @@ class Enqueue {
 		);
 	}
 
+	/**
+	 * Validate and sanitize hex color values.
+	 * Only allows valid hex color format (#RRGGBB or #RGB).
+	 *
+	 * @param mixed  $color        The color value to validate.
+	 * @param string $default_color The default color to use if validation fails.
+	 * @return string Valid hex color or default color.
+	 */
+	private function validate_hex_color( $color, $default_color = '#000000' ) {
+		if ( empty( $color ) ) {
+			return $default_color;
+		}
+		
+		// Remove any whitespace
+		$color = trim( $color );
+		
+		// Validate hex color format (#RGB or #RRGGBB)
+		if ( preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
+			return $color;
+		}
+		
+		// Return default color if invalid
+		return $default_color;
+	}
 
 }

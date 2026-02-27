@@ -823,14 +823,93 @@ class SettingsController {
         }
     }
 
+	private function mergeMissingBuilderSections(&$notifications, $default_notifications) {
+		$has_changes = false;
+
+		foreach ($default_notifications as $role => $role_defaults) {
+			if (!isset($notifications[$role]) || !is_array($notifications[$role]) || !is_array($role_defaults)) {
+				continue;
+			}
+
+			foreach ($role_defaults as $template_key => $template_default) {
+				if (!isset($notifications[$role][$template_key]) || !is_array($notifications[$role][$template_key])) {
+					continue;
+				}
+
+				if (!isset($template_default['builder']) || !is_array($template_default['builder'])) {
+					continue;
+				}
+
+				if (!isset($notifications[$role][$template_key]['builder']) || $notifications[$role][$template_key]['builder'] === '') {
+					$notifications[$role][$template_key]['builder'] = $template_default['builder'];
+					$has_changes = true;
+					continue;
+				}
+
+				if (!is_array($notifications[$role][$template_key]['builder'])) {
+					continue;
+				}
+
+				$current_builder = $notifications[$role][$template_key]['builder'];
+				$existing_ids = array();
+
+				foreach ($current_builder as $section) {
+					if (is_array($section) && !empty($section['id'])) {
+						$existing_ids[$section['id']] = true;
+					}
+				}
+
+				$missing_sections = array();
+				foreach ($template_default['builder'] as $default_section) {
+					if (!is_array($default_section) || empty($default_section['id'])) {
+						continue;
+					}
+
+					if (!isset($existing_ids[$default_section['id']])) {
+						$missing_sections[] = $default_section;
+					}
+				}
+
+				if (empty($missing_sections)) {
+					continue;
+				}
+
+				$footer_index = null;
+				foreach ($current_builder as $index => $section) {
+					if (is_array($section) && isset($section['id']) && $section['id'] === 'footer') {
+						$footer_index = $index;
+						break;
+					}
+				}
+
+				$insert_index = ($footer_index !== null) ? $footer_index : count($current_builder);
+				array_splice($current_builder, $insert_index, 0, $missing_sections);
+
+				foreach ($current_builder as $index => $section) {
+					if (is_array($section)) {
+						$current_builder[$index]['order'] = $index;
+					}
+				}
+
+				$notifications[$role][$template_key]['builder'] = $current_builder;
+				$has_changes = true;
+			}
+		}
+
+		return $has_changes;
+	}
+
 	// Get Notification Settings
 	public function GetNotificationSettings() {
 		// $_tfhb_notification_settings = get_option( '_tfhb_notification_settings' );
 		$_tfhb_notification_settings = !empty(get_option( '_tfhb_notification_settings' )) && get_option( '_tfhb_notification_settings' ) != false ? get_option( '_tfhb_notification_settings' ) : array();
-		
+		$_tfhb_default_notification_settings = array();
+	 	
 		if(empty($_tfhb_notification_settings)){
 			$default_notification =  new Helper();
-			$_tfhb_notification_settings = $default_notification->get_default_notification_template(); 
+			$_tfhb_notification_settings = $default_notification->get_default_notification_template();
+			$_tfhb_default_notification_settings = $_tfhb_notification_settings;
+	 
 		}else{
 			$default_notification =  new Helper();
 			$_tfhb_default_notification_settings = $default_notification->get_default_notification_template(); 
@@ -844,8 +923,11 @@ class SettingsController {
 				$_tfhb_notification_settings['slack'] = !empty($_tfhb_default_notification_settings['slack']) ? $_tfhb_default_notification_settings['slack'] : '';
 			}
 		}
-
 		$this->ensureBuilderKeyExists($_tfhb_notification_settings);
+		$has_notification_updates = $this->mergeMissingBuilderSections($_tfhb_notification_settings, $_tfhb_default_notification_settings);
+		if($has_notification_updates){
+			update_option( '_tfhb_notification_settings', $_tfhb_notification_settings );
+		}
 
 		$_tfhb_integration_settings = !empty(get_option( '_tfhb_integration_settings' )) && get_option( '_tfhb_integration_settings' ) != false ? get_option( '_tfhb_integration_settings' ) : array();
 
@@ -884,6 +966,7 @@ class SettingsController {
 			$twilio_Data['status'] = false;
 		}
 
+		
 		$data                        = array(
 			'status'                => true,
 			'notification_settings' => $_tfhb_notification_settings,
@@ -1068,18 +1151,92 @@ class SettingsController {
 
 	/**
 	 * Update Appearance Settings.
+	 * Sanitizes and validates all appearance settings to prevent XSS attacks.
 	 */
 	public function UpdateAppearanceSettings() {
 		$request = json_decode( file_get_contents( 'php://input' ), true );
+		
+		if ( ! is_array( $request ) ) {
+			return rest_ensure_response( array(
+				'status'  => false,
+				'message' => __( 'Invalid request data', 'hydra-booking' ),
+			) );
+		}
+		
+		// Sanitize appearance settings
+		$sanitized_settings = $this->sanitize_appearance_settings( $request );
+		
 		// update option
-		update_option( '_tfhb_appearance_settings', $request );
+		update_option( '_tfhb_appearance_settings', $sanitized_settings );
 
 		$data = array(
 			'status'  => true,
 			'message' => __( 'Appearance Settings Updated Successfully', 'hydra-booking' ),
-			'data'    => $request,
+			'data'    => $sanitized_settings,
 		);
 		return rest_ensure_response( $data );
+	}
+
+	/**
+	 * Sanitize appearance settings - validates color values and other settings.
+	 *
+	 * @param array $settings The settings to sanitize.
+	 * @return array Sanitized settings.
+	 */
+	private function sanitize_appearance_settings( $settings ) {
+		$sanitized = array();
+		
+		// List of valid color field keys
+		$color_fields = array(
+			'primary_color',
+			'primary_hover',
+			'secondary_color',
+			'secondary_hover',
+			'text_title_color',
+			'paragraph_color',
+			'surface_primary',
+			'surface_background',
+			'surface_border',
+			'surface_border_hover',
+			'surface_input_field',
+		);
+		
+		// Sanitize each setting
+		foreach ( $settings as $key => $value ) {
+			if ( in_array( $key, $color_fields, true ) ) {
+				// Validate and sanitize color values - only allow valid hex colors
+				$sanitized[ $key ] = $this->sanitize_hex_color( $value );
+			} else {
+				// For other fields, use text sanitization
+				$sanitized[ $key ] = sanitize_text_field( $value );
+			}
+		}
+		
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize and validate hex color values.
+	 * Only allows valid hex color format (#RRGGBB or #RGB).
+	 *
+	 * @param mixed $color The color value to validate.
+	 * @return string Valid hex color or empty string.
+	 */
+	private function sanitize_hex_color( $color ) {
+		if ( empty( $color ) ) {
+			return '';
+		}
+		
+		// Remove any whitespace
+		$color = trim( $color );
+		
+		// Validate hex color format (#RGB or #RRGGBB)
+		if ( preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
+			return $color;
+		}
+		
+		// Return empty string if invalid
+		return '';
 	}
 
 

@@ -15,8 +15,7 @@ class Mailer {
 		$body = mb_convert_encoding($body, 'UTF-8', 'auto');
 		
 		// Set proper headers
-		$headers[] = 'Content-Type: text/html; charset=UTF-8';
-		$headers[] = 'Content-Transfer-Encoding: 8bit';
+		$headers[] = 'Content-Type: text/html; charset=UTF-8'; 
 		
 		// Send email
 		$result = wp_mail($to, $subject, $body, $headers, $attachments);
