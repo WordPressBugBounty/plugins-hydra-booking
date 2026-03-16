@@ -5,6 +5,7 @@ use HydraBooking\Admin\Controller\AdminMenu;
 use HydraBooking\Admin\Controller\Notification;
 use HydraBooking\Admin\Controller\UpdateController;
 use HydraBooking\Services\Integrations\Zoom\ZoomServices;
+use HydraBooking\Hooks\Mailer;
 use HydraBooking\Migration\Migration;
 use HydraBooking\Admin\Controller\NoticeController;
 use HydraBooking\Admin\Controller\licenseController;
@@ -58,6 +59,26 @@ class Admin {
 
 
 		add_action('wp_ajax_tfhb_hydra_manage_plugin', array( $this, 'tfhb_hydra_manage_plugin' ) );
+
+		// send demo mail
+		// add_action('admin_init', array( $this, 'tfhb_send_demo_mail' ) );
+	 
+	}
+
+	public function tfhb_send_demo_mail(){
+
+		$to = get_option( 'admin_email' );
+		$subject = 'Hydra Booking - Test Email';
+		$body = Mailer::mail_body_template([
+			'recipient_name' => 'Dear Admin',
+			'title'          => esc_html__( 'Your account has been activated', 'hydra-booking' ),
+			'subtitle'       => esc_html__( 'Your account has been successfully activated.', 'hydra-booking' ),
+			'brand_name'     => get_bloginfo( 'name' ),
+			'footer_text'    => esc_html__( 'This is an automated email from ' . get_bloginfo( 'name' ) . ', please do not reply.', 'hydra-booking' ),
+		]); 
+		$headers = array('Content-Type: text/html; charset=UTF-8');
+		
+		Mailer::send( $to, $subject, $body, $headers );
 	}
 
 	public function add_admin_footer_content() {

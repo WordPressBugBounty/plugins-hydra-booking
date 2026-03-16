@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 use HydraBooking\DB\Host;
 use HydraBooking\DB\Availability;
 
+use HydraBooking\Hooks\Mailer;
+
+
 /**
  * Signup Class
  * 
@@ -427,15 +430,22 @@ class Signup {
         $string = array( 'id' => $data['user_id'], 'code' => $code );
         $subject = esc_html__( 'Email Verification', 'hydra-booking' );
         $url = get_site_url() . '/?hydra-booking=email-verification&tfhb_verification=' . base64_encode( json_encode( $string ) );
-        $message = '<p>' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '</p>';
-        $message .= '<p>' . esc_html__( 'Please click the link below to activate your account:', 'hydra-booking' ) . '</p>';
-        $message .= '<p><a target="_blank" href="' . $url . '">' . $url . '</a></p>';
-        $message .= '<p>' . esc_html__( 'Thank you', 'hydra-booking' ) . '</p>';
+     
+   
 
         $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+ 
 
-        wp_mail( $email, $subject, $message, $headers );
+        $body = Mailer::mail_body_template([
+            'recipient_name' => '' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '',
+            'title'          => esc_html__( 'Please click the button below to activate your account', 'hydra-booking' ),
+            'body_content'   => '<p><a target="_blank" href="' . $url . '" style="display:inline-block;padding:10px 20px;background-color:#273F2B;color:#fff;text-decoration:none;border-radius:5px;">' . esc_html__( 'Activate Account', 'hydra-booking' ) . '</a></p>',
+            'brand_name'     => get_bloginfo( 'name' ),
+			'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
+        ]); 
+        
+        Mailer::send( $email, $subject, $body, $headers );
 
     }
     /**
@@ -451,13 +461,19 @@ class Signup {
        $email = $data['email'];
        $name = $data['first_name'] . ' ' . $data['last_name'];
         $subject = esc_html__( 'Your account has been activated', 'hydra-booking' );
-        $message = '<p>' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '</p>';
-        $message .= '<p>' . esc_html__( 'Your account has been successfully activated.', 'hydra-booking' ) . '</p>'; 
 
         $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n"; 
 
-        wp_mail( $email, $subject, $message, $headers );
+ 
+
+        $body = Mailer::mail_body_template([
+            'recipient_name' => '' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '',
+            'title'          => esc_html__( 'Your account has been successfully activated', 'hydra-booking' ), 
+            'brand_name'     => get_bloginfo( 'name' ),
+			'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
+        ]);  
+        Mailer::send( $email, $subject, $body, $headers );
 
     }
 

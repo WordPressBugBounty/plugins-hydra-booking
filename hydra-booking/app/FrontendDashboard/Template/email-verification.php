@@ -5,6 +5,8 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; } 
 
 use HydraBooking\DB\Host;
+use HydraBooking\Hooks\Mailer;
+
 $page = get_query_var( 'hydra-booking' );
 $tfhb_verification = get_query_var( 'tfhb_verification' );
 if($page != "email-verification" || !$tfhb_verification) {
@@ -72,8 +74,16 @@ get_header();
 
                         $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
                         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-
-                        wp_mail( $email, $subject, $message, $headers );
+ 
+ 
+                        $body = Mailer::mail_body_template([
+                            'recipient_name' => 'Dear '. $name,
+                            'title'          => esc_html__( 'Your account has been successfully activated.', 'hydra-booking' ), 
+                            'brand_name'     => get_bloginfo( 'name' ),
+                            'footer_text'    => esc_html__( 'This is an automated email from ' . get_bloginfo( 'name' ) . ', please do not reply.', 'hydra-booking' ),
+                        ]); 
+                        
+                        Mailer::send( $email, $subject, $body, $headers );
                     }
 
                 } elseif (!empty($saved_code) && $saved_code != $data_code) {

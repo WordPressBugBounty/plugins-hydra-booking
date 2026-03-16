@@ -694,6 +694,10 @@ namespace HydraBooking\Admin\Controller;
             'Booking Has Been Pending' =>  __('Booking Has Been Pending', 'hydra-booking'), 
             'Booking Has Been Canceled' =>  __('Booking Has Been Canceled', 'hydra-booking'), 
             'Booking Has Been Rescheduled' =>  __('Booking Has Been Rescheduled', 'hydra-booking'),  
+            'Google Calendar Event Created' =>  __('Google Calendar Event Created', 'hydra-booking'),  
+            'Updated Google Calendar Event' =>  __('Updated Google Calendar Event', 'hydra-booking'),  
+            'Attendee added to the google calendar' =>  __('Attendee added to the google calendar', 'hydra-booking'),  
+            'Attendee removed from the google calendar' =>  __('Attendee removed from the google calendar', 'hydra-booking'),  
 
             //
             'Import bookings from a CSV file' =>  __('Import bookings from a CSV file', 'hydra-booking'), 

@@ -1848,7 +1848,7 @@ class MeetingController {
 					'value' => $form->ID,
 				);
 			}
-		} elseif ( $form_type == 'forminator-forms' ) {
+		} elseif ( $form_type == 'forminator' ) {
 			$args  = array(
 				'post_type'      => 'forminator_forms',
 				'posts_per_page' => -1,

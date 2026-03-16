@@ -1157,6 +1157,20 @@ button.tfhb-btn.tfhb-preloader:before {
   gap: 16px;
   margin-top: 16px;
 }
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-form-fields, .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .wpcf7-form, .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .fluentform, .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .forminator-ui,
+.tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-form-fields,
+.tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .wpcf7-form,
+.tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .fluentform,
+.tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .forminator-ui {
+  max-height: 400px;
+  overflow: auto;
+  padding-right: 20px;
+}
+.tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .forminator-ui .forminator-row,
+.tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .forminator-ui .forminator-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form,
 .tfhb-booking-cencel .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form {
   width: 100%;
@@ -1197,6 +1211,7 @@ button.tfhb-btn.tfhb-preloader:before {
   width: 100%;
   padding: 8px 12px;
   box-sizing: border-box;
+  font-size: 13px;
 }
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form .tfhb-single-form input[type=text]:focus,
 .tfhb-meeting-box .tfhb-meeting-card .tfhb-meeting-booking-form .tfhb-forms .tfhb-meeting-form .tfhb-single-form input[type=email]:focus,

@@ -72,7 +72,9 @@ $tfhb_stripe = isset( $_tfhb_integration_settings['stripe'] ) ? $_tfhb_integrati
 			endif;
 
 		} else {
-			echo '<form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">';
+			echo '<form  method="post" action="" class="tfhb-meeting-form ajax-submit"  enctype="multipart/form-data">
+			<div class="tfhb-form-fields">
+			';
 			if ( is_array( $questions ) && ! empty( $questions ) ) {
 				$disable = ! empty( $booking_data ) ? 'disabled' : '';
 				$others_info = isset( $booking_data->others_info ) ? $booking_data->others_info : '';
@@ -184,12 +186,13 @@ $tfhb_stripe = isset( $_tfhb_integration_settings['stripe'] ) ? $_tfhb_integrati
 			
 		
 			?> 
-				<div class="tfhb-confirmation-button tfhb-mt-32">
-					<button class="tfhb-flexbox tfhb-gap-8 tfhb-booking-submit">
-					<?php echo ! empty( $booking_data ) ? 'Reschedule' : 'Confirm'; ?>  
-						<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/arrow-right.svg'); ?>" alt="arrow"> 
-					</button>
-				</div>
+			</div>
+			<div class="tfhb-confirmation-button tfhb-mt-32">
+				<button class="tfhb-flexbox tfhb-gap-8 tfhb-booking-submit">
+				<?php echo ! empty( $booking_data ) ? 'Reschedule' : 'Confirm'; ?>  
+					<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/arrow-right.svg'); ?>" alt="arrow"> 
+				</button>
+			</div>
 			<?php
 				if(isset($tfhb_paypal['status']) && $tfhb_paypal['status'] == 1 ):
 			?> 

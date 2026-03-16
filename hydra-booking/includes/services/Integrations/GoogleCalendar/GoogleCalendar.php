@@ -477,11 +477,35 @@ class GoogleCalendar {
 		$get_booking_meta = $BookingMeta->getWithIdKey( $booking->booking_id, 'booking_calendar', 1 );  
 		 
 		if($get_booking_meta){
-			$this->addAttendeeGoogleCalender($booking, $get_booking_meta);	
+			$this->addAttendeeGoogleCalender($booking, $get_booking_meta);	 
+
+			// Add activity after email sent
+			$BookingMeta->add([
+				'booking_id' => $booking->booking_id,
+				'meta_key' => 'booking_activity',
+				'value' => array( 
+						'datetime' => date('M d, Y, h:i A'), 
+						'title' =>  'Updated Google Calendar Event',  // translate it from Vue
+						'description' =>  'Attendee added to the google calendar', 
+					)
+				]
+			);
 		}else{
 			
 			// Update the Booking
 			$this->InsertGoogleCalender($booking);
+
+			// Add activity after email sent
+			$BookingMeta->add([
+				'booking_id' => $booking->booking_id,
+				'meta_key' => 'booking_activity',
+				'value' => array( 
+						'datetime' => date('M d, Y, h:i A'), 
+						'title' =>  'Google Calendar Event Created',  // translate it from Vue
+						'description' => 'Attendee added to the google calendar',
+					)
+				]
+			);
 		}
  
 		return true;
@@ -567,6 +591,18 @@ class GoogleCalendar {
 					'value' => wp_json_encode( $value ),
 				);  
 				$UpdateBookingMeta->update( $booking_meta ); 
+
+				// Add activity after email sent
+				$UpdateBookingMeta->add([
+					'booking_id' => $attendee->booking_id,
+					'meta_key' => 'booking_activity',
+					'value' => array( 
+							'datetime' => date('M d, Y, h:i A'), 
+							'title' =>  'Updated Google Calendar Event',  // translate it from Vue
+							'description' =>  'Attendee removed from the google calendar',
+						)
+					]
+				);
 			} 
 		} 
 		$this->insert_calender_after_booking_confirmed($attendee);

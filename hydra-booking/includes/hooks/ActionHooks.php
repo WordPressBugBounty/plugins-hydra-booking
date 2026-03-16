@@ -45,6 +45,9 @@ class ActionHooks {
 			// Show custom data in order details.
 			add_action( 'woocommerce_checkout_create_order_line_item', array( new WooBooking(), 'tfhb_booking_custom_order_data' ), 10, 4 );
 
+			// Sync booking/attendee status when Woo order status changes from backend.
+			add_action( 'woocommerce_order_status_changed', array( new WooBooking(), 'sync_booking_status_from_woo_order_status' ), 10, 4 );
+
 			// add booking_id to order meta
 			add_action( 'woocommerce_checkout_order_processed', array( new WooBooking(), 'tfhb_add_booking_data_checkout_order_processed' ), 10, 4 );
 

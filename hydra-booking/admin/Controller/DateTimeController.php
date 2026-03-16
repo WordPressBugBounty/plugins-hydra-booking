@@ -188,12 +188,17 @@ class DateTimeController extends \DateTimeZone {
 			// get the first date
 			$meeting_date = $meeting_dates_array[0]; 
 
-			$start_time = $this->convert_time_based_on_timezone( $meeting_date, $start_time, $time_zone, $selected_time_zone, $selected_time_format );
-			$end_time   = $this->convert_time_based_on_timezone( $meeting_date, $end_time, $time_zone, $selected_time_zone, $selected_time_format );
+			$start_time_obj = $this->convert_time_based_on_timezone( $meeting_date, $start_time, $time_zone, $selected_time_zone, '' );
+			$end_time_obj   = $this->convert_time_based_on_timezone( $meeting_date, $end_time, $time_zone, $selected_time_zone, '' );
+
+			$start_time = $this->formatTime( $start_time_obj, $selected_time_format, $selected_time_zone );
+			$end_time   = $this->formatTime( $end_time_obj, $selected_time_format, $selected_time_zone );
 			 
 			$disabled_times[] = array(
-				'start' => $start_time,
-				'end'   => $end_time,
+				'start'        => $start_time,
+				'end'          => $end_time,
+				'start_object' => $start_time_obj,
+				'end_object'   => $end_time_obj,
 			);
 			// echo $meeting_date;
 
@@ -236,18 +241,45 @@ class DateTimeController extends \DateTimeZone {
 
 		}
 
-		// if date time_slots_data any array match with disabled_times any array  exists remove that array without loop form
+		// Skip time slots that overlap with any existing booking range.
+		$slot_format = ( '12' === $selected_time_format ) ? 'Y-m-d h:i A' : 'Y-m-d H:i';
 		$time_slots_data = array_filter(
 			$time_slots_data,
-			function ( $slot ) use ( $disabled_times ) {
-				 
-				$flag = true;
-				foreach ( $disabled_times as $key => $value ) {
-					if ( $slot['start'] == $value['start'] && $slot['end'] == $value['end'] ) {
-						$flag = false;
+			function ( $slot ) use ( $disabled_times, $selected_date, $selected_time_zone, $slot_format, $meeting_interval ) {
+				$slot_start = \DateTime::createFromFormat(
+					$slot_format,
+					$selected_date . ' ' . $slot['start'],
+					new \DateTimeZone( $selected_time_zone )
+				);
+				$slot_end = \DateTime::createFromFormat(
+					$slot_format,
+					$selected_date . ' ' . $slot['end'],
+					new \DateTimeZone( $selected_time_zone )
+				);
+
+				if ( ! $slot_start || ! $slot_end ) {
+					return true;
+				}
+
+				foreach ( $disabled_times as $value ) {
+					if ( empty( $value['start_object'] ) || empty( $value['end_object'] ) ) {
+						continue;
+					}
+
+					$booked_start_with_gap = clone $value['start_object'];
+					$booked_end_with_gap = clone $value['end_object'];
+					if ( (int) $meeting_interval > 0 ) {
+						$booked_start_with_gap->modify( '-' . (int) $meeting_interval . ' minutes' );
+						$booked_end_with_gap->modify( '+' . (int) $meeting_interval . ' minutes' );
+					}
+
+					// Skip any slot that overlaps [booked_start - interval, booked_end + interval].
+					if ( $slot_start < $booked_end_with_gap && $slot_end > $booked_start_with_gap ) {
+						return false;
 					}
 				}
-				return $flag;
+
+				return true;
 			}
 		);
 		// return $time_slots_data;
@@ -301,8 +333,13 @@ class DateTimeController extends \DateTimeZone {
 			$end_time   = $this->formatTime( ( clone $current )->modify( "+$total_diff seconds" ), $time_format, $selected_time_zone );
 
 			// if current time is passed then skip skip_before_meeting_start
-			$current_minus_skip = ( clone $current )->modify( "-$skip_before_meeting_start $skip_before_format" );			if ( new \DateTime( 'now', new \DateTimeZone( $time_zone ) ) > $current_minus_skip ) {
-				$current->modify( "+$total_diff seconds" )->modify( "+$meeting_interval seconds" );
+			$current_minus_skip = ( clone $current )->modify( "-$skip_before_meeting_start $skip_before_format" );			
+			if ( new \DateTime( 'now', new \DateTimeZone( $time_zone ) ) > $current_minus_skip ) {
+				if($meeting_interval == 0){
+					$current->modify( "+$total_diff seconds" );
+				}else{
+					 $current->modify( "+$meeting_interval seconds" ); 
+				}
 
 				continue;
 			}   
@@ -323,7 +360,11 @@ class DateTimeController extends \DateTimeZone {
 				$arg
 			);
 			
-			$current->modify( "+$total_diff seconds" )->modify( "+$meeting_interval seconds" );
+			if($meeting_interval == 0){
+				$current->modify( "+$total_diff seconds" );
+			}else{
+				$current->modify( "+$meeting_interval seconds" ); 
+			}
 
 		}
 

@@ -161,20 +161,26 @@ class Transactions {
  
 
 	public function totalEarning($previous_date, $current_date, $user_id = false) {
-		// where "created_at BETWEEN '$previous_date' AND '$current_date'",  
 		global $wpdb;
-		$host_table = $wpdb->prefix . 'tfhb_hosts';
-		$table_name = $wpdb->prefix . $this->table;
-		// Join the tables transactions and meetings
-		$sql = "SELECT  SUM($table_name.total) AS total_sum FROM $table_name
-		LEFT JOIN $host_table ON $table_name.host_id = $host_table.id
-		WHERE $table_name.created_at BETWEEN '$previous_date' AND '$current_date'";
-		if ($user_id) {
-			$sql .= " AND $host_table.id = '$user_id'";
-		} 
-		$data = $wpdb->get_var($sql);
-		return $data;
 
+		$host_table  = $wpdb->prefix . 'tfhb_hosts';
+		$table_name  = $wpdb->prefix . $this->table;
+		$status_name = 'canceled';
+
+		$sql = "SELECT COALESCE(SUM(CAST($table_name.total AS DECIMAL(10,2))), 0) AS total_sum
+				FROM $table_name
+				LEFT JOIN $host_table ON $table_name.host_id = $host_table.id
+				WHERE $table_name.created_at BETWEEN %s AND %s
+				AND $table_name.status != %s";
+
+		$params = array($previous_date, $current_date, $status_name);
+
+		if ($user_id) {
+			$sql      .= " AND $host_table.id = %d";
+			$params[] = (int) $user_id;
+		}
+
+		return $wpdb->get_var($wpdb->prepare($sql, $params));
 	}
 
 	// delete

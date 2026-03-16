@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.39
+Stable tag: 1.1.40
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -219,6 +219,19 @@ There are several well-known appointment booking plugins available for WordPress
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.40 – Mar 16, 2026 =
+
+- New: Added Forminator feature.
+- New: Added default email template.
+- Improved: Meeting interval logic updated.
+- Improved: Custom field types.
+- Improved: Host permission for integrations settings.
+- Improved: WooCommerce order compatibility with Hydra booking.
+- Improved: Host profile access.
+- Improved: Order cancellation and amount deduction.
+- Fixed: License issue on the frontend dashboard.
+- Fixed: Host profile design improved.
 
 = 1.1.39 – Feb 27, 2026 =
 

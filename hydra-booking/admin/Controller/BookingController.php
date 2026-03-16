@@ -610,6 +610,29 @@ class BookingController {
 				'status' => $select_status, 
 			)
 		);
+		//  need to update all attendees status and transactions status to rebooked
+		$attendees = new Attendees();
+		$transactions = new Transactions();
+		foreach ( $single_booking->attendees as $attendee ) {
+			$attendees->update(
+				array(
+					'id' => $attendee->id,
+					'status' => $select_status, 
+				)
+			);
+			$where = array(
+				array('attendee_id', '=', $attendee->id),
+			);
+			$transaction = $transactions->get( $where, 1 );
+			if($transaction != null || !empty($transaction)){
+				$transactions->update( 
+					array(
+						'id' => $transaction->id,
+						'status' => $select_status, 
+					)
+				);
+			}
+		}
 
 		// 
 		// return witn success message
@@ -622,6 +645,8 @@ class BookingController {
  
 
 	}
+
+
 
 	// Pre Booking Data
 	public function getPreBookingsData() {
@@ -713,10 +738,7 @@ class BookingController {
 
 		// Buffer Time After
 		$buffer_time_after = isset( $data['buffer_time_after'] ) && ! empty( $data['buffer_time_after'] ) ? $data['buffer_time_after'] : 0;
-
-		// Meeting Interval
-		$meeting_interval = isset( $data['meeting_interval'] ) && ! empty( $data['meeting_interval'] ) ? $data['meeting_interval'] : 0;
-
+ 
 		// Disable Dates
 		$disabled_dates = array();
 		if ( $availability_data['date_slots'] != '' ) {
@@ -1299,9 +1321,7 @@ class BookingController {
 		// Buffer Time After
 		$buffer_time_after = isset( $data['buffer_time_after'] ) && ! empty( $data['buffer_time_after'] ) ? $data['buffer_time_after'] : 0;
 
-		// Meeting Interval
-		$meeting_interval = isset( $data['meeting_interval'] ) && ! empty( $data['meeting_interval'] ) ? $data['meeting_interval'] : 0;
-
+	 
 		// Disable Dates
 
 		// Get All Booking Data.
@@ -1582,14 +1602,12 @@ class BookingController {
 			'status' => isset( $request['status'] ) ? sanitize_text_field( $request['status'] ) : '',
 		);
  
+ 
 		$booking = new Booking();
 		// Booking Update
 		 $booking->update( $data );
  
- 
-		$booking = new Booking();
- 
-		// Single Booking
+  
 		 
 		$where = array(
 			array('id', '=', $request['id']),
@@ -1600,8 +1618,27 @@ class BookingController {
 			'DESC',
 		); 
 
-
- 
+		// tfhb_print_r($request['status']);
+		// exit;
+		if($request['status'] == 'canceled'){
+			$transactions = new Transactions();
+			// update transaction status to canceled
+			$attendees = $single_booking_meta->attendees;
+			foreach( $attendees as $attendee ){
+				$where = array(
+					array('attendee_id', '=', $attendee->id),
+				);
+				$transaction = $transactions->get( $where, 1 );
+				if($transaction != null || !empty($transaction)){
+					$transactions->update( 
+						array(
+							'id' => $transaction->id,
+							'status' => 'canceled', 
+						)
+					);
+				}
+			}
+		}
 		// Update Attendee Status based on booking status
 
 		if( $single_booking_meta->booking_type  == 'one-to-one'){

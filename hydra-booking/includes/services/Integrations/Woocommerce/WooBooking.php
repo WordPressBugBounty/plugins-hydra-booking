@@ -23,6 +23,85 @@ class WooBooking {
 	public function __construct() {
 	}
 
+	private function map_woo_status_to_booking_status( $woo_status ) {
+		$woo_status = strtolower( (string) $woo_status );
+
+		if ( in_array( $woo_status, array( 'processing', 'completed' ), true ) ) {
+			return 'confirmed';
+		}
+
+		if ( in_array( $woo_status, array( 'cancelled', 'refunded', 'failed' ), true ) ) {
+			return 'canceled';
+		}
+
+		return 'pending';
+	}
+
+	public function sync_booking_status_from_woo_order_status( $order_id, $old_status, $new_status, $order ) {
+		if ( ! $order instanceof \WC_Order ) {
+			$order = wc_get_order( $order_id );
+		}
+
+		if ( ! $order ) {
+			return;
+		}
+
+		$booking_status = $this->map_woo_status_to_booking_status( $new_status );
+		$booking = new Booking();
+		$attendees = new Attendees();
+
+		foreach ( $order->get_items() as $item ) {
+			$booking_id  = $item->get_meta( '_tfhb_booking_id' );
+			$attendee_id = $item->get_meta( '_tfhb_attendee_id' );
+
+			if ( empty( $booking_id ) || empty( $attendee_id ) ) {
+				continue;
+			}
+
+			$booking->update(
+				array(
+					'id'     => $booking_id,
+					'status' => $booking_status,
+				)
+			);
+
+			$attendees->update(
+				array(
+					'id'             => $attendee_id,
+					'status'         => $booking_status,
+					'payment_status' => $new_status,
+				)
+			);
+
+			$attendee_booking = $attendees->getAttendeeWithBooking(
+				array(
+					array( 'id', '=', $attendee_id ),
+				),
+				1,
+				'DESC'
+			);
+
+			if ( ! $attendee_booking ) {
+				continue;
+			}
+
+			if ( 'confirmed' === $booking_status ) {
+				do_action( 'hydra_booking/after_booking_confirmed', $attendee_booking );
+			}
+
+			if ( 'pending' === $booking_status ) {
+				do_action( 'hydra_booking/after_booking_pending', $attendee_booking );
+			}
+
+			if ( 'canceled' === $booking_status ) {
+				do_action( 'hydra_booking/after_booking_canceled', $attendee_booking );
+			}
+
+			$notification = new Notification();
+			$notification->AddNotification( $attendee_booking );
+		}
+	}
+
 	public function add_to_cart( $product_id, $data, $attendee_data ) { 
 		$product                                      = wc_get_product( $product_id );
 		$order_meta                                   = array();

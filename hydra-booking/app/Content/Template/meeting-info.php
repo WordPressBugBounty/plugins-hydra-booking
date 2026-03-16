@@ -126,7 +126,13 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 					</defs>
 					</svg>
 				</div>
-				<?php echo ! empty( $meeting['duration'] ) ? esc_html( TransStrings::tfhbTranslateNumber($meeting['duration']) . ' ' ) : '0 ' ; ?>  
+				<?php  
+					if(!empty($meeting['duration'] == 'custom') ){
+						echo ! empty( $meeting['custom_duration'] ) ? esc_html( TransStrings::tfhbTranslateNumber($meeting['custom_duration']) . ' ' ) : '0 ' ;
+					}else{
+						echo ! empty( $meeting['duration'] ) ? esc_html( TransStrings::tfhbTranslateNumber($meeting['duration']) . ' ' ) : '0 ' ;
+					}
+				?>  
 				<?php echo esc_html__('minutes', 'hydra-booking') ?>  
 				
 			</li>

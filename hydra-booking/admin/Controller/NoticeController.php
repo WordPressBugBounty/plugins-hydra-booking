@@ -35,6 +35,7 @@ class NoticeController {
             ],
             'cookies' => $_COOKIE,
         ]);
+        tfhb_print_r($response);
 
         if (is_wp_error($response)) {
             wp_send_json_error(['message' => 'API request failed: ' . $response->get_error_message()]);

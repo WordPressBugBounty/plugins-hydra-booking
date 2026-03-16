@@ -10,6 +10,9 @@ use HydraBooking\Admin\Controller\Enqueue;
 use HydraBooking\FdDashboard\Shortcode\Signup;
 use HydraBooking\FdDashboard\Shortcode\Login;
 use HydraBooking\Admin\Controller\licenseController;
+
+use HydraBooking\Hooks\Mailer;
+
 /**
  * Frontend Dashboard Class
  * 
@@ -205,26 +208,23 @@ class FrontendDashboard {
 
                 $link = get_site_url() . '/?hydra-booking=forgot-password&tfhb_verification=' . base64_encode( json_encode( $string ) );
 
-                $subject = '<p>' . esc_html__( 'Password Reset Request', 'hydra-booking' ) . '</p>';
+                $subject = '' . esc_html__( 'Password Reset Request', 'hydra-booking' ) . '';
 
-                $message =  '<p>' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $user->first_name . ' ' . $user->last_name . '</p>';
-
-                $message .= '<p>' . esc_html__( 'You have requested to reset your password.', 'hydra-booking' ) . '</p>';
-
-                $message .='<p>' . esc_html__( 'Please click the link below to reset your password:', 'hydra-booking' ) . '</p>';
-
-                $message .= '<p><a href="' . $link . '">' . $link . '</a></p>';
-
-                $message .= '<p>' . esc_html__( 'If you did not request this, please ignore this email.', 'hydra-booking' ) . '</p>';
-
-                $message .= '<p>' . esc_html__( 'Thank you', 'hydra-booking' ) . '</p>';
-
-                $message .= '<p>' . esc_html__( 'Hydra Booking', 'hydra-booking' ) . '</p>';
+        
 
                 $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
                 $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
 
-                if ( wp_mail( $user_email, $subject, $message, $headers ) ) {
+                $body = Mailer::mail_body_template([
+                    'recipient_name' => '' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $user->first_name . ' ' . $user->last_name . '',
+                    'title'          => esc_html__( 'You have requested to reset your password.', 'hydra-booking' ),
+                    'body_content'   => '<p><a target="_blank" href="' . $link . '" style="display:inline-block;padding:10px 20px;background-color:#273F2B;color:#fff;text-decoration:none;border-radius:5px;">' . esc_html__( 'Reset Password', 'hydra-booking' ) . '</a></p> ',
+                    'brand_name'     => get_bloginfo( 'name' ),
+                    'footer_text'    => esc_html__( 'This is an automated email from ' . get_bloginfo( 'name' ) . ', please do not reply.', 'hydra-booking' ),
+                ]);
+                 
+
+                if ( wp_mail( $user_email, $subject, $body, $headers ) ) {
                     $response['success'] = true;
                     $response['message'] = esc_html__( 'Password reset link sent to your email.', 'hydra-booking' );
                 }

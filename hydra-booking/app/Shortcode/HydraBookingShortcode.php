@@ -410,7 +410,6 @@ class HydraBookingShortcode {
 					},
 					ARRAY_FILTER_USE_KEY
 				);
-
 				if ( isset( $_POST['names'] ) && is_array( $_POST['names'] ) ) {
 					$attendee_data['attendee_name'] = $_POST['names']['first_name'] . ' ' . $_POST['names']['last_name'];
 				}
@@ -478,6 +477,8 @@ class HydraBookingShortcode {
 
 		if ( isset( $questions ) && ! empty( $questions ) ) {
 			foreach ( $questions as $key => $question ) {
+				// remove question_ from key
+				$key = str_replace( 'question_', '', $key );
 				$attendee_data['others_info'][ $key ] = sanitize_text_field( $question );
 			}
 		}
@@ -1104,6 +1105,8 @@ class HydraBookingShortcode {
 			wp_send_json_error( array( 'message' => esc_html(__('Invalid Booking ID', 'hydra-booking')) ) );
 		}
 
+		
+
 
 		$attendee_data = array(
 			'id'           => $attendeeBooking->id,
@@ -1114,7 +1117,24 @@ class HydraBookingShortcode {
 
 		
 		$Attendee->update( $attendee_data );
+		
 
+
+		// Update Transaction status to Cancelled
+		$transactions = new Transactions();
+		$where = array(
+			array('attendee_id', '=', $attendeeBooking->id),
+		);
+		$transaction = $transactions->get( $where, 1 );
+		if($transaction != null || !empty($transaction)){
+			$transactions->update( 
+				array(
+					'id' => $transaction->id,
+					'status' => 'canceled', 
+				)
+			);
+		}
+		
 
 		// if booking type is one-to-one then Cancel booking status
 		if('one-to-one' == $attendeeBooking->booking_type){
