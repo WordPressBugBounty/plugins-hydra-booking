@@ -679,13 +679,24 @@ class HostsController {
 		// Apple Calendar
 		$apple_calendar = isset( $_tfhb_host_integration_settings['apple_calendar'] ) ? $_tfhb_host_integration_settings['apple_calendar'] : array();
 
-		if ( isset($_tfhb_integration_settings['apple_calendar']['connection_status']) && $_tfhb_integration_settings['apple_calendar']['connection_status'] == true ) {
+		if ( isset( $_tfhb_integration_settings['apple_calendar']['status'] ) && $_tfhb_integration_settings['apple_calendar']['status'] == true ) {
 
-			$apple_calendar['type']              = 'calendar';
-			$apple_calendar['status']            = $_tfhb_integration_settings['apple_calendar']['status'];
-			$apple_calendar['connection_status'] = $_tfhb_integration_settings['apple_calendar']['connection_status'];
+			$apple_calendar['type']   = 'calendar';
+			$apple_calendar['status'] = $_tfhb_integration_settings['apple_calendar']['status'];
+
+			// Host's own connection_status: 1 only when the host has saved their own credentials
+			$host_has_credentials            = ! empty( $apple_calendar['apple_id'] ) && ! empty( $apple_calendar['app_password'] );
+			$apple_calendar['connection_status'] = $host_has_credentials ? 1 : 0;
 			$apple_calendar['apple_id']          = isset( $apple_calendar['apple_id'] ) ? $apple_calendar['apple_id'] : '';
-			$apple_calendar['app_password']      = isset( $apple_calendar['app_password'] ) ? $apple_calendar['app_password'] : '';
+			$apple_calendar['host_status']       = isset( $apple_calendar['host_status'] ) ? (int) $apple_calendar['host_status'] : 0;
+
+			// Never expose the encrypted password; report whether it is set
+			$apple_calendar['app_password_set'] = $host_has_credentials ? 1 : 0;
+			$apple_calendar['app_password']     = '';
+		} else {
+			$apple_calendar['type']              = 'calendar';
+			$apple_calendar['status']            = 0;
+			$apple_calendar['connection_status'] = 0;
 		}
 
 		// Mailchimp API
@@ -700,8 +711,10 @@ class HostsController {
 		}else{
 			$mailchimp['type']              = 'mailchimp';
 			$mailchimp['status']            = 0; 
-			$mailchimp['connection_status']            = 0; 
+			$mailchimp['connection_status'] = 0; 
 		}
+
+		
 
 		// Telegram
 		$telegram = isset( $_tfhb_host_integration_settings['telegram'] ) ? $_tfhb_host_integration_settings['telegram'] : array();
@@ -781,6 +794,7 @@ class HostsController {
 			'zoom_meeting'               => $zoom_meeting, 
 			'apple_calendar'             => $apple_calendar,
 			'mailchimp'                  => $mailchimp,
+			'aweber'                     => $aweber,
 			'zoho'                       => $zoho,
 			'telegram'                   => $telegram,
 			'twilio'                     => $twilio,
@@ -855,18 +869,32 @@ class HostsController {
 			$responseData['status'] = true;
 			$responseData['message'] = esc_html(__('Outlook Calendar Settings Updated Successfully', 'hydra-booking')); 
 		} elseif ( $key == 'apple_calendar' ) {
-			// Get Global Settings
-			$_tfhb_host_integration_settings['apple_calendar']['type']              = sanitize_text_field( $data['type'] );
-			$_tfhb_host_integration_settings['apple_calendar']['status']            = sanitize_text_field( $data['status'] );
-			$_tfhb_host_integration_settings['apple_calendar']['connection_status'] = isset( $data['secret_key'] ) && ! empty( $data['secret_key'] ) ? 1 : sanitize_text_field( $data['connection_status'] );
-			$_tfhb_host_integration_settings['apple_calendar']['apple_id']          = $data['apple_id'];
-			$_tfhb_host_integration_settings['apple_calendar']['app_password']      = $data['app_password'];
+			$_tfhb_host_integration_settings['apple_calendar']['type']        = sanitize_text_field( $data['type'] );
+			$_tfhb_host_integration_settings['apple_calendar']['status']      = sanitize_text_field( $data['status'] );
+			$_tfhb_host_integration_settings['apple_calendar']['host_status'] = isset( $data['host_status'] ) ? (int) $data['host_status'] : 0;
+
+			// Clear all credentials when apple_id is empty (disconnect)
+			if ( empty( $data['apple_id'] ) ) {
+				$_tfhb_host_integration_settings['apple_calendar']['apple_id']          = '';
+				$_tfhb_host_integration_settings['apple_calendar']['app_password']      = '';
+				$_tfhb_host_integration_settings['apple_calendar']['connection_status'] = 0;
+			} else {
+				$_tfhb_host_integration_settings['apple_calendar']['apple_id'] = sanitize_email( $data['apple_id'] );
+				// Only update the password if a new non-empty value was supplied
+				if ( ! empty( $data['app_password'] ) ) {
+					$_tfhb_host_integration_settings['apple_calendar']['app_password'] = self::encrypt_value( sanitize_text_field( $data['app_password'] ) );
+				}
+				// connection_status = 1 when both credentials are stored
+				$has_credentials = ! empty( $_tfhb_host_integration_settings['apple_calendar']['apple_id'] )
+				                   && ! empty( $_tfhb_host_integration_settings['apple_calendar']['app_password'] );
+				$_tfhb_host_integration_settings['apple_calendar']['connection_status'] = $has_credentials ? 1 : 0;
+			}
 
 			// update User Meta
 			update_user_meta( $user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings );
- 
-			$responseData['status'] = true;
-			$responseData['message'] = esc_html(__('Apple Calendar Settings Updated Successfully', 'hydra-booking'));   
+
+			$responseData['status']  = true;
+			$responseData['message'] = esc_html( __( 'Apple Calendar Settings Updated Successfully', 'hydra-booking' ) );
 		} elseif ( $key == 'mailchimp' ) {
 			$_tfhb_host_integration_settings['mailchimp']['type']   = 'mailchimp';
 			$_tfhb_host_integration_settings['mailchimp']['status'] = sanitize_text_field( $data['status'] );
@@ -929,6 +957,22 @@ class HostsController {
 			 
 			$responseData['status'] = true;
 			$responseData['message'] = esc_html(__('Zoho Settings Updated Successfully', 'hydra-booking')); 
+			 
+		} elseif ( $key == 'aweber' ) {
+			$_tfhb_host_integration_settings['aweber']['type']          = 'aweber';
+			$_tfhb_host_integration_settings['aweber']['status']        = sanitize_text_field( $data['status'] );
+			$_tfhb_host_integration_settings['aweber']['connection_status']        = sanitize_text_field( $data['connection_status'] );
+			$_tfhb_host_integration_settings['aweber']['client_id']     = $data['client_id'];
+			$_tfhb_host_integration_settings['aweber']['redirect_url']     = $data['redirect_url'];
+			$_tfhb_host_integration_settings['aweber']['auth_data']     = $data['auth_data'];
+			$_tfhb_host_integration_settings['aweber']['authorize_url'] = $data['authorize_url']; 
+			
+			// update User Meta
+			update_user_meta( $user_id, '_tfhb_host_integration_settings', $_tfhb_host_integration_settings );
+
+			 
+			$responseData['status'] = true;
+			$responseData['message'] = esc_html(__('AWeber Settings Updated Successfully', 'hydra-booking')); 
 			 
 		}
 		
@@ -1197,6 +1241,40 @@ class HostsController {
 			 return true;
 
 		}
+	}
+
+	/**
+	 * Encrypt a value for secure storage (Apple Calendar password etc).
+	 */
+	private static function encrypt_value( $value ) {
+		if ( empty( $value ) || ! function_exists( 'openssl_encrypt' ) ) {
+			return $value;
+		}
+		$key       = substr( hash( 'sha256', AUTH_SALT . SECURE_AUTH_SALT, true ), 0, 32 );
+		$iv        = openssl_random_pseudo_bytes( 16 );
+		$encrypted = openssl_encrypt( $value, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+		if ( $encrypted === false ) {
+			return $value;
+		}
+		return base64_encode( $iv . $encrypted );
+	}
+
+	/**
+	 * Decrypt a value previously encrypted with encrypt_value().
+	 */
+	public static function decrypt_value( $stored ) {
+		if ( empty( $stored ) || ! function_exists( 'openssl_decrypt' ) ) {
+			return '';
+		}
+		$decoded = base64_decode( $stored, true );
+		if ( $decoded === false || strlen( $decoded ) <= 16 ) {
+			return '';
+		}
+		$key       = substr( hash( 'sha256', AUTH_SALT . SECURE_AUTH_SALT, true ), 0, 32 );
+		$iv        = substr( $decoded, 0, 16 );
+		$encrypted = substr( $decoded, 16 );
+		$decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+		return $decrypted !== false ? $decrypted : '';
 	}
 
 }

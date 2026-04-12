@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */ 
 
 use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\Admin\Controller\Helper;
  
 $atts          = isset( $args['atts'] ) ? $args['atts'] : array();
 $meeting          = isset( $args['meeting'] ) ? $args['meeting'] : array();
@@ -25,6 +26,8 @@ $calendar_id  = isset( $meeting['id'] ) ? $meeting['id'] : 0;
 
 
 $date_time = new DateTimeController( 'UTC' );
+$helper = new Helper();
+$display_date_format = $helper->get_date_format_from_settings( 'l, F j' );
 $availability_data = $date_time->GetAvailabilityData($meeting);  
  
 $availability_time_zone = isset($availability_data['time_zone']) ? $availability_data['time_zone'] : '';
@@ -68,7 +71,7 @@ $availability_time_zone = isset($availability_data['time_zone']) ? $availability
                     foreach ( $meeting_dates as $key => $date ) {
                         $formate_date = $date_time->convert_time_based_on_timezone( $date, $booking_data->start_time, $meeting_availability_time_zone, $booking_data->attendee_time_zone , '' );
 
-                        $date_strings .= $formate_date->format('l, F j');
+                        $date_strings .= $formate_date->format( $display_date_format );
                         $date_strings .= '| ';
                     } 
                     $date_strings = rtrim( $date_strings, '| ' );

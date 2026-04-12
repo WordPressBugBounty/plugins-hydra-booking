@@ -16,11 +16,14 @@ defined( 'ABSPATH' ) || exit;
  */
 
 use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\Admin\Controller\Helper;
 use HydraBooking\Services\Integrations\BookingBookmarks\BookingBookmarks; 
 $data = isset( $args['attendeeBooking'] ) ? $args['attendeeBooking'] : array();  
 $confirmation_page = isset( $args['confirmation_page'] ) ? $args['confirmation_page'] : false;  
 
 $date_time = new DateTimeController( 'UTC' );
+$helper = new Helper();
+$display_date_format = $helper->get_date_format_from_settings( 'l, F j' );
 $availability_data = $date_time->GetAvailabilityData($data);    
 $availability_time_zone = $availability_data['time_zone'];  
 $Bookmark = new BookingBookmarks();
@@ -73,7 +76,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 							$date_strings = '';
 						foreach ( $meeting_dates as $key => $date ) {
 							$formate_date = $date_time->convert_time_based_on_timezone( $date, $data->start_time, $booking_availability_time_zone, $data->attendee_time_zone , '' );
-							$date_strings .= $formate_date->format('l, F j');
+							$date_strings .= $formate_date->format( $display_date_format );
 							$date_strings .= '| ';
 						}
 						$date_strings = rtrim( $date_strings, '| ' ); 

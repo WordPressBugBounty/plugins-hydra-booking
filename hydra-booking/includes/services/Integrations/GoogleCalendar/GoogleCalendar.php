@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 use HydraBooking\Admin\Controller\RouteController;
 use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\Admin\Controller\Helper;
 use HydraBooking\DB\Booking;
 use HydraBooking\DB\BookingMeta;
 use HydraBooking\DB\Host;
@@ -35,6 +36,11 @@ class GoogleCalendar {
  
 
 		
+	}
+
+	private function get_activity_datetime() {
+		$helper = new Helper();
+		return wp_date( $helper->get_date_time_format_from_settings( 'M d, Y', 'h:i A' ) );
 	}
 
 	// Update Google Calender
@@ -484,7 +490,7 @@ class GoogleCalendar {
 				'booking_id' => $booking->booking_id,
 				'meta_key' => 'booking_activity',
 				'value' => array( 
-						'datetime' => date('M d, Y, h:i A'), 
+						'datetime' => $this->get_activity_datetime(), 
 						'title' =>  'Updated Google Calendar Event',  // translate it from Vue
 						'description' =>  'Attendee added to the google calendar', 
 					)
@@ -500,7 +506,7 @@ class GoogleCalendar {
 				'booking_id' => $booking->booking_id,
 				'meta_key' => 'booking_activity',
 				'value' => array( 
-						'datetime' => date('M d, Y, h:i A'), 
+						'datetime' => $this->get_activity_datetime(), 
 						'title' =>  'Google Calendar Event Created',  // translate it from Vue
 						'description' => 'Attendee added to the google calendar',
 					)
@@ -597,7 +603,7 @@ class GoogleCalendar {
 					'booking_id' => $attendee->booking_id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'), 
+							'datetime' => $this->get_activity_datetime(), 
 							'title' =>  'Updated Google Calendar Event',  // translate it from Vue
 							'description' =>  'Attendee removed from the google calendar',
 						)

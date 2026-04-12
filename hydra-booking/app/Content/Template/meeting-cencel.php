@@ -20,6 +20,8 @@ global $wp_query;
 
  
 $data    = isset( $args['attendeeBooking'] ) ? $args['attendeeBooking'] : array(); 
+$helper = new \HydraBooking\Admin\Controller\Helper();
+$display_date_format = $helper->get_date_format_from_settings( 'l, F j' );
 
 ?>
 <div class=" tfhb-booking-cencel tfhb-meeting-<?php echo esc_attr( $data->meeting_id ); ?>" data-calendar="<?php echo esc_attr( $data->meeting_id ); ?>">
@@ -53,7 +55,7 @@ $data    = isset( $args['attendeeBooking'] ) ? $args['attendeeBooking'] : array(
 							$date_strings = '';
 							foreach ( $meeting_dates as $key => $date ) {
 
-								$date_strings .= gmdate( 'l, F j', strtotime( $date ) );
+								$date_strings .= gmdate( $display_date_format, strtotime( $date ) );
 								$date_strings .= ', ';
 							}
 

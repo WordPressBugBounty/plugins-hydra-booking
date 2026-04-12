@@ -209,6 +209,14 @@ class SettingsController {
 		$country_list           = $country->country_list();
 		$currency_list           = $country->currency_list();
 		$_tfhb_general_settings = get_option( '_tfhb_general_settings' );
+		if ( ! is_array( $_tfhb_general_settings ) ) {
+			$_tfhb_general_settings = array();
+		}
+
+		if ( empty( $_tfhb_general_settings['date_format'] ) ) {
+			$_tfhb_general_settings['date_format'] = 'default';
+		}
+
 		if( isset($_tfhb_general_settings['allowed_reschedule_before_meeting_start']) && !is_array($_tfhb_general_settings['allowed_reschedule_before_meeting_start'])){
 			$old_value = $_tfhb_general_settings['allowed_reschedule_before_meeting_start'];
 			unset($_tfhb_general_settings['allowed_reschedule_before_meeting_start']); 
@@ -232,13 +240,24 @@ class SettingsController {
 	public function UpdateGeneralSettings() {
 		$request                = json_decode( file_get_contents( 'php://input' ), true );
 		$_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
+		$date_format            = isset( $request['date_format'] ) ? sanitize_text_field( $request['date_format'] ) : '';
+		$date_format            = ! empty( $date_format ) ? trim( $date_format ) : 'default';
+
+		if ( 'default' !== strtolower( $date_format ) && ! $this->is_valid_date_format( $date_format ) ) {
+			$data = array(
+				'status'  => false,
+				'message' => __( 'Invalid date format selected', 'hydra-booking' ),
+			);
+			return rest_ensure_response( $data );
+		}
 
 
 		// senitaized
+		$_tfhb_general_settings['admin_email']                               = sanitize_email( $request['admin_email'] );
 		$_tfhb_general_settings['time_zone']                               = sanitize_text_field( $request['time_zone'] );
 		$_tfhb_general_settings['time_format']                             = sanitize_text_field( $request['time_format'] );
 		$_tfhb_general_settings['week_start_from']                         = sanitize_text_field( $request['week_start_from'] );
-		$_tfhb_general_settings['date_format']                             = sanitize_text_field( $request['date_format'] );
+		$_tfhb_general_settings['date_format']                             = $date_format;
 		$_tfhb_general_settings['country']                                 = sanitize_text_field( $request['country'] );
 		$_tfhb_general_settings['currency']                                 = sanitize_text_field( $request['currency'] );
 		$_tfhb_general_settings['after_booking_completed']                 = sanitize_text_field( $request['after_booking_completed'] );
@@ -256,6 +275,41 @@ class SettingsController {
 			'message' =>  __('General Settings Updated Successfully', 'hydra-booking')
 		);
 		return rest_ensure_response( $data );
+	}
+
+	private function is_valid_date_format( $date_format ) {
+		if ( empty( $date_format ) || ! is_string( $date_format ) ) {
+			return false;
+		}
+
+		$allowed_tokens = array(
+			'd', 'D', 'j', 'l', 'N', 'S', 'w', 'z',
+			'W', 'F', 'm', 'M', 'n', 't', 'L', 'o',
+			'Y', 'y', 'a', 'A', 'g', 'G', 'h', 'H',
+			'i', 's', 'u', 'e', 'I', 'O', 'P', 'T',
+			'Z', 'c', 'r', 'U',
+		);
+
+		$length = strlen( $date_format );
+		$has_token = false;
+
+		for ( $i = 0; $i < $length; $i++ ) {
+			$current_char = $date_format[ $i ];
+
+			if ( '\\' === $current_char ) {
+				$i++;
+				continue;
+			}
+
+			if ( ctype_alpha( $current_char ) ) {
+				if ( ! in_array( $current_char, $allowed_tokens, true ) ) {
+					return false;
+				}
+				$has_token = true;
+			}
+		}
+
+		return $has_token;
 	}
 
 	// Get Availability Settings
@@ -507,6 +561,7 @@ class SettingsController {
 			$_tfhb_integration_settings['google_calendar']['redirect_url']      = $GoogleCalendar->redirectUrl;
 
 		}
+		 
 		$_tfhb_integration_settings = apply_filters( 'tfhb_get_integration_settings', $_tfhb_integration_settings );
 		// Checked if woo
 		$data = array(
@@ -563,17 +618,39 @@ class SettingsController {
 			);
 			return rest_ensure_response( $data );
 		} elseif ( $key == 'apple_calendar' ) {
-			$_tfhb_integration_settings['apple_calendar']['type']              = sanitize_text_field( $data['type'] );
-			$_tfhb_integration_settings['apple_calendar']['connection_status'] = sanitize_text_field( $data['connection_status'] );
+			$_tfhb_integration_settings['apple_calendar']['type']    = sanitize_text_field( $data['type'] );
+			$_tfhb_integration_settings['apple_calendar']['status']  = sanitize_text_field( $data['status'] );
+			$_tfhb_integration_settings['apple_calendar']['apple_id'] = sanitize_email( $data['apple_id'] );
+
+			// Clear all credentials when apple_id is empty (disconnect)
+			if ( empty( $data['apple_id'] ) ) {
+				$_tfhb_integration_settings['apple_calendar']['app_password']     = '';
+				$_tfhb_integration_settings['apple_calendar']['connection_status'] = 0;
+			} else {
+				// Only update password if a new one was provided
+				if ( ! empty( $data['app_password'] ) ) {
+					$_tfhb_integration_settings['apple_calendar']['app_password'] = self::encrypt_value( sanitize_text_field( $data['app_password'] ) );
+				}
+				// connection_status = 1 when both apple_id and app_password are stored
+				$has_credentials = ! empty( $_tfhb_integration_settings['apple_calendar']['apple_id'] )
+				                   && ! empty( $_tfhb_integration_settings['apple_calendar']['app_password'] );
+				$_tfhb_integration_settings['apple_calendar']['connection_status'] = $has_credentials ? 1 : 0;
+			}
+
 			// update option
 			update_option( '_tfhb_integration_settings', $_tfhb_integration_settings );
 			$option = get_option( '_tfhb_integration_settings', $_tfhb_integration_settings );
 
-			// woocommerce payment
+			// Mask password in response – never expose the encrypted value
+			if ( isset( $option['apple_calendar'] ) ) {
+				$option['apple_calendar']['app_password_set'] = ! empty( $option['apple_calendar']['app_password'] ) ? 1 : 0;
+				$option['apple_calendar']['app_password']     = '';
+			}
+
 			$data = array(
-				'status'  => true,
-				'integration_settings'  => $option,
-				'message' => __('Apple Calendar Settings Updated Successfully', 'hydra-booking')
+				'status'               => true,
+				'integration_settings' => $option,
+				'message'              => __( 'Apple Calendar Settings Updated Successfully', 'hydra-booking' ),
 			);
 			return rest_ensure_response( $data );
 		} elseif ( $key == 'mailchimp' ) {
@@ -591,7 +668,7 @@ class SettingsController {
 				'message' => __('Mailchimp Settings Updated Successfully', 'hydra-booking')
 			);
 			return rest_ensure_response( $data );
-		} elseif ( $key == 'paypal' ) {
+		}elseif ( $key == 'paypal' ) {
 			$_tfhb_integration_settings['paypal']['type']        = sanitize_text_field( $data['type'] );
 			$_tfhb_integration_settings['paypal']['status']      = sanitize_text_field( $data['status'] );
 			$_tfhb_integration_settings['paypal']['client_id']   = sanitize_text_field( $data['client_id'] );
@@ -773,6 +850,7 @@ class SettingsController {
 			); 
 			
 			$option = get_option( '_tfhb_integration_settings', $_tfhb_integration_settings );
+			// tfhb_print_r($option);
 
 			$data['integration_settings'] = $option;
 			return rest_ensure_response( $data );
@@ -1314,5 +1392,39 @@ class SettingsController {
         }
 		return rest_ensure_response( $data );
 		 
+	}
+
+	/**
+	 * Encrypt a value for secure storage.
+	 */
+	private static function encrypt_value( $value ) {
+		if ( empty( $value ) || ! function_exists( 'openssl_encrypt' ) ) {
+			return $value;
+		}
+		$key = substr( hash( 'sha256', AUTH_SALT . SECURE_AUTH_SALT, true ), 0, 32 );
+		$iv  = openssl_random_pseudo_bytes( 16 );
+		$encrypted = openssl_encrypt( $value, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+		if ( $encrypted === false ) {
+			return $value;
+		}
+		return base64_encode( $iv . $encrypted );
+	}
+
+	/**
+	 * Decrypt a value previously encrypted with encrypt_value().
+	 */
+	public static function decrypt_value( $stored ) {
+		if ( empty( $stored ) || ! function_exists( 'openssl_decrypt' ) ) {
+			return '';
+		}
+		$decoded = base64_decode( $stored, true );
+		if ( $decoded === false || strlen( $decoded ) <= 16 ) {
+			return '';
+		}
+		$key       = substr( hash( 'sha256', AUTH_SALT . SECURE_AUTH_SALT, true ), 0, 32 );
+		$iv        = substr( $decoded, 0, 16 );
+		$encrypted = substr( $decoded, 16 );
+		$decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+		return $decrypted !== false ? $decrypted : '';
 	}
 }

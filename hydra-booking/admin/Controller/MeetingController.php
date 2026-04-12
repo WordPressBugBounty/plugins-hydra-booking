@@ -475,7 +475,7 @@ class MeetingController {
 	// Integrations
 	public function updateMeetingIntegration() {
 		$request = json_decode( file_get_contents( 'php://input' ), true );
-
+		// tfhb_print_r($request);
 		// Get Meeting
 		$meeting     = new Meeting();
 		$MeetingData = $meeting->get( $request['meeting_id'] );
@@ -492,7 +492,7 @@ class MeetingController {
 			'bodys'    => ! empty( $request['bodys'] ) ? $request['bodys'] : '',
 			'events'   => ! empty( $request['events'] ) ? $request['events'] : '',
 			'url'      => ! empty( $request['url'] ) ? $request['url'] : '',
-			'audience' => 'Mailchimp' == $request['webhook'] && ! empty( $request['audience'] ) ? $request['audience'] : '',
+			'audience' => ! empty( $request['audience'] ) ? $request['audience'] : '',
 			'tags'     => 'FluentCRM' == $request['webhook'] && ! empty( $request['tags'] ) ? $request['tags'] : '',
 			'lists'    => 'FluentCRM' == $request['webhook'] && ! empty( $request['lists'] ) ? $request['lists'] : '',
 			'modules'  => 'ZohoCRM' == $request['webhook'] && ! empty( $request['modules'] ) ? $request['modules'] : '',
@@ -508,7 +508,7 @@ class MeetingController {
 			// Append the new webhook data
 			$Integrationsdata[] = $newIntegrationsdata;
 		}
-
+		 
 		// Encode the updated webhook data back to JSON
 		$encodedIntegrationsdata = wp_json_encode( $Integrationsdata );
 
@@ -1052,6 +1052,7 @@ class MeetingController {
 		$integrations['zoho_crm_status'] = isset( $_tfhb_integration_settings['zoho_crm']['status'] ) ? $_tfhb_integration_settings['zoho_crm']['status'] : 0;
 		$integrations['pabbly_status'] = isset( $_tfhb_integration_settings['pabbly']['status'] ) ? $_tfhb_integration_settings['pabbly']['status'] : 0;
 		$integrations['zapier_status'] = isset( $_tfhb_integration_settings['zapier']['status'] ) ? $_tfhb_integration_settings['zapier']['status'] : 0;
+		$integrations['aweber_status'] = isset( $_tfhb_integration_settings['aweber']['status'] ) ? $_tfhb_integration_settings['aweber']['status'] : 0;
 		 
 
 		// Meeting Category
@@ -1087,6 +1088,8 @@ class MeetingController {
 		} else {
 			$mailchimp_Data['status'] = false;
 		}
+
+	 
 
 		// FluentCRM
 		$fluentcrm_Data = array();
@@ -1249,6 +1252,8 @@ class MeetingController {
 			'twilio'           => $twilio_Data,
 			'message'          =>  __( 'Meeting Data','hydra-booking' ),
 		);
+		$data = apply_filters( 'tfhb_single_meeting_data_response', $data, $MeetingData );
+		 
 		return rest_ensure_response( $data );
 	}
 
@@ -1605,6 +1610,7 @@ class MeetingController {
 	public function getIntegrationModulsFields( $request ) {
 		$host      = ! empty( $request['host_id'] ) ? $request['host_id'] : '';
 		$hook_type = ! empty( $request['webhook'] ) ? $request['webhook'] : '';
+		
 
 		$_tfhb_host_integration_settings = is_array( get_user_meta( $host, '_tfhb_host_integration_settings', true ) ) ? get_user_meta( $host, '_tfhb_host_integration_settings', true ) : array();
 
@@ -1674,6 +1680,18 @@ class MeetingController {
 					}
 				}
 			}
+		}elseif ( 'Aweber' == $hook_type ) {
+
+			$request_data = [
+				'host_id' => $host,
+				'webhook' => $hook_type,
+				'module' => $request['module'],
+			];
+
+			$fields = apply_filters( 'tfhb_aweber_fields', array(), $request_data );
+	 
+			 
+
 		} else {
 			$fields = array(
 				array(

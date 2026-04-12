@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.40
+Stable tag: 1.1.41
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -91,8 +91,8 @@ Say goodbye to no-shows and cancellations with automated notifications for all b
 = 🎉SEAMLESS INTEGRATIONS =
 Hydra Booking integrates with leading tools to elevate your business:
 
-* **CRM & Email Integration**: Connect with CRMs like Zoho and FluentCRM(upcoming).
-* **Appointment booking calendar Sync**: Integrate with Google and Outlook calendars to avoid double bookings.
+* **CRM & Email Integration**: Connect with CRMs like Zoho, AWeber, and FluentCRM.
+* **Appointment booking calendar Sync**: Integrate with Google Calendar, Apple Calendar, and Outlook calendars to avoid double bookings.
 * **Video Conferencing**: Automatic [Zoom](https://demo.hydrabooking.com/one-to-one-meeting-zoom/) or [Google Meet](https://demo.hydrabooking.com/one-to-one-meeting-with-google-meet/) links for virtual appointments.
 * **Webhook Support (Pro)**: Transfer data across applications with ease.
 
@@ -185,7 +185,7 @@ Yes, Hydra Booking is designed to be versatile, making it suitable for businesse
 Yes, Hydra is a WordPress booking plugin free of cost and available on WordPress.org. The free version will always remain free. However, there is also a Pro version with additional features available for purchase on our official website.
 
 =  Does Hydra Booking integrate with third-party CRM and scheduling calendar services? =
-Yes. Hydra Booking supports integrations with popular CRMs like Zoho and FluentCRM, along with calendar synchronization for Google Calendar, Apple Calendar, and Outlook Calendar.
+Yes. Hydra Booking supports integrations with popular CRMs like Zoho and FluentCRM, along with calendar synchronization for Google, Apple, and Outlook Calendar.
 
 =  Can I create forms with different WordPress Forms plugins? =
 Hydra Booking integrates with popular form plugins like Fluent Forms and Contact Form 7, with support for Gravity Forms and more coming soon for enhanced flexibility.
@@ -219,6 +219,12 @@ There are several well-known appointment booking plugins available for WordPress
 13. Slack, Twilio, Telegram settings
 
 == Changelog ==
+
+= 1.1.41 – Apr 12, 2026 =
+
+- New: AWeber integration with Hydra Bookings.
+- New: Apple Calendar integration with Hydra Bookings.
+- Improved: Dashboard widget for quick overview and status insights.
 
 = 1.1.40 – Mar 16, 2026 =
 

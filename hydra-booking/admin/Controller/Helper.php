@@ -11,6 +11,7 @@ class Helper {
  
 	}
 
+
     // Get Default Notification
     public function get_default_notification_template(){
         $notification = array(
@@ -3842,19 +3843,47 @@ class Helper {
                 <p> {{meeting.title}} with {{attendee.name}}</p> 
                 <p> Date: {{meeting.date}} </p>'
         );
-
-        // $notification = $this->append_add_to_calendar_default_section(
-        //     $notification,
-        //     $google_calendar_image_url,
-        //     $outlook_calendar_image_url,
-        //     $yahoo_calendar_image_url,
-        //     $other_calendar_image_url
-        // );
+ 
 
         return $notification;
         
     }
- 
+
+    /**
+     * Get date format from general settings.
+     *
+     * Returns the date format configured in HydraBooking general settings.
+     * Falls back to $existing_format if no setting is saved.
+     *
+     * @param string $existing_format  The hardcoded fallback format (e.g. 'M d, Y').
+     * @return string
+     */
+    public function get_date_format_from_settings( $existing_format = 'Y-m-d' ) {
+        $general_settings = get_option( '_tfhb_general_settings' );
+        $date_format = isset( $general_settings['date_format'] ) && ! empty( $general_settings['date_format'] )
+            ? trim( (string) $general_settings['date_format'] )
+            : '';
+
+        if ( empty( $date_format ) || 'default' === strtolower( $date_format ) ) {
+            return $existing_format;
+        }
+
+        return $date_format;
+    }
+
+    /**
+     * Get date-time format from general settings.
+     *
+     * Uses saved date format from settings and appends the provided time format.
+     *
+     * @param string $existing_date_format The hardcoded fallback date format.
+     * @param string $existing_time_format The hardcoded fallback time format.
+     * @return string
+     */
+    public function get_date_time_format_from_settings( $existing_date_format = 'M d, Y', $existing_time_format = 'h:i A' ) {
+        $date_format = $this->get_date_format_from_settings( $existing_date_format );
+        return $date_format . ', ' . $existing_time_format;
+    }
 
 
 }

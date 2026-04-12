@@ -50,9 +50,9 @@ class DashboardController {
 	public function getDashboardsData() {
 
 		$request   = json_decode( file_get_contents( 'php://input' ), true );
-		$days      = $request['days']; // exp 1
-		$from_date = $request['from_date']; // exp 2021-09-01
-		$to_date   = $request['to_date']; // exp 2021-09-01
+		$days      = isset($request['days']) ? $request['days'] : 30; // exp 1
+		$from_date = isset($request['from_date']) ? $request['from_date'] : null; // exp 2021-09-01
+		$to_date   = isset($request['to_date']) ? $request['to_date'] : null; // exp 2021-09-01
 
 		// calculate Days based on form day and to day
 		$days = $from_date != null && $to_date != null ? ( strtotime( $to_date ) - strtotime( $from_date ) ) / ( 60 * 60 * 24 ) : $days; // exp 1
@@ -215,6 +215,8 @@ class DashboardController {
 
 		$request       = json_decode( file_get_contents( 'php://input' ), true );
 		$days          = $request['statistics_days']; // exp 2021-09-01
+		$helper        = new Helper();
+		$label_format  = $helper->get_date_format_from_settings( 'd M, y' );
 		$current_date  = gmdate( 'Y-m-d 23:59:59' ); // exp 2021-09-01
 		$previous_date = gmdate( 'Y-m-d 00:00:00', strtotime( '-' . $days . ' days' ) ); // exp 2021-09-01
 
@@ -234,7 +236,7 @@ class DashboardController {
 		if ( $days == 7 ) {
 			// store label as date
 			for ( $i = 0; $i < 7; $i++ ) {
-				$statistics['label'][] = gmdate( 'd M, y', strtotime( '-' . $i . ' days' ) );
+				$statistics['label'][] = gmdate( $label_format, strtotime( '-' . $i . ' days' ) );
 			}
 			$statistics['label'] = array_reverse( $statistics['label'] );
 		}
@@ -247,7 +249,7 @@ class DashboardController {
 			// Get Current month
 
 			for ( $day = 1; $day <= $days_in_month; $day++ ) {
-				$statistics['label'][] = gmdate( 'd M, y', strtotime( "$currentYear-$currentMonth-$day" ) );
+				$statistics['label'][] = gmdate( $label_format, strtotime( "$currentYear-$currentMonth-$day" ) );
 			}
 		}
 		if ( $days == 3 ) {  // last 3 Months
@@ -276,7 +278,7 @@ class DashboardController {
 			}
 			if ( $days == 30 || $days == 7 ) { // value is a date exp 2021-09-01
 
-				$value = $dateTime->convertDateTimeFormat( $value, 'd M, y', 'Y-m-d' ); 
+				$value = $dateTime->convertDateTimeFormat( $value, $label_format, 'Y-m-d' ); 
 				$date      =  $value;
 				$next_date =  $value;
 			} 

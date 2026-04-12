@@ -98,6 +98,9 @@ class Enqueue {
 		$embed_script_link = esc_html('<script src="' .TFHB_URL . 'assets/app/js/widget.js"></script>');
 		$trans_string = array_merge(TransStrings::getTransStrings(), TransStrings::calendarTransString());
 		$license = LicenseController::getInstance()->check_license();
+		$_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
+		$date_format            = isset( $_tfhb_general_settings['date_format'] ) ? sanitize_text_field( $_tfhb_general_settings['date_format'] ) : '';
+
 	
 		wp_localize_script(
 			'tfhb-admin-core',
@@ -111,6 +114,7 @@ class Enqueue {
 				'rest_route'           => get_rest_url(),
 				'embed_script_link'    => esc_html( $embed_script_link ),
 				'ajax_url'             => admin_url( 'admin-ajax.php' ),
+				'date_format'            => $date_format,
 				'front_end_dashboard'  => $front_end_dashboard,
 				'tfhb_url'             => TFHB_URL,
 				'tfhb_hydra_admin_url' => admin_url( 'admin.php?page=hydra-booking#/' ),

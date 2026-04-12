@@ -6,7 +6,8 @@ use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Attendees;
 use HydraBooking\DB\Host;
 use HydraBooking\DB\BookingMeta;
-use HydraBooking\Admin\Controller\DateTimeController; 
+use HydraBooking\Admin\Controller\DateTimeController;
+use HydraBooking\Admin\Controller\Helper;
 
 
 class MailHooks {
@@ -35,6 +36,11 @@ class MailHooks {
 		add_action( 'hydra_booking/send_booking_with_all_attendees_schedule', array( $this, 'send_booking_with_all_attendees_schedule' ), 10, 1 );
 	}
 
+	private function get_activity_datetime() {
+		$helper = new Helper();
+		return wp_date( $helper->get_date_time_format_from_settings( 'M d, Y', 'h:i A' ) );
+	}
+
 	// Get Meeting Data
 	public function getMeetingData( $meeting_id ) {
 		$meeting      = new Meeting();
@@ -47,6 +53,12 @@ class MailHooks {
 		$host      = new Host();
 		$host_data = $host->getHostById(  $host_id );
 		return $host_data;
+	}
+	// get admin email from general settings
+	public function getAdminEmail() {
+		$_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
+		$admin_email = isset($_tfhb_general_settings['admin_email']) && !empty($_tfhb_general_settings['admin_email']) && $_tfhb_general_settings['admin_email'] != '{{wp.admin_email}}' ? sanitize_email($_tfhb_general_settings['admin_email']) : get_bloginfo( 'admin_email' );
+		return $admin_email;
 	}
 
 	// If booking Status is Complted
@@ -61,10 +73,11 @@ class MailHooks {
 
 			// Host Confirmation Email, If Settings Enable for Host Confirmation
 			if ( ! empty( $_tfhb_notification_settings['host']['booking_confirmation']['status'] ) ) {
-				
+				     
+			
 				
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['host']['booking_confirmation']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['host']['booking_confirmation']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['host']['booking_confirmation']['subject'] ) ? $_tfhb_notification_settings['host']['booking_confirmation']['subject'] : 'Booking Confirmation';
@@ -99,7 +112,7 @@ class MailHooks {
 					'booking_id' => $attendees->booking_id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'), 
+							'datetime' => $this->get_activity_datetime(), 
 							'title' => 'Confirmation Email Sent', // translate it from Vue
 							'description' => 'Confirmation Email Sent to Host',  // translate it from Vue
 						)
@@ -112,7 +125,7 @@ class MailHooks {
 				
 				
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['subject'] : 'Booking Confirmation';
@@ -148,7 +161,7 @@ class MailHooks {
 					'meta_key' => 'booking_activity',
 					'value' => array(
 							 
-							'datetime' => date('M d, Y, h:i A'), 
+							'datetime' => $this->get_activity_datetime(), 
 							'title' =>  'Confirmation Email Sent', // translate it from Vue
 							'description' => 'Confirmation Email Sent to Attendee', // translate it from Vue
 						)
@@ -173,7 +186,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['host']['booking_pending']['status'] ) ) {
 				
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_pending']['form'] ) ? $_tfhb_notification_settings['host']['booking_pending']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_pending']['form'] ) ? $_tfhb_notification_settings['host']['booking_pending']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['host']['booking_pending']['subject'] ) ? $_tfhb_notification_settings['host']['booking_pending']['subject'] : 'Booking Pending';
@@ -205,7 +218,7 @@ class MailHooks {
 					'meta_key' => 'booking_activity',
 					'value' => array(
 							 
-							'datetime' => date('M d, Y, h:i A'),  
+							'datetime' => $this->get_activity_datetime(),  
 							'title' => 'Pending Email Sent', // translate it from Vue
 							'description' => 'Pending Email Sent to Host', // translate it from Vue
 						)
@@ -216,7 +229,7 @@ class MailHooks {
 			// Attendee Pending Email, If Settings Enable for Attendee Pending
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['status'] ) ) {
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['subject'] : 'Booking Pending';
@@ -249,7 +262,7 @@ class MailHooks {
 					'meta_key' => 'booking_activity',
 					'value' => array(
 							 
-							'datetime' => date('M d, Y, h:i A'),   
+							'datetime' => $this->get_activity_datetime(),   
 							'title' => 'Pending Email Sent', // translate it from Vue
 							'description' => 'Pending Email Sent to Attendee', // translate it from Vue
 						)
@@ -273,7 +286,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['host']['booking_cancel']['status'] ) ) {
 
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['host']['booking_cancel']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['host']['booking_cancel']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['host']['booking_cancel']['subject'] ) ? $_tfhb_notification_settings['host']['booking_cancel']['subject'] : 'Booking Canceled';
@@ -304,7 +317,7 @@ class MailHooks {
 					'meta_key' => 'booking_activity',
 					'value' => array(
 							 
-							'datetime' => date('M d, Y, h:i A'),    
+							'datetime' => $this->get_activity_datetime(),    
 							'title' => 'Canceled Email Sent', // translate it from Vue
 							'description' => 'Canceled Email Sent to Host', // translate it from Vue
 						)
@@ -315,7 +328,7 @@ class MailHooks {
 			// Attendee Canceled Email, If Settings Enable for Attendee Canceled
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['status'] ) ) {
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['subject'] : 'Booking Canceled';
@@ -347,7 +360,7 @@ class MailHooks {
 					'meta_key' => 'booking_activity',
 					'value' => array(
 							 
-							'datetime' => date('M d, Y, h:i A'),
+							'datetime' => $this->get_activity_datetime(),
 							'title' => 'Canceled Email Sent', // translate it from Vue
 							'description' => 'Canceled Email Sent to Attendee', // translate it from Vue
 						)
@@ -370,7 +383,7 @@ class MailHooks {
 			// Host ReSchedule Email, If Settings Enable for Host ReSchedule
 			if ( ! empty( $_tfhb_notification_settings['host']['booking_reschedule']['status'] ) ) {
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['host']['booking_reschedule']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['host']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['host']['booking_reschedule']['form'] : $this->getAdminEmail();
  
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['host']['booking_reschedule']['subject'] ) ? $_tfhb_notification_settings['host']['booking_reschedule']['subject'] : 'Booking ReSchedule';
@@ -402,7 +415,7 @@ class MailHooks {
 					'booking_id' => $attendees->booking_id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),
+							'datetime' => $this->get_activity_datetime(),
 							'title' => 'ReSchedule Email Sent', // translate it from Vue
 							'description' => 'ReSchedule Email Sent to Host', // translate it from Vue
 						)
@@ -413,7 +426,7 @@ class MailHooks {
 			// Attendee ReSchedule Email, If Settings Enable for Attendee ReSchedule
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['status'] ) ) {
 				// From Email
-				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] : get_option( 'admin_email' );
+				$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] : $this->getAdminEmail();
 
 				// Email Subject
 				$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['subject'] : 'Booking ReSchedule';
@@ -444,7 +457,7 @@ class MailHooks {
 					'booking_id' => $attendees->booking_id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),
+							'datetime' => $this->get_activity_datetime(),
 							'title' => 'ReSchedule Email Sent', // translate it from Vue
 							'description' => 'ReSchedule Email Sent to Attendee', // translate it from Vue
 						)
@@ -470,7 +483,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_reminder']['status'] ) ) {
 				foreach($attendees as $key => $attendee_data){
 					// From Email
-					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reminder']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reminder']['form'] : get_option( 'admin_email' );
+					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reminder']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reminder']['form'] : $this->getAdminEmail();
 
 					// Email Subject
 					$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_reminder']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_reminder']['subject'] : 'Booking ReSchedule';
@@ -500,7 +513,7 @@ class MailHooks {
 						'booking_id' => $attendees->booking_id,
 						'meta_key' => 'booking_activity',
 						'value' => array( 
-								'datetime' => date('M d, Y, h:i A'), 
+								'datetime' => $this->get_activity_datetime(), 
 								'title' => 'Reminder Email Sent', // translate it from Vue
 								'description' => 'Reminder Email Sent to Attendee', // translate it from Vue
 							)
@@ -527,7 +540,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['status'] ) ) {
 				foreach($attendees as $key => $attendee_data){
 					// From Email
-					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] : get_option( 'admin_email' );
+					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['form'] : $this->getAdminEmail();
 
 					// Email Subject
 					$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_confirmation']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_confirmation']['subject'] : 'Booking ReSchedule';
@@ -559,7 +572,7 @@ class MailHooks {
 					'booking_id' => $booking->id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),  
+							'datetime' => $this->get_activity_datetime(),  
 							'title' => 'Booking Has Been Confirmed', // translate it from Vue
 							'description' => 'Confirmation Email Sent to Attendee', // translate it from Vue
 						)
@@ -584,7 +597,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['status'] ) ) {
 				foreach($attendees as $key => $attendee_data){
 					// From Email
-					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['form'] : get_option( 'admin_email' );
+					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['form'] : $this->getAdminEmail();
 
 					// Email Subject
 					$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_pending']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_pending']['subject'] : 'Booking ReSchedule';
@@ -616,7 +629,7 @@ class MailHooks {
 					'booking_id' => $booking->id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),   
+							'datetime' => $this->get_activity_datetime(),   
 							'title' => 'Booking Has Been Pending', // translate it from Vue
 							'description' => 'Pending Email Sent to Attendee', // translate it from Vue
 						)
@@ -642,7 +655,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['status'] ) ) {
 				foreach($attendees as $key => $attendee_data){
 					// From Email
-					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['form'] : get_option( 'admin_email' );
+					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['form'] : $this->getAdminEmail();
 
 					// Email Subject
 					$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_cancel']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_cancel']['subject'] : 'Booking ReSchedule';
@@ -674,7 +687,7 @@ class MailHooks {
 					'booking_id' => $booking->id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),    
+							'datetime' => $this->get_activity_datetime(),    
 							'title' => 'Booking Has Been Canceled', // translate it from Vue
 							'description' => 'Canceled Email Sent to Attendee', // translate it from Vue
 						)
@@ -702,7 +715,7 @@ class MailHooks {
 			if ( ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['status'] ) ) {
 				foreach($attendees as $key => $attendee_data){
 					// From Email
-					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] : get_option( 'admin_email' );
+					$replyTo = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['form'] : $this->getAdminEmail();
 
 					// Email Subject
 					$subject = ! empty( $_tfhb_notification_settings['attendee']['booking_reschedule']['subject'] ) ? $_tfhb_notification_settings['attendee']['booking_reschedule']['subject'] : 'Booking ReSchedule';
@@ -735,7 +748,7 @@ class MailHooks {
 					'booking_id' => $booking->id,
 					'meta_key' => 'booking_activity',
 					'value' => array( 
-							'datetime' => date('M d, Y, h:i A'),     
+							'datetime' => $this->get_activity_datetime(),     
 							'title' => 'Booking Has Been Rescheduled', // translate it from Vue
 							'description' => 'ReSchedule Email Sent to Attendee', // translate it from Vue
 						)
@@ -779,6 +792,9 @@ class MailHooks {
 			'DESC'
 		); 
 
+		// Initialize Helper to use settings-based date format
+		$helper = new Helper();
+		$date_format = $helper->get_date_format_from_settings( 'M d, Y' );
 
 		$google_calendar_link  = '#';
 		$outlook_calendar_link = '#';
@@ -835,12 +851,22 @@ class MailHooks {
 				}
 			}
 		}
-		 
+		
+		// Format meeting date using settings-based date format
+		$formatted_meeting_date = '';
+		if ( ! empty( $attendeeBooking->meeting_dates ) ) {
+			$date_obj = \DateTime::createFromFormat( 'Y-m-d', trim( $attendeeBooking->meeting_dates ) );
+			if ( $date_obj !== false ) {
+				$formatted_meeting_date = $date_obj->format( $date_format );
+			} else {
+				$formatted_meeting_date = $attendeeBooking->meeting_dates;
+			}
+		}
 
 		$replacements = array(
 			'{{meeting.title}}'    => ! empty( $attendeeBooking->meeting_title ) ? $attendeeBooking->meeting_title : '',
 			'{{meeting.content}}'  => ! empty( $attendeeBooking->meeting_content ) ? $attendeeBooking->meeting_content : '',
-			'{{meeting.date}}'     => ! empty( $attendeeBooking->meeting_dates ) ? $attendeeBooking->meeting_dates : '',
+			'{{meeting.date}}'     => $formatted_meeting_date,
 			'{{meeting.location}}' => implode( ', ', $locations ),
 			'{{meeting.duration}}' => $attendeeBooking->duration,
 			'{{meeting.time}}'     => $attendeeBooking->start_time . '-' . $attendeeBooking->end_time,

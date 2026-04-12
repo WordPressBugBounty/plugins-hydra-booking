@@ -64,7 +64,10 @@ get_header();
                             'status' => 'activate'
                         ];
                         $host->update($data);
-
+     
+                        $_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
+                        $admin_email = isset($_tfhb_general_settings['admin_email']) && !empty($_tfhb_general_settings['admin_email']) && $_tfhb_general_settings['admin_email'] != '{{wp.admin_email}}' ? sanitize_email($_tfhb_general_settings['admin_email']) : get_bloginfo( 'admin_email' );
+                    
                         // send confirmation email 
                         $email = $getHost->email;
                         $name = $getHost->first_name . ' ' . $getHost->last_name;
@@ -72,7 +75,7 @@ get_header();
                         $message = '<p>' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '</p>';
                         $message .= '<p>' . esc_html__( 'Your account has been successfully activated.', 'hydra-booking' ) . '</p>'; 
 
-                        $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>' . "\r\n";
+                        $headers = 'From: ' . get_bloginfo( 'name' ) . ' <' . $admin_email . '>' . "\r\n";
                         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
  
  

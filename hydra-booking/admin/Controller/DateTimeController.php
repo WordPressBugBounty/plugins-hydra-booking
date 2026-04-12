@@ -12,7 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class DateTimeController extends \DateTimeZone {
 	public function TimeZone() {
-		$time_zone_data = $this->listIdentifiers();
+		// Include backward-compatible identifiers so browser-reported aliases
+		// (for example Europe/Kiev or Asia/Calcutta) can still be matched.
+		$time_zone_data = $this->listIdentifiers( \DateTimeZone::ALL_WITH_BC );
 		$time_zone      = array();
 		// make array in this format { value: 'New York', name: 'NY' },
 
@@ -71,6 +73,11 @@ class DateTimeController extends \DateTimeZone {
 
 		$_tfhb_general_settings = get_option( '_tfhb_general_settings' );
 		$time_format 		 = isset( $_tfhb_general_settings['time_format'] ) ? $_tfhb_general_settings['time_format'] : '12';
+		
+		// Get date format from settings via Helper
+		$helper = new Helper();
+		$date_format = $helper->get_date_format_from_settings( 'M d, Y' );
+		
 		$start_time = new \DateTime( $selected_date . ' ' . $start_time, new \DateTimeZone( $time_zone ) );
 		$end_time   = new \DateTime( $selected_date . ' ' . $end_time, new \DateTimeZone( $time_zone ) );
 		 
@@ -80,12 +87,12 @@ class DateTimeController extends \DateTimeZone {
 
 		// Prepare formatted output
 		if ( $time_format == '12' ) {
-			// Return in this format: 2024-09-24 11:30 AM - 12:00 PM (America/New_York)
-			$start_format = $start_time->format('Y-m-d g:i A');
+			// Return in this format using settings-based date format: M d, Y 11:30 AM - 12:00 PM (America/New_York)
+			$start_format = $start_time->format($date_format . ' g:i A');
 			$end_format = $end_time->format('g:i A');
 		} else {
-			// Return in this format: 2024-09-24 11:30 - 12:00 (America/New_York)
-			$start_format = $start_time->format('Y-m-d H:i');
+			// Return in this format using settings-based date format: M d, Y 11:30 - 12:00 (America/New_York)
+			$start_format = $start_time->format($date_format . ' H:i');
 			$end_format = $end_time->format('H:i');
 		}
 	
@@ -93,7 +100,7 @@ class DateTimeController extends \DateTimeZone {
 			return $start_format . ' (' . $selected_time_zone . ')';
 		}elseif($type == 'full'){
 
-			// Return formatted time range with the time zone name ex: 2024-09-24  | 11:30 AM - 12:00 PM (America/New_York)
+			// Return formatted time range with the time zone name using settings-based date format
 			return $start_format . ' - ' . $end_format . ' (' . $selected_time_zone . ')';
 		}
 	}

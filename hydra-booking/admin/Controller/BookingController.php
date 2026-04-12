@@ -23,6 +23,11 @@ class BookingController {
 	public function __construct() {
 	}
 
+	private function get_activity_datetime() {
+		$helper = new Helper();
+		return wp_date( $helper->get_date_time_format_from_settings( 'M d, Y', 'h:i A' ) );
+	}
+
 	public function init() {
 	}
 
@@ -300,9 +305,6 @@ class BookingController {
 		}else{
 			// Get all order by desc 
 		}
-		
-
-
 		
 		if ( 'administrator' != $current_user_role && 'tfhb_host' != $current_user_role ) {
 			return rest_ensure_response(
@@ -1475,8 +1477,7 @@ class BookingController {
 					'booking_id' => $booking_id,
 					'meta_key' => 'booking_activity',
 					'value' => array(
-							
-							'datetime' => date('M d, Y, h:i A'),
+							'datetime' => $this->get_activity_datetime(),
 							'title' =>  'Booking has been completed',
 							'description' => '',
 						)
@@ -1557,7 +1558,7 @@ class BookingController {
 				'meta_key' => 'booking_activity',
 				'value' => array(
 						 
-						'datetime' => date('M d, Y, h:i A'),
+						'datetime' => $this->get_activity_datetime(),
 						'title' => esc_html(__(  'A attendee has been canceled by host', 'hydra-booking')),
 						'description' => $cancel_reason,
 					)
