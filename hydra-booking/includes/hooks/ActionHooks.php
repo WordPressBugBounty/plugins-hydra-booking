@@ -20,6 +20,7 @@ class ActionHooks {
 		if(!empty($google_calendar) && $google_calendar['status'] == true){
 			add_action( 'hydra_booking/after_booking_confirmed', array( new GoogleCalendar(), 'insert_calender_after_booking_confirmed' ), 11, 2 ); 
 			add_action( 'hydra_booking/after_booking_canceled', array( new GoogleCalendar(), 'deleteGoogleCalender' ), 11, 2 );
+			add_action( 'hydra_booking/after_booking_deleted', array( new GoogleCalendar(), 'deleteGoogleCalender' ), 11, 1 );
 			add_action( 'hydra_booking/after_booking_schedule', array( new GoogleCalendar(), 'remove_attendde_event_from_existing_booking' ), 11, 2 );
 		}
 

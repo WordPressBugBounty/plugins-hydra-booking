@@ -931,7 +931,19 @@ class BookingController {
 		}
 
 		if ( 'schedule' == $request['status'] ) {
-			do_action( 'hydra_booking/after_booking_schedule', $single_booking_meta );
+			$attendee = null;
+			if ( ! empty( $request['id'] ) ) {
+				$Attendee = new Attendees();
+				$attendee = $Attendee->getAttendeeWithBooking(
+					array(
+						array( 'booking_id', '=', absint( $request['id'] ) ),
+					),
+					1,
+					'DESC'
+				);
+			}
+
+			do_action( 'hydra_booking/after_booking_schedule', absint( $request['id'] ), $attendee );
 		}
 
 
@@ -964,6 +976,10 @@ class BookingController {
 		}
 		// Delete Booking
 		$booking       = new Booking();
+		$single_booking_meta = $booking->get( absint( $booking_id ) );
+		if ( ! empty( $single_booking_meta ) ) {
+			do_action( 'hydra_booking/after_booking_deleted', $single_booking_meta );
+		}
 		$bookingDelete = $booking->delete( $booking_id );
 		$current_user  = get_userdata( $booking_owner );
 		// get user role
