@@ -100,7 +100,7 @@ class Admin {
 		check_ajax_referer('wp_rest', 'security');
 
 		if (!current_user_can('install_plugins')) {
-			wp_send_json_error('You do not have permission to perform this action.');
+			wp_send_json_error( __( 'You do not have permission to perform this action.', 'hydra-booking' ) );
 		}
 
 		$plugin_slug = isset($_POST['plugin_slug']) ? sanitize_text_field($_POST['plugin_slug']) : '';
@@ -108,7 +108,7 @@ class Admin {
 		$plugin_action = isset($_POST['plugin_action']) ? sanitize_text_field($_POST['plugin_action']) : '';
 
 		if (!$plugin_slug || !$plugin_action) {
-			wp_send_json_error('Invalid request.');
+			wp_send_json_error( __( 'Invalid request.', 'hydra-booking' ) );
 		}
 
 		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -129,14 +129,14 @@ class Admin {
 				wp_send_json_error($install_result->get_error_message());
 			}
 
-			wp_send_json_success(['message' => 'Installed successfully.']);
+			wp_send_json_success(['message' => __( 'Installed successfully.', 'hydra-booking' )]);
 		}
 
 		if ($plugin_action === 'activate') {
 			$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_filename . '.php';
 
 			if (!file_exists($plugin_path)) {
-				wp_send_json_error('Plugin file not found.');
+				wp_send_json_error( __( 'Plugin file not found.', 'hydra-booking' ) );
 			}
 
 			$activate_result = activate_plugin($plugin_path);
@@ -145,10 +145,10 @@ class Admin {
 				wp_send_json_error($activate_result->get_error_message());
 			}
 
-			wp_send_json_success(['message' => 'Activated successfully.']);
+			wp_send_json_success(['message' => __( 'Activated successfully.', 'hydra-booking' )]);
 		}
 
-		wp_send_json_error('Invalid action.');
+		wp_send_json_error( __( 'Invalid action.', 'hydra-booking' ) );
 	}
 
 

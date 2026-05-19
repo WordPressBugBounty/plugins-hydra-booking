@@ -100,16 +100,23 @@ class Enqueue {
 		$license = LicenseController::getInstance()->check_license();
 		$_tfhb_general_settings = !empty(get_option( '_tfhb_general_settings' )) && get_option( '_tfhb_general_settings' ) != false ? get_option( '_tfhb_general_settings' ) : array();
 		$date_format            = isset( $_tfhb_general_settings['date_format'] ) ? sanitize_text_field( $_tfhb_general_settings['date_format'] ) : '';
-
+ 
+		$meeting_url_generation = isset( $_tfhb_general_settings['meeting_url_generation'] ) ? (int) $_tfhb_general_settings['meeting_url_generation'] : 1;
+		// When pro is not active the 'tfhb_is_url_generation_enabled' filter defaults to true,
+		// so meeting pages are publicly accessible → always expose 1 to the frontend.
+		if ( $license['license_type'] !== 'pro' || empty( $license['is_valid'] ) ) {
+			$meeting_url_generation = 1;
+		}
 	
 		wp_localize_script(
 			'tfhb-admin-core',
 			'tfhb_core_apps',
 			array(
 				// 'url' => TFHB_URL,
-				'rest_nonce'           => wp_create_nonce( 'wp_rest' ),
-				'tfhb_license_type' =>  $license['license_type'],
-                'tfhb_is_valid'  =>  $license['is_valid'],
+				'rest_nonce'               => wp_create_nonce( 'wp_rest' ),
+				'tfhb_license_type'        => $license['license_type'],
+                'tfhb_is_valid'            => $license['is_valid'],
+				'meeting_url_generation'   => $meeting_url_generation,
 				'admin_url'            => site_url(),
 				'rest_route'           => get_rest_url(),
 				'embed_script_link'    => esc_html( $embed_script_link ),

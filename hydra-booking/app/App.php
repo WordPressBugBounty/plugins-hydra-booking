@@ -68,8 +68,61 @@ class App {
 		add_filter( 'single_template', array( $this, 'tfhb_single_meeting_template' ) );
 		
 		add_filter( 'post_type_link',  array( $this,'tfhb_meeting_permalink'), 10, 2 );
+
+		// SEO: exclude meeting URLs when URL generation is disabled.
+		add_filter( 'wp_sitemaps_post_types',                      array( $this, 'tfhb_exclude_from_wp_sitemap' ) );
+		add_filter( 'wpseo_sitemap_exclude_post_type',             array( $this, 'tfhb_yoast_exclude_sitemap' ), 10, 2 );
+		add_filter( 'rank_math/sitemap/exclude_post_type',         array( $this, 'tfhb_rankmath_exclude_sitemap' ), 10, 2 );
+		add_action( 'wp',                                          array( $this, 'tfhb_send_noindex_header' ) );
 	
 	 }
+
+	/**
+	 * Remove tfhb_meeting from WordPress core XML sitemap when disabled.
+	 */
+	public function tfhb_exclude_from_wp_sitemap( $post_types ) {
+		if ( ! $this->tfhb_is_url_generation_enabled() ) {
+			unset( $post_types['tfhb_meeting'] );
+		}
+		return $post_types;
+	}
+
+	/**
+	 * Exclude from Yoast SEO sitemap when disabled.
+	 */
+	public function tfhb_yoast_exclude_sitemap( $excluded, $post_type ) {
+		if ( 'tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled() ) {
+			return true;
+		}
+		return $excluded;
+	}
+
+	/**
+	 * Exclude from RankMath sitemap when disabled.
+	 */
+	public function tfhb_rankmath_exclude_sitemap( $excluded, $post_type ) {
+		if ( 'tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled() ) {
+			return true;
+		}
+		return $excluded;
+	}
+
+	/**
+	 * Send X-Robots-Tag: noindex header for meeting post type when disabled
+	 * and the current user is not an admin.
+	 */
+	public function tfhb_send_noindex_header() {
+		if ( $this->tfhb_is_url_generation_enabled() ) {
+			return;
+		}
+		if ( ! is_singular( 'tfhb_meeting' ) && ! is_post_type_archive( 'tfhb_meeting' ) ) {
+			return;
+		}
+		if ( current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		header( 'X-Robots-Tag: noindex, nofollow', true );
+	}
 
 	public function tfhb_meeting_permalink( $permalink, $post ) {
 		$permalink_structure = get_option( 'permalink_structure' );
@@ -87,15 +140,46 @@ class App {
 		 * single-meeting.php
 		 */
 		if ( 'tfhb_meeting' === $post->post_type ) {
+			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+				// Allow admins to load the template only for a genuine preview request.
+				if ( is_preview() && current_user_can( 'manage_options' ) ) {
+					return TFHB_PATH . '/app/Content/Template/single-meeting.php';
+				}
+				// All other requests (including admins browsing the public URL) → 404.
+				global $wp_query;
+				$wp_query->set_404();
+				status_header( 404 );
+				return get_404_template();
+			}
 			return TFHB_PATH . '/app/Content/Template/single-meeting.php';
 		}
 
 		return $single_template;
 	}
 
+	/**
+	 * Check whether meeting URL generation is enabled.
+	 *
+	 * Returns true by default in the free version.
+	 * Pro plugin hooks into 'tfhb_is_url_generation_enabled' to override.
+	 *
+	 * @return bool
+	 */
+	public function tfhb_is_url_generation_enabled() {
+		return (bool) apply_filters( 'tfhb_is_url_generation_enabled', true );
+	}
+
 	public function tfhb_remove_posttype_request( $query ) {
 		// Only noop the main query.
 		if ( ! $query->is_main_query() ) {
+			return;
+		}
+
+		// Preview requests include an extra `preview` query var, making count = 3.
+		// Handle them before the strict count guard so admin preview always resolves
+		// the meeting post even when public URL generation is disabled.
+		if ( ! empty( $query->query['name'] ) && ! empty( $query->query['preview'] ) ) {
+			$query->set( 'post_type', array( 'post', 'page', 'tfhb_meeting' ) );
 			return;
 		}
 
@@ -109,11 +193,14 @@ class App {
 			$post_types = array(
 				'post', // important to  not break your standard posts
 				'page', // important to  not break your standard pages
-				'tfhb_meeting',
 			);
 
-			$query->set( 'post_type', $post_types );
+			// Only include tfhb_meeting in slug-based queries when public URL generation is enabled.
+			if ( $this->tfhb_is_url_generation_enabled() ) {
+				$post_types[] = 'tfhb_meeting';
+			}
 
+			$query->set( 'post_type', $post_types );
 		}
 	}
 
@@ -132,13 +219,17 @@ class App {
 	public function tfhb_single_page_template( $template ) {
 		
 		if ( get_query_var( 'hydra-booking' ) === 'meeting' && get_query_var( 'meetingId' )) {
-			 
+			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+				return $template;
+			}
 
 			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/embed.php', true );
 			return $custom_template;
 		}
 		if ( get_query_var( 'hydra-booking' ) === 'meeting' && get_query_var( 'meeting' ) ) {
-			 
+			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+				return $template;
+			}
 			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/single-meeting.php', false );
 			return $custom_template;
 		} 

@@ -204,7 +204,28 @@ class HydraBookingShortcode {
 		}
 		// Availability Range
 		$availability_range      = isset( $data['availability_range'] ) ? $data['availability_range'] : array();
-		$availability_range_type = isset( $data['availability_range_type'] ) ? $data['availability_range_type'] : array();
+		$availability_range_type = isset( $data['availability_range_type'] ) ? $data['availability_range_type'] : '';
+
+		// Rolling window: compute today + N days/weeks/months and expose as a regular 'range'
+		if ( 'within_days' === $availability_range_type ) {
+			$_within      = isset( $availability_range['within_days'][0] ) ? $availability_range['within_days'][0] : array();
+			$within_value = isset( $_within['limit'] ) ? (int) $_within['limit'] : 30;
+			$within_unit  = isset( $_within['times'] ) ? sanitize_text_field( $_within['times'] ) : 'days';
+
+			// Only allow safe units
+			$allowed_units = array( 'days', 'weeks', 'months' );
+			if ( ! in_array( $within_unit, $allowed_units, true ) ) {
+				$within_unit = 'days';
+			}
+
+			$today    = new \DateTime( 'today', wp_timezone() );
+			$end_date = clone $today;
+			$end_date->modify( '+' . $within_value . ' ' . $within_unit );
+
+			$availability_range_type      = 'range';
+			$availability_range['start']  = $today->format( 'Y-m-d' );
+			$availability_range['end']    = $end_date->format( 'Y-m-d' );
+		}
 		$questions_type = isset( $data['questions_type'] ) ? $data['questions_type'] : array();
 		$questions_form_type = isset( $data['questions_form_type'] ) ? $data['questions_form_type'] : array();
 		$questions_form = isset( $data['questions_form'] ) ? $data['questions_form'] : array(); 

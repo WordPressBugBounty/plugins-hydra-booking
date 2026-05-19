@@ -265,6 +265,9 @@ class SettingsController {
 		$_tfhb_general_settings['booking_status']                          = sanitize_text_field( $request['booking_status'] );
 		$_tfhb_general_settings['reschedule_status']                       = sanitize_text_field( $request['reschedule_status'] );
 		$_tfhb_general_settings['allowed_reschedule_before_meeting_start'] =  $request['allowed_reschedule_before_meeting_start'];
+
+		$_tfhb_general_settings['meeting_url_generation'] = isset( $request['meeting_url_generation'] ) ? (int) $request['meeting_url_generation'] : 1;
+
 		// update option
 		update_option( '_tfhb_general_settings', $_tfhb_general_settings );
 		$ScheduleController = new ScheduleController();
@@ -560,7 +563,10 @@ class SettingsController {
 			$_tfhb_integration_settings['google_calendar']['secret_key']        = '';
 			$_tfhb_integration_settings['google_calendar']['redirect_url']      = $GoogleCalendar->redirectUrl;
 
-		}
+		}elseif(isset($_tfhb_integration_settings['google_calendar'])){
+			$GoogleCalendar                                        = new GoogleCalendar();
+			$_tfhb_integration_settings['google_calendar']['redirect_url']      = $GoogleCalendar->setRedirectUrl();
+		} 
 		 
 		$_tfhb_integration_settings = apply_filters( 'tfhb_get_integration_settings', $_tfhb_integration_settings );
 		// Checked if woo
@@ -599,11 +605,12 @@ class SettingsController {
 			);
 			return rest_ensure_response( $data );
 		} elseif ( $key == 'google_calendar' ) {
+			$GoogleCalendar                                        = new GoogleCalendar();
 			$_tfhb_integration_settings['google_calendar']['type']              = sanitize_text_field( $data['type'] );
 			$_tfhb_integration_settings['google_calendar']['status']            = sanitize_text_field( $data['status'] );
 			$_tfhb_integration_settings['google_calendar']['client_id']         = sanitize_text_field( $data['client_id'] );
 			$_tfhb_integration_settings['google_calendar']['secret_key']        = sanitize_text_field( $data['secret_key'] );
-			$_tfhb_integration_settings['google_calendar']['redirect_url']      = sanitize_text_field( $data['redirect_url'] );
+			$_tfhb_integration_settings['google_calendar']['redirect_url']      = $GoogleCalendar->setRedirectUrl();
 			$_tfhb_integration_settings['google_calendar']['connection_status'] = isset( $data['secret_key'] ) && ! empty( $data['secret_key'] ) ? 1 : 0;
 
 			// update option
@@ -1132,7 +1139,7 @@ class SettingsController {
 
 		$data = array(
 			'status'         => true,
-			'message'        => 'Hosts Settings',
+			'message'        => __( 'Hosts Settings', 'hydra-booking' ),
 			'hosts_settings' => $_tfhb_hosts_settings,
 		);
 		return rest_ensure_response( $data );
@@ -1221,7 +1228,7 @@ class SettingsController {
 		$_tfhb_appearance_settings = get_option( '_tfhb_appearance_settings' );
 		$data                      = array(
 			'status'              => true,
-			'message'             => 'Appearance Settings',
+			'message'             => __( 'Appearance Settings', 'hydra-booking' ),
 			'appearance_settings' => $_tfhb_appearance_settings,
 		);
 		return rest_ensure_response( $data );
@@ -1356,7 +1363,7 @@ class SettingsController {
 		// 
 		$data = array(
 			'status'  => true,
-            'message' => 'Shortcode Settings',
+	            'message' => __( 'Shortcode Settings', 'hydra-booking' ),
             'hostsList' => $hostsList,
             'categoryList' => $categoryList, 
 		);
@@ -1380,14 +1387,14 @@ class SettingsController {
 			$shortcodeHTML = ob_get_clean();
 			$data = array(
                 'status'  => true,
-                'message' => 'Shortcode Preview',
+	                'message' => __( 'Shortcode Preview', 'hydra-booking' ),
                 'output' => $shortcodeHTML, 
             );
 
 		}  else {
 			$data = array(
                 'status'  => false,
-                'message' => 'No Shortcode provided',
+	                'message' => __( 'No Shortcode provided', 'hydra-booking' ),
             );
         }
 		return rest_ensure_response( $data );

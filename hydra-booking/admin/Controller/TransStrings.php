@@ -772,6 +772,11 @@ namespace HydraBooking\Admin\Controller;
             'Select Data to Import' =>  __('Select Data to Import', 'hydra-booking'),  
             'No upcoming booking found' =>  __('No upcoming booking found', 'hydra-booking'),    
             'Choose which data you would like to to import your website' =>  __('Choose which data you would like to to import your website', 'hydra-booking'),  
+            'Your start time will be over the: ' =>  __('Your start time will be over the: ', 'hydra-booking'),
+            'Your End time will be over the: ' =>  __('Your End time will be over the: ', 'hydra-booking'),
+            ' And Less than ' =>  __(' And Less than ', 'hydra-booking'),
+            'End date should be greater than or equal to Start dates' =>  __('End date should be greater than or equal to Start dates', 'hydra-booking'),
+            'When disabled, meeting public pages will return 404 and the share link feature will be hidden.' =>  __('When disabled, meeting public pages will return 404 and the share link feature will be hidden.', 'hydra-booking'),
             'hello' =>  __('hello', 'hydra-booking'),
         );
      } 

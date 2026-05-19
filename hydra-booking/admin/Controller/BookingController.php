@@ -426,7 +426,7 @@ class BookingController {
 			'bookings'         	=> $booking_list,
 			'booking_calendar' 	=> $booking_array,
 			'time_zone' 		=> $time_zone,
-			'message'          	=> 'Booking Data Successfully Retrieve!',
+			'message'          	=> __( 'Booking Data Successfully Retrieve!', 'hydra-booking' ),
 		);
 		return rest_ensure_response( $data );
 	}
@@ -598,7 +598,7 @@ class BookingController {
 			// return error message
 			$data = array(
 				'status'    => false,
-				'message' => 'Booking is not exist', 
+				'message' => __( 'Booking is not exist', 'hydra-booking' ), 
 			);
 			return rest_ensure_response( $data );
 		}  
@@ -640,7 +640,7 @@ class BookingController {
 		// return witn success message
 		$data = array(
 			'status'    => true,
-			'message' => 'Booking is updated successfully', 
+			'message' => __( 'Booking is updated successfully', 'hydra-booking' ), 
 		);
 		return rest_ensure_response( $data );
 

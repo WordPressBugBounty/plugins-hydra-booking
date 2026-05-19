@@ -83,7 +83,7 @@ class Notification {
             'meeting_id' =>  $data->meeting_id, 
             'attendee_id' =>  $data->id,
             'attendee_name' =>  $data->attendee_name,
-            'message' =>  'Has booked a meeting',
+            'message' =>  __( 'Has booked a meeting', 'hydra-booking' ),
             'status' => 'unread', 
         );
         $data = array(

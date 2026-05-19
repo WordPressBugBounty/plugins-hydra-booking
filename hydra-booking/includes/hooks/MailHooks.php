@@ -779,6 +779,159 @@ class MailHooks {
 	}
 
 	/**
+	 * Resolve locale for attendee email template rendering.
+	 */
+	private function get_mail_template_locale( $attendeeBooking ) {
+		$locale = get_locale();
+
+		if ( ! empty( $attendeeBooking->attendee_locale ) ) {
+			$locale = $attendeeBooking->attendee_locale;
+		} elseif ( ! empty( $attendeeBooking->locale ) ) {
+			$locale = $attendeeBooking->locale;
+		} elseif ( ! empty( $attendeeBooking->language ) ) {
+			$locale = $attendeeBooking->language;
+		}
+
+		return apply_filters( 'hydra_booking/mail_template_locale', $locale, $attendeeBooking );
+	}
+
+	/**
+	 * Format date string in active locale when possible.
+	 */
+	private function localize_meeting_dates( $meeting_dates ) {
+		if ( empty( $meeting_dates ) ) {
+			return '';
+		}
+
+		$date_format = get_option( 'date_format', 'M d, Y' );
+		$parts       = array_map( 'trim', explode( ',', (string) $meeting_dates ) );
+		$output      = array();
+
+		foreach ( $parts as $part ) {
+			if ( '' === $part ) {
+				continue;
+			}
+
+			$timestamp = strtotime( $part );
+			$output[]  = false !== $timestamp ? wp_date( $date_format, $timestamp ) : $part;
+		}
+
+		if ( empty( $output ) ) {
+			return (string) $meeting_dates;
+		}
+
+		return implode( ', ', $output );
+	}
+
+	/**
+	 * Format time string in active locale when possible.
+	 */
+	private function localize_time_value( $time_value ) {
+		$time_value = trim( (string) $time_value );
+
+		if ( '' === $time_value ) {
+			return '';
+		}
+
+		$time_format = get_option( 'time_format', 'g:i a' );
+		$timestamp   = strtotime( '1970-01-01 ' . $time_value );
+
+		if ( false === $timestamp ) {
+			return $time_value;
+		}
+
+		return wp_date( $time_format, $timestamp );
+	}
+
+	/**
+	 * Format duration with locale-aware pluralization when duration is numeric.
+	 */
+	private function localize_duration_value( $duration_value ) {
+		$duration_value = trim( (string) $duration_value );
+
+		if ( '' === $duration_value ) {
+			return '';
+		}
+
+		if ( ctype_digit( $duration_value ) ) {
+			$minutes = (int) $duration_value;
+			return sprintf(
+				/* translators: %s is the meeting duration in minutes. */
+				_n( '%s minute', '%s minutes', $minutes, 'hydra-booking' ),
+				number_format_i18n( $minutes )
+			);
+		}
+
+		return $duration_value;
+	}
+
+	/**
+	 * Human readable timezone label with translation hook.
+	 */
+	private function localize_timezone_label( $timezone_value, $attendeeBooking ) {
+		$timezone_value = (string) $timezone_value;
+		$label          = str_replace( '_', ' ', $timezone_value );
+
+		return apply_filters( 'hydra_booking/mail_template_timezone_label', $label, $timezone_value, $attendeeBooking );
+	}
+
+	/**
+	 * Per-tag value translation hook for multilingual integrations.
+	 */
+	private function localize_mail_tag_value( $tag, $value, $attendeeBooking, $locale ) {
+		return apply_filters( 'hydra_booking/mail_template_tag_value', $value, $tag, $attendeeBooking, $locale );
+	}
+
+	/**
+	 * Translate default template copy that is saved as static text in email HTML.
+	 */
+	private function translate_default_template_copy( $template, $attendeeBooking, $locale ) {
+		$replace_map = array(
+			'Hey' => __( 'Hey', 'hydra-booking' ),
+			'Your booking has been scheduled' => __( 'Your booking has been scheduled', 'hydra-booking' ),
+			'Meeting Details' => __( 'Meeting Details', 'hydra-booking' ),
+			'Date & Time:' => __( 'Date & Time:', 'hydra-booking' ),
+			'A new booking with ' => __( 'A new booking with ', 'hydra-booking' ),
+			'was confirmed.' => __( 'was confirmed.', 'hydra-booking' ),
+			'Host:' => __( 'Host:', 'hydra-booking' ),
+			'About:' => __( 'About:', 'hydra-booking' ),
+			'Description:' => __( 'Description:', 'hydra-booking' ),
+			'Location:' => __( 'Location:', 'hydra-booking' ),
+			'Host Details' => __( 'Host Details', 'hydra-booking' ),
+			'Name:' => __( 'Name:', 'hydra-booking' ),
+			'Email:' => __( 'Email:', 'hydra-booking' ),
+			'Phone:' => __( 'Phone:', 'hydra-booking' ),
+			'Instructions' => __( 'Instructions', 'hydra-booking' ),
+			'Please <strong>join the event five minutes before the event starts</strong> based on your time zone.' => sprintf(
+				/* translators: 1: opening strong tag, 2: closing strong tag, 3: localized "Date & Time" label. */
+				__( 'Please %1$sjoin the event five minutes before the event starts%2$s based on your time zone. The %3$s is listed above for your reference.', 'hydra-booking' ),
+				'<strong>',
+				'</strong>',
+				__( 'Date & Time', 'hydra-booking' )
+			),
+
+			'Ensure you have a good internet connection, a quality camera, and a quiet space.' => __( 'Ensure you have a good internet connection, a quality camera, and a quiet space.', 'hydra-booking' ),
+			'You can cancel or reschedule this event for any reason.' => __( 'You can cancel or reschedule this event for any reason.', 'hydra-booking' ),
+			'Cancel' => __( 'Cancel', 'hydra-booking' ),
+			'Reschedule' => __( 'Reschedule', 'hydra-booking' ),
+			'Add To Calendar' => __( 'Add To Calendar', 'hydra-booking' ), 
+			'Join Meeting' => __( 'Join Meeting', 'hydra-booking' ),
+			'Password :' => __( 'Password :', 'hydra-booking' ),
+			'Host time:' => __( 'Host time:', 'hydra-booking' ),
+		);
+
+		foreach ( $replace_map as $source => $translated ) {
+			$translated = apply_filters( 'hydra_booking/mail_template_default_text', $translated, $source, $attendeeBooking, $locale );
+
+			if ( ! empty( $translated ) && $translated !== $source ) {
+				$template = str_replace( $source, $translated, $template );
+			}
+		}
+
+		return $template; 
+	}
+
+	/**
 	 * Replace all available mail tags
 	 */
 	public function replace_mail_tags( $template, $attendee_id ) { 
@@ -791,6 +944,23 @@ class MailHooks {
 			1,
 			'DESC'
 		); 
+
+		$locale       = $this->get_mail_template_locale( $attendeeBooking );
+		$did_switch   = false;
+		$old_locale   = function_exists( 'determine_locale' ) ? determine_locale() : get_locale();
+		if ( function_exists( 'switch_to_locale' ) && ! empty( $locale ) && $locale !== $old_locale ) {
+			$did_switch = switch_to_locale( $locale );
+		}
+
+		$meeting_title          = ! empty( $attendeeBooking->meeting_title ) ? $attendeeBooking->meeting_title : '';
+		$meeting_content        = ! empty( $attendeeBooking->meeting_content ) ? $attendeeBooking->meeting_content : '';
+		$meeting_dates          = ! empty( $attendeeBooking->meeting_dates ) ? $this->localize_meeting_dates( $attendeeBooking->meeting_dates ) : '';
+		$localized_duration     = $this->localize_duration_value( $attendeeBooking->duration );
+		$localized_start_time   = $this->localize_time_value( $attendeeBooking->start_time );
+		$localized_end_time     = $this->localize_time_value( $attendeeBooking->end_time );
+		$localized_timezone     = $this->localize_timezone_label( $attendeeBooking->attendee_time_zone, $attendeeBooking );
+		$localized_host_name    = trim( $attendeeBooking->host_first_name . ' ' . $attendeeBooking->host_last_name );
+		$localized_attendee_name = ! empty( $attendeeBooking->attendee_name ) ? $attendeeBooking->attendee_name : '';
 
 		// Initialize Helper to use settings-based date format
 		$helper = new Helper();
@@ -864,16 +1034,19 @@ class MailHooks {
 		}
 
 		$replacements = array(
+			'{{meeting.title}}'    => $meeting_title,
+			'{{meeting.content}}'  => $meeting_content,
+			'{{meeting.date}}'     => $meeting_dates,
 			'{{meeting.title}}'    => ! empty( $attendeeBooking->meeting_title ) ? $attendeeBooking->meeting_title : '',
 			'{{meeting.content}}'  => ! empty( $attendeeBooking->meeting_content ) ? $attendeeBooking->meeting_content : '',
 			'{{meeting.date}}'     => $formatted_meeting_date,
 			'{{meeting.location}}' => implode( ', ', $locations ),
-			'{{meeting.duration}}' => $attendeeBooking->duration,
-			'{{meeting.time}}'     => $attendeeBooking->start_time . '-' . $attendeeBooking->end_time,
-			'{{host.name}}'        => $attendeeBooking->host_first_name . ' ' . $attendeeBooking->host_last_name,
+			'{{meeting.duration}}' => $localized_duration,
+			'{{meeting.time}}'     => $localized_start_time . '-' . $localized_end_time,
+			'{{host.name}}'        => $localized_host_name,
 			'{{host.email}}'       => ! empty( $attendeeBooking->host_email ) ? $attendeeBooking->host_email : '',
 			'{{host.phone}}'       => ! empty( $attendeeBooking->host_phone ) ? $attendeeBooking->host_phone : '',
-			'{{attendee.name}}'    => ! empty( $attendeeBooking->attendee_name ) ? $attendeeBooking->attendee_name : '',
+			'{{attendee.name}}'    => $localized_attendee_name,
 			'{{attendee.email}}'   => ! empty( $attendeeBooking->email ) ? $attendeeBooking->email : '', 
 			'{{booking.add_to_calendar.google}}'   => ! empty( $google_calendar_link ) ? htmlspecialchars($google_calendar_link, ENT_QUOTES, 'UTF-8') : '#', 
 			'{{booking.add_to_calendar.outlook}}'   => ! empty( $outlook_calendar_link ) ? htmlspecialchars($outlook_calendar_link, ENT_QUOTES, 'UTF-8') : '#', 
@@ -912,8 +1085,8 @@ class MailHooks {
 		}
 		
 		// Full start end time with timezone for attendee 
-		$replacements['{{booking.full_start_end_attendee_timezone}}'] = $attendeeBooking->start_time.' - '.$attendeeBooking->end_time.' ('.$attendeeBooking->attendee_time_zone.')';
-		$replacements['{{booking.start_date_time_for_attendee}}'] = $attendeeBooking->start_time. ' ('.$attendeeBooking->attendee_time_zone.')';
+		$replacements['{{booking.full_start_end_attendee_timezone}}'] = $localized_start_time.' - '.$localized_end_time.' ('.$localized_timezone.')';
+		$replacements['{{booking.start_date_time_for_attendee}}'] = $localized_start_time. ' ('.$localized_timezone.')';
 		
 	
 		// Full start end time with timezone for host
@@ -921,14 +1094,20 @@ class MailHooks {
 		$metting_dates = explode(',', $attendeeBooking->meeting_dates);
 		if($attendeeBooking->availability_time_zone != ''){
 			$full_start_end_host_timezone = $dateTime->convert_full_start_end_host_timezone_with_date( $attendeeBooking->start_time, $attendeeBooking->end_time, $attendeeBooking->attendee_time_zone, $attendeeBooking->availability_time_zone,  $metting_dates[0], 'full' );  
+			$full_start_end_host_timezone = str_replace( 'Host time:', __( 'Host time:', 'hydra-booking' ), $full_start_end_host_timezone );
 			$replacements['{{booking.full_start_end_host_timezone}}'] = $full_start_end_host_timezone;
 
 			$start_date_time_for_host = $dateTime->convert_full_start_end_host_timezone_with_date( $attendeeBooking->start_time, $attendeeBooking->end_time, $attendeeBooking->attendee_time_zone, $attendeeBooking->availability_time_zone,  $metting_dates[0], 'start' );
+			$start_date_time_for_host = str_replace( 'Host time:', __( 'Host time:', 'hydra-booking' ), $start_date_time_for_host );
 			$replacements['{{booking.start_date_time_for_host}}'] =  $start_date_time_for_host;
 		}else{
-			$replacements['{{booking.full_start_end_host_timezone}}'] = $attendeeBooking->start_time.' - '.$attendeeBooking->end_time.' ('.$attendeeBooking->attendee_time_zone.')';
+			$replacements['{{booking.full_start_end_host_timezone}}'] = $localized_start_time.' - '.$localized_end_time.' ('.$localized_timezone.')';
 
-			$replacements['{{booking.start_date_time_for_host}}'] = $attendeeBooking->start_time. ' ('.$attendeeBooking->attendee_time_zone.')';
+			$replacements['{{booking.start_date_time_for_host}}'] = $localized_start_time. ' ('.$localized_timezone.')';
+		}
+
+		foreach ( $replacements as $tag => $value ) {
+			$replacements[ $tag ] = $this->localize_mail_tag_value( $tag, $value, $attendeeBooking, $locale );
 		}
  
 		if( !empty($attendeeBooking->meeting_locations) && $attendeeBooking->meeting_locations != NULL  ){
@@ -950,6 +1129,7 @@ class MailHooks {
 		$tags   = array_keys( $replacements );
 		$values = array_values( $replacements ); 
 		$template = str_replace( $tags, $values, $template );
+		$template = $this->translate_default_template_copy( $template, $attendeeBooking, $locale );
 
 		if ($attendeeBooking->attendee_can_cancel != 1 && $attendeeBooking->attendee_can_reschedule != 1) {
 			libxml_use_internal_errors(true); // Suppress warnings for invalid HTML
@@ -989,6 +1169,10 @@ class MailHooks {
 
 			$template = $dom->saveHTML($dom->getElementsByTagName('body')->item(0));
 			$template = preg_replace('/^<body>|<\/body>$/', '', $template);
+		}
+
+		if ( $did_switch && function_exists( 'restore_previous_locale' ) ) {
+			restore_previous_locale();
 		}
 
 		return $template;

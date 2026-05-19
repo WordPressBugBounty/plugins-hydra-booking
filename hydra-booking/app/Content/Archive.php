@@ -43,6 +43,20 @@ class Archive  {
      * 
      * */
     public function tfhb_meeting_custom_archive_template($template) {
+        // When URL generation is disabled, serve a 404 for all meeting archive/taxonomy pages.
+        if ( ! $this->tfhb_is_url_generation_enabled() ) {
+            if ( is_post_type_archive( 'tfhb_meeting' ) || is_tax( 'meeting_category' ) ) {
+                if ( ! current_user_can( 'manage_options' ) ) {
+                    global $wp_query;
+                    $wp_query->set_404();
+                    status_header( 404 );
+                    header( 'X-Robots-Tag: noindex, nofollow', true );
+                    return get_404_template();
+                }
+            }
+            return $template;
+        }
+
         if (is_post_type_archive('tfhb_meeting')) {
             return plugin_dir_path(__FILE__) . 'Archive/archive-tfhb_meeting.php';
         }
@@ -75,6 +89,17 @@ class Archive  {
         }
         
         return $template; 
+    }
+
+    /**
+     * Check whether meeting URL generation is enabled.
+     *
+     * Delegates to the same filter as App::tfhb_is_url_generation_enabled().
+     *
+     * @return bool
+     */
+    protected function tfhb_is_url_generation_enabled() {
+        return (bool) apply_filters( 'tfhb_is_url_generation_enabled', true );
     }
     
 } 

@@ -404,7 +404,7 @@ class ZoomServices {
 		if ( $data == null ) {
 			return array(
 				'status'  => false,
-				'message' => 'Invalid Data',
+				'message' => __( 'Invalid Data', 'hydra-booking' ),
 			);
 		}
 
@@ -417,7 +417,7 @@ class ZoomServices {
 		if ( ! isset( $data['account_id'] ) || ! isset( $data['app_client_id'] ) || ! isset( $data['app_secret_key'] ) ) {
 			$data = array(
 				'status'  => false,
-				'message' => 'Invalid Data',
+				'message' => __( 'Invalid Data', 'hydra-booking' ),
 			);
 			return $data;
 		}
@@ -455,7 +455,7 @@ class ZoomServices {
 			$data = array(
 				'status'  => true,
 				'integration_settings'  => $option,
-				'message' => 'Zoom Integration Settings Updated Successfully',
+				'message' => __( 'Zoom Integration Settings Updated Successfully', 'hydra-booking' ),
 			);
 			return $data;
 		}
@@ -468,7 +468,7 @@ class ZoomServices {
 		if ( $data == null || $user_id == null ) {
 			return array(
 				'status'  => false,
-				'message' => 'Invalid Data',
+				'message' => __( 'Invalid Data', 'hydra-booking' ),
 			);
 		}
  
@@ -486,7 +486,7 @@ class ZoomServices {
 
 			$data = array(
 				'status'  => false,
-				'message' => 'Invalid Data',
+				'message' => __( 'Invalid Data', 'hydra-booking' ),
 			);
 			return $data;
 		}
@@ -515,7 +515,7 @@ class ZoomServices {
 
 			$data = array(
 				'status'  => true,
-				'message' => 'Zoom Integration Settings Updated Successfully',
+				'message' => __( 'Zoom Integration Settings Updated Successfully', 'hydra-booking' ),
 			);
 			return $data;
 		}
