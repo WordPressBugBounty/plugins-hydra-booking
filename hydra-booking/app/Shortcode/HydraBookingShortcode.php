@@ -301,7 +301,7 @@ class HydraBookingShortcode {
 
 	// Form Submit Callback
 	public function tfhb_meeting_form_submit_callback() {
-
+ 
 		// Checked Nonce validation
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'tfhb_nonce' ) ) {
 			wp_send_json_error( array( 'message' => __('Nonce verification failed', 'hydra-booking') ) );
@@ -432,13 +432,13 @@ class HydraBookingShortcode {
 					ARRAY_FILTER_USE_KEY
 				);
 				if ( isset( $_POST['names'] ) && is_array( $_POST['names'] ) ) {
-					$attendee_data['attendee_name'] = $_POST['names']['first_name'] . ' ' . $_POST['names']['last_name'];
+					$attendee_data['attendee_name'] = sanitize_text_field( $_POST['names']['first_name'] ) . ' ' . sanitize_text_field( $_POST['names']['last_name'] );
 				}
 			}
 
 			if ( $meta_data['questions_form_type'] == 'forminator' ) {
-
-				$attendee_data['email'] = $_POST['email-1'];
+		
+				$attendee_data['email'] = isset( $_POST['email-1'] ) ? sanitize_email( $_POST['email-1'] ) : '';
 				unset( $_POST['email-1'] );
 
 				$attendee_names = array_filter(
@@ -451,7 +451,7 @@ class HydraBookingShortcode {
 
 				$attendee_data['attendee_name'] = '';
 				foreach ( $attendee_names as $key => $name ) {
-					$attendee_data['attendee_name'] .= $name . ' ';
+					$attendee_data['attendee_name'] .= sanitize_text_field( $name ) . ' ';
 					unset( $_POST[ $key ] );
 				}
 
@@ -464,7 +464,7 @@ class HydraBookingShortcode {
 				);
 
 				foreach ( $address as $key => $name ) {
-					$attendee_data['address'] .= $name . ' ';
+					$attendee_data['address'] .= sanitize_text_field( $name ) . ' ';
 					unset( $_POST[ $key ] );
 				}
 				$questions = $_POST;
@@ -506,7 +506,6 @@ class HydraBookingShortcode {
 		$attendee_data['country']    = isset( $_POST['country'] ) ? sanitize_text_field( $_POST['country'] ) : '';
 		$attendee_data['ip_address'] = isset( $_POST['ip_address'] ) ? sanitize_text_field( $_POST['ip_address'] ) : '';
 		$attendee_data['device']     = isset( $_POST['device'] ) ? sanitize_text_field( $_POST['device'] ) : '';
-
 
 		// Recurring Meeting
 		if ( isset( $meta_data['recurring_status'] ) && $meta_data['recurring_status'] == true ) {

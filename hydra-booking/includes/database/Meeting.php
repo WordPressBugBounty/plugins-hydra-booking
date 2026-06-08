@@ -306,7 +306,7 @@ class Meeting {
 			
 			// Sanitize orderBy - whitelist allowed values
 			$allowed_order = array( 'ASC', 'DESC' );
-			$orderBy = strtoupper( $orderBy );
+			$orderBy = $orderBy ? strtoupper( (string) $orderBy ) : 'DESC';
 			if ( ! in_array( $orderBy, $allowed_order, true ) ) {
 				$orderBy = 'DESC';
 			}

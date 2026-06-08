@@ -1,7 +1,10 @@
 <?php
+
 namespace HydraBooking\App;
 // exit
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if (! defined('ABSPATH')) {
+	exit;
+}
 
 // Use Classes
 use HydraBooking\App\Shortcode\HydraBookingShortcode;
@@ -15,13 +18,16 @@ use HydraBooking\Services\Integrations\BookingBookmarks\BookingBookmarks;
 use HydraBooking\DB\Booking;
 use HydraBooking\DB\Attendees;
 
-class App {
-	public function __construct() {
+class App
+{
+	public function __construct()
+	{
 
 		$this->init();
 	}
 
-	public function init() {
+	public function init()
+	{
 
 		// Load Enqueue Class
 		new Enqueue();
@@ -32,18 +38,18 @@ class App {
 		// Load meeting shortcode Class
 		new ShortcodeBuilder();
 
- 
+
 
 		new FrontendDashboard();
 		// use this class
 		new Archive();
 
 
-		add_filter( 'query_vars', array( $this, 'tfhb_single_query_vars' ) );
+		add_filter('query_vars', array($this, 'tfhb_single_query_vars'));
 
-		add_filter( 'template_include', array( $this, 'tfhb_single_page_template' ) );
+		add_filter('template_include', array($this, 'tfhb_single_page_template'));
 
-	 
+
 
 		add_rewrite_rule(
 			'^meeting/([0-9]+)/?$',
@@ -64,25 +70,25 @@ class App {
 			'top'
 		);
 
-		add_action( 'pre_get_posts', array( $this, 'tfhb_remove_posttype_request' ) );
-		add_filter( 'single_template', array( $this, 'tfhb_single_meeting_template' ) );
-		
-		add_filter( 'post_type_link',  array( $this,'tfhb_meeting_permalink'), 10, 2 );
+		add_action('pre_get_posts', array($this, 'tfhb_remove_posttype_request'));
+		add_filter('single_template', array($this, 'tfhb_single_meeting_template'));
+
+		add_filter('post_type_link',  array($this, 'tfhb_meeting_permalink'), 10, 2);
 
 		// SEO: exclude meeting URLs when URL generation is disabled.
-		add_filter( 'wp_sitemaps_post_types',                      array( $this, 'tfhb_exclude_from_wp_sitemap' ) );
-		add_filter( 'wpseo_sitemap_exclude_post_type',             array( $this, 'tfhb_yoast_exclude_sitemap' ), 10, 2 );
-		add_filter( 'rank_math/sitemap/exclude_post_type',         array( $this, 'tfhb_rankmath_exclude_sitemap' ), 10, 2 );
-		add_action( 'wp',                                          array( $this, 'tfhb_send_noindex_header' ) );
-	
-	 }
+		add_filter('wp_sitemaps_post_types',                      array($this, 'tfhb_exclude_from_wp_sitemap'));
+		add_filter('wpseo_sitemap_exclude_post_type',             array($this, 'tfhb_yoast_exclude_sitemap'), 10, 2);
+		add_filter('rank_math/sitemap/exclude_post_type',         array($this, 'tfhb_rankmath_exclude_sitemap'), 10, 2);
+		add_action('wp',                                          array($this, 'tfhb_send_noindex_header'));
+	}
 
 	/**
 	 * Remove tfhb_meeting from WordPress core XML sitemap when disabled.
 	 */
-	public function tfhb_exclude_from_wp_sitemap( $post_types ) {
-		if ( ! $this->tfhb_is_url_generation_enabled() ) {
-			unset( $post_types['tfhb_meeting'] );
+	public function tfhb_exclude_from_wp_sitemap($post_types)
+	{
+		if (! $this->tfhb_is_url_generation_enabled()) {
+			unset($post_types['tfhb_meeting']);
 		}
 		return $post_types;
 	}
@@ -90,8 +96,9 @@ class App {
 	/**
 	 * Exclude from Yoast SEO sitemap when disabled.
 	 */
-	public function tfhb_yoast_exclude_sitemap( $excluded, $post_type ) {
-		if ( 'tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled() ) {
+	public function tfhb_yoast_exclude_sitemap($excluded, $post_type)
+	{
+		if ('tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled()) {
 			return true;
 		}
 		return $excluded;
@@ -100,8 +107,9 @@ class App {
 	/**
 	 * Exclude from RankMath sitemap when disabled.
 	 */
-	public function tfhb_rankmath_exclude_sitemap( $excluded, $post_type ) {
-		if ( 'tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled() ) {
+	public function tfhb_rankmath_exclude_sitemap($excluded, $post_type)
+	{
+		if ('tfhb_meeting' === $post_type && ! $this->tfhb_is_url_generation_enabled()) {
 			return true;
 		}
 		return $excluded;
@@ -111,27 +119,30 @@ class App {
 	 * Send X-Robots-Tag: noindex header for meeting post type when disabled
 	 * and the current user is not an admin.
 	 */
-	public function tfhb_send_noindex_header() {
-		if ( $this->tfhb_is_url_generation_enabled() ) {
+	public function tfhb_send_noindex_header()
+	{
+		if ($this->tfhb_is_url_generation_enabled()) {
 			return;
 		}
-		if ( ! is_singular( 'tfhb_meeting' ) && ! is_post_type_archive( 'tfhb_meeting' ) ) {
+		if (! is_singular('tfhb_meeting') && ! is_post_type_archive('tfhb_meeting')) {
 			return;
 		}
-		if ( current_user_can( 'manage_options' ) ) {
+		if (current_user_can('manage_options')) {
 			return;
 		}
-		header( 'X-Robots-Tag: noindex, nofollow', true );
+		header('X-Robots-Tag: noindex, nofollow', true);
 	}
 
-	public function tfhb_meeting_permalink( $permalink, $post ) {
-		$permalink_structure = get_option( 'permalink_structure' );
-		if ( !empty($permalink_structure) && $post->post_type === 'tfhb_meeting' && '/%postname%/' == $permalink_structure) {
-			return home_url( '/' . $post->post_name . '/' );
+	public function tfhb_meeting_permalink($permalink, $post)
+	{
+		$permalink_structure = get_option('permalink_structure');
+		if (!empty($permalink_structure) && $post->post_type === 'tfhb_meeting' && '/%postname%/' == $permalink_structure) {
+			return home_url('/' . $post->post_name . '/');
 		}
 		return $permalink;
 	}
-	public function tfhb_single_meeting_template( $single_template ) {
+	public function tfhb_single_meeting_template($single_template)
+	{
 		global $post;
 
 		/**
@@ -139,16 +150,16 @@ class App {
 		 *
 		 * single-meeting.php
 		 */
-		if ( 'tfhb_meeting' === $post->post_type ) {
-			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+		if ('tfhb_meeting' === $post->post_type) {
+			if (! $this->tfhb_is_url_generation_enabled()) {
 				// Allow admins to load the template only for a genuine preview request.
-				if ( is_preview() && current_user_can( 'manage_options' ) ) {
+				if (is_preview() && current_user_can('manage_options')) {
 					return TFHB_PATH . '/app/Content/Template/single-meeting.php';
 				}
 				// All other requests (including admins browsing the public URL) → 404.
 				global $wp_query;
 				$wp_query->set_404();
-				status_header( 404 );
+				status_header(404);
 				return get_404_template();
 			}
 			return TFHB_PATH . '/app/Content/Template/single-meeting.php';
@@ -165,48 +176,51 @@ class App {
 	 *
 	 * @return bool
 	 */
-	public function tfhb_is_url_generation_enabled() {
-		return (bool) apply_filters( 'tfhb_is_url_generation_enabled', true );
+	public function tfhb_is_url_generation_enabled()
+	{
+		return (bool) apply_filters('tfhb_is_url_generation_enabled', true);
 	}
 
-	public function tfhb_remove_posttype_request( $query ) {
+	public function tfhb_remove_posttype_request($query)
+	{
 		// Only noop the main query.
-		if ( ! $query->is_main_query() ) {
+		if (! $query->is_main_query()) {
 			return;
 		}
 
 		// Preview requests include an extra `preview` query var, making count = 3.
 		// Handle them before the strict count guard so admin preview always resolves
 		// the meeting post even when public URL generation is disabled.
-		if ( ! empty( $query->query['name'] ) && ! empty( $query->query['preview'] ) ) {
-			$query->set( 'post_type', array( 'post', 'page', 'tfhb_meeting' ) );
+		if (! empty($query->query['name']) && ! empty($query->query['preview'])) {
+			$query->set('post_type', array('post', 'page', 'tfhb_meeting'));
 			return;
 		}
 
 		// Only noop our very specific rewrite rule match.
-		if ( 2 != count( $query->query ) || ! isset( $query->query['page'] ) ) {
+		if (2 != count($query->query) || ! isset($query->query['page'])) {
 			return;
 		}
 
 		// 'name' will be set if post permalinks are just post_name, otherwise the page rule will match.
-		if ( ! empty( $query->query['name'] ) ) {
+		if (! empty($query->query['name'])) {
 			$post_types = array(
 				'post', // important to  not break your standard posts
 				'page', // important to  not break your standard pages
 			);
 
 			// Only include tfhb_meeting in slug-based queries when public URL generation is enabled.
-			if ( $this->tfhb_is_url_generation_enabled() ) {
+			if ($this->tfhb_is_url_generation_enabled()) {
 				$post_types[] = 'tfhb_meeting';
 			}
 
-			$query->set( 'post_type', $post_types );
+			$query->set('post_type', $post_types);
 		}
 	}
 
-	public function tfhb_single_query_vars( $query_vars ) {
-		$query_vars[] = 'hydra-booking'; 
-		$query_vars[] = 'hydra-add-to-calendar'; 
+	public function tfhb_single_query_vars($query_vars)
+	{
+		$query_vars[] = 'hydra-booking';
+		$query_vars[] = 'hydra-add-to-calendar';
 		$query_vars[] = 'username';
 		$query_vars[] = 'meeting';
 		$query_vars[] = 'meeting-id';
@@ -216,91 +230,87 @@ class App {
 		return $query_vars;
 	}
 
-	public function tfhb_single_page_template( $template ) {
-		
-		if ( get_query_var( 'hydra-booking' ) === 'meeting' && get_query_var( 'meetingId' )) {
-			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+	public function tfhb_single_page_template($template)
+	{
+
+		if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meetingId')) {
+			if (! $this->tfhb_is_url_generation_enabled()) {
 				return $template;
 			}
 
-			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/embed.php', true );
+			$custom_template = load_template(TFHB_PATH . '/app/Content/Template/embed.php', true);
 			return $custom_template;
 		}
-		if ( get_query_var( 'hydra-booking' ) === 'meeting' && get_query_var( 'meeting' ) ) {
-			if ( ! $this->tfhb_is_url_generation_enabled() ) {
+		if (get_query_var('hydra-booking') === 'meeting' && get_query_var('meeting')) {
+			if (! $this->tfhb_is_url_generation_enabled()) {
 				return $template;
 			}
-			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/single-meeting.php', false );
+			$custom_template = load_template(TFHB_PATH . '/app/Content/Template/single-meeting.php', false);
 			return $custom_template;
-		} 
-		if ( get_query_var( 'hydra-add-to-calendar' )) {
-			
-			
+		}
+		if (get_query_var('hydra-add-to-calendar')) {
+
+
 			$Bookmark = new BookingBookmarks();
-			$getBookmark = $Bookmark->sendBookmarkFormEmail(get_query_var( 'hydra-add-to-calendar' ));
+			$getBookmark = $Bookmark->sendBookmarkFormEmail(get_query_var('hydra-add-to-calendar'));
+		}
 
-		} 
 
- 
 		// Reschedule Page
-		if ( get_query_var( 'hydra-booking' ) === 'booking' && get_query_var( 'hash' ) && get_query_var( 'type' ) === 'reschedule' ) {
-			$custom_template = load_template( TFHB_PATH . '/app/Content/Template/reschedule.php', false );
+		if (get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'reschedule') {
+			$custom_template = load_template(TFHB_PATH . '/app/Content/Template/reschedule.php', false);
 			return $custom_template;
-
-		} 
+		}
 		// Cenceled And Confirmation Page and download ics
-		if (( 
-			get_query_var( 'hydra-booking' ) === 'booking' && get_query_var( 'hash' ) && get_query_var( 'type' ) === 'cancel' ) // Cenceled  Page
-			|| ( get_query_var( 'hydra-booking' ) === 'booking' && get_query_var( 'hash' ) && get_query_var( 'type' ) === 'confirmation' ) // Confirmation  Page
-			|| ( get_query_var( 'hydra-booking' ) === 'booking' && get_query_var( 'hash' ) && get_query_var( 'type' ) === 'download_ics' ) // Download Ics
+		if ((
+				get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'cancel') // Cenceled  Page
+			|| (get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'confirmation') // Confirmation  Page
+			|| (get_query_var('hydra-booking') === 'booking' && get_query_var('hash') && get_query_var('type') === 'download_ics') // Download Ics
 		) {
-			 
-			if ( ! wp_script_is( 'tfhb-app-script', 'enqueued' ) ) {
-				wp_enqueue_script( 'tfhb-app-script' );
+
+			if (! wp_script_is('tfhb-app-script', 'enqueued')) {
+				wp_enqueue_script('tfhb-app-script');
 			}
-		 
-			
+
+
 			$Attendee = new Attendees();
-			$attendeeBooking =  $Attendee->getAttendeeWithBooking( 
+			$attendeeBooking =  $Attendee->getAttendeeWithBooking(
 				array(
-					array('hash', '=', get_query_var( 'hash' )),
+					array('hash', '=', get_query_var('hash')),
 				),
 				1,
 				'DESC'
-			);  
-			if ( ! $attendeeBooking ) {
+			);
+			if (! $attendeeBooking) {
 				return $template;
-			} 
-			if('confirmation' == get_query_var( 'type' )){
+			}
+			if ('confirmation' == get_query_var('type')) {
 				$custom_template = load_template(
 					TFHB_PATH . '/app/Content/Template/meeting-confirmation.php',
 					false,
 					array(
-						'attendeeBooking'         => $attendeeBooking, 
-						'confirmation_page'         => true, 
+						'attendeeBooking'         => $attendeeBooking,
+						'confirmation_page'         => true,
 					)
 				);
 			}
-			if('cancel' == get_query_var( 'type' )){
+			if ('cancel' == get_query_var('type')) {
 				$custom_template = load_template(
 					TFHB_PATH . '/app/Content/Template/meeting-cencel.php',
 					false,
 					array(
-						'attendeeBooking'         => $attendeeBooking, 
+						'attendeeBooking'         => $attendeeBooking,
 					)
 				);
 			}
-			if('download_ics' == get_query_var( 'type' )){
+			if ('download_ics' == get_query_var('type')) {
 				$bookmark = new BookingBookmarks();
 				$bookmark->generateBookingICS($attendeeBooking);
 				return $template;
 			}
-			
-			return $custom_template;
 
+			return $custom_template;
 		}
 		return $template;
 	}
-
-	 
 }

@@ -520,7 +520,7 @@ class FrontendDashboard {
 
         
 
-        if(in_array($current_user->roles[0], $admin_roles)){ 
+        if(!empty($current_user->roles) && in_array($current_user->roles[0], $admin_roles)){ 
             // Allow AJAX requests
             if (defined('DOING_AJAX') && DOING_AJAX) {
                 return; 
