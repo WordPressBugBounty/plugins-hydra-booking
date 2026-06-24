@@ -28,6 +28,26 @@ class BookingController {
 		return wp_date( $helper->get_date_time_format_from_settings( 'M d, Y', 'h:i A' ) );
 	}
 
+	private function tfhb_verify_booking_ownership( $booking_id ) {
+		$current_user      = wp_get_current_user();
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+
+		if ( 'administrator' === $current_user_role && current_user_can( 'tfhb_manage_settings' ) ) {
+			return true;
+		}
+		$host      = new Host();
+		$host_data = $host->getHostByUserId( get_current_user_id() );
+		if ( empty( $host_data ) || empty( $host_data->id ) ) {
+			return false;
+		}
+		$booking        = new Booking();
+		$booking_record = $booking->getBookingWithAttendees( array( array( 'id', '=', absint( $booking_id ) ) ), 1 );
+		if ( empty( $booking_record ) ) {
+			return false;
+		}
+		return (int) $booking_record->host_id === (int) $host_data->id;
+	}
+
 	public function init() {
 	}
 
@@ -571,7 +591,7 @@ class BookingController {
 			) );
 
 		}
-		$request = json_decode( file_get_contents( 'php://input' ), true ); 
+		$request = json_decode( file_get_contents( 'php://input' ), true );
 		$select_date = isset( $request['select_date'] ) ? $request['select_date'] : '';
 		$booking_id = isset( $request['booking_id'] ) ? $request['booking_id'] : '';
 		$meeting_id = isset( $request['meeting_id'] ) ? $request['meeting_id'] : '';
@@ -579,11 +599,15 @@ class BookingController {
 		$select_date = isset( $request['select_date'] ) ? $request['select_date'] : '';
 		$select_time_slot = isset( $request['select_time_slot'] ) ? $request['select_time_slot'] : '';
 		$select_status = isset( $request['select_status'] ) ? $request['select_status'] : '';
-		$select_time_slot = json_decode( $select_time_slot, true ); 
+		$select_time_slot = json_decode( $select_time_slot, true );
 		$start_time = $select_time_slot['start'];
 		$end_time = $select_time_slot['end'];
 
-		// get booking data with attendees 
+		if ( ! empty( $booking_id ) && ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
+		// get booking data with attendees
 		$booking = new Booking();
 		$where = array(
 			array('id', '=', $booking_id),
@@ -1046,7 +1070,7 @@ class BookingController {
 
 	// Send Reminder Email
 	public function sendReminderEmail(){
-		$request = json_decode( file_get_contents( 'php://input' ), true ); 
+		$request = json_decode( file_get_contents( 'php://input' ), true );
 
 		$booking_id =  isset( $request['booking_id'] ) ? $request['booking_id'] : 0;
 		if( empty( $booking_id ) && $booking_id == 0 ){
@@ -1056,6 +1080,10 @@ class BookingController {
 					'message' => __('Invalid Booking', 'hydra-booking'),
 				)
 			);
+		}
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
 		}
 
 		// Get Booking Data
@@ -1241,7 +1269,7 @@ class BookingController {
 
 	 public function updateInternalNotes(){
 		$bookingMeta = new BookingMeta();
-		$request = json_decode( file_get_contents( 'php://input' ), true ); 
+		$request = json_decode( file_get_contents( 'php://input' ), true );
 		$booking_id =  isset( $request['booking_id'] ) ? $request['booking_id'] : 0;
 		$internal_note =  isset( $request['internal_note'] ) ? $request['internal_note'] : '';
 
@@ -1252,6 +1280,10 @@ class BookingController {
 					'message' =>  __('Invalid Booking', 'hydra-booking'),
 				)
 			);
+		}
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
 		}
 		$get_internal_note = $bookingMeta->getWithIdKey( $booking_id, 'internal_note', 1 );
 		if($get_internal_note){
@@ -1292,7 +1324,12 @@ class BookingController {
 
 	// Get Single Booking
 	public function getBookingData( $request ) {
-		$booking_id = $request['id']; 
+		$booking_id = $request['id'];
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		// Check if user is already a booking
 		$booking = new Booking();
 		// Insert booking
@@ -1368,7 +1405,12 @@ class BookingController {
 
 	public function getBookingDetailsData($booking_id){
 		$booking = new Booking();
+ 
 		
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		$where = array(
 			array('id', '=', $booking_id),
 		);
@@ -1416,7 +1458,7 @@ class BookingController {
 	 * 
 	 */
 	public function getBookingDetails( $request ) {
-		$booking_id = $request['id']; 
+		$booking_id = $request['id'];
 
 		if(empty($booking_id)){
 			return rest_ensure_response(
@@ -1426,7 +1468,11 @@ class BookingController {
 				)
 			);
 		}
-		
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		$bookingsList = $this->getBookingDetailsData($booking_id);
 		$bookingMeta = new BookingMeta();
 		$booking_activity = $bookingMeta->getWithIdKey ( $booking_id, 'booking_activity', null); 
@@ -1477,7 +1523,10 @@ class BookingController {
 				)
 			);
 		}
-		 
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
 
 		// Check if user is already a booking
 		$booking = new Booking();  
@@ -1529,7 +1578,7 @@ class BookingController {
 		$attendee_id = $request['id'];
 		$booking_id = $request['booking_id'];
 		$status     =  $request['status'];
-		$cancel_reason =  $request['cancel_reason']; 
+		$cancel_reason =  $request['cancel_reason'];
 		if ( empty( $attendee_id ) || $attendee_id == 0 ) {
 			return rest_ensure_response(
 				array(
@@ -1537,6 +1586,10 @@ class BookingController {
 					'message' => __('Invalid Attendee', 'hydra-booking'),
 				)
 			);
+		}
+
+		if ( ! empty( $booking_id ) && ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
 		}
 
 		$Attendee = new Attendees();

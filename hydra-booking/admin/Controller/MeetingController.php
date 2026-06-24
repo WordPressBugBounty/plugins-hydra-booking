@@ -215,16 +215,19 @@ class MeetingController
 		// get user role
 		$current_user_role = ! empty($current_user->roles[0]) ? $current_user->roles[0] : '';
 		$current_user_id   = $current_user->ID;
-
+	
 		// Meeting Lists
-		$meeting = new Meeting();
+		$meeting      = new Meeting();
+		$MeetingsList = array();
 
 		if (! empty($current_user_role) && 'administrator' == $current_user_role) {
 			$MeetingsList = $meeting->get();
+		} elseif (! empty($current_user_role) && 'tfhb_host' == $current_user_role) {
+			$MeetingsList = $meeting->get(null, null, $current_user_id);
 		}
 
-		if (! empty($current_user_role) && 'tfhb_host' == $current_user_role) {
-			$MeetingsList = $meeting->get(null, null, $current_user_id);
+		if ( empty( $MeetingsList ) || ! is_array( $MeetingsList ) ) {
+			return array();
 		}
 
 		// add meeting permalink and preview_link into the meeting list
@@ -241,7 +244,7 @@ class MeetingController
 	// Meeting List
 	public function getMeetingsData()
 	{
-
+		
 		$MeetingsList = $this->getMeetingList();
 
 		// Return response
