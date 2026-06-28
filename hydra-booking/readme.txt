@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -220,6 +220,14 @@ There are several well-known appointment booking plugins available for WordPress
 
 == Changelog ==
 
+= 1.2.1 – Jun 28, 2026 =
+ 
+- Fixed: Timezone issue on email template
+
+= 1.2.0 – Jun 24, 2026 =
+ 
+- Fixed: Security issue has been resolved.
+
 = 1.1.45 – Jun 08, 2026 =
 
 - Added: HubSpot integration for sync data (Pro).
@@ -241,10 +249,6 @@ There are several well-known appointment booking plugins available for WordPress
 - Fixed: WooCommerce API crash issue.
 - Fixed: Frontend dashboard license issue.
 - Updated: Google redirect URL handling.
-
-= 1.2.0 – Jun 24, 2026 =
- 
-- Fixed: Security issue has been resolved.
 
 = 1.1.42 – Apr 28, 2026 =
 

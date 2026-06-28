@@ -840,7 +840,8 @@ class MailHooks {
 			return $time_value;
 		}
 
-		return wp_date( $time_format, $timestamp );
+		// Pass UTC explicitly so wp_date() does not shift the attendee's wall-clock time by the site timezone offset.
+		return wp_date( $time_format, $timestamp, new \DateTimeZone( 'UTC' ) );
 	}
 
 	/**
