@@ -900,6 +900,9 @@ class BookingController {
 		$booking = new Booking();
 
 		if ( ! empty( $request['id'] ) ) {
+			if ( ! $this->tfhb_verify_booking_ownership( $request['id'] ) ) {
+				return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+			}
 			$data = array(
 				'id'                 => isset( $request['id'] ) ? $request['id'] : '',
 				'meeting_id'         => isset( $request['meeting'] ) ? $request['meeting'] : '',
@@ -998,6 +1001,11 @@ class BookingController {
 				)
 			);
 		}
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		// Delete Booking
 		$booking       = new Booking();
 		$single_booking_meta = $booking->get( absint( $booking_id ) );
@@ -1160,6 +1168,10 @@ class BookingController {
 			);
 		}
 
+		if ( ! $this->tfhb_verify_booking_ownership( $attendeeBooking->booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		if( 'confirmed' != $attendeeBooking->status ){
 			return rest_ensure_response(
 				array(
@@ -1217,6 +1229,11 @@ class BookingController {
 				)
 			);
 		}
+
+		if ( ! $this->tfhb_verify_booking_ownership( $attendeeBooking->booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		if($attendeeBooking->status == $status){
 			return rest_ensure_response(
 				array(
@@ -1667,6 +1684,10 @@ class BookingController {
 			);
 		}
 
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
+		}
+
 		$data = array(
 			'id'     => $request['id'],
 			'status' => isset( $request['status'] ) ? sanitize_text_field( $request['status'] ) : '',
@@ -1762,6 +1783,8 @@ class BookingController {
 		$items    = $request['items'];
 		$booking_owner = !empty($request['host']) ? $request['host'] : '';
 
+		// Only keep booking ids the current user is actually allowed to touch.
+		$items = ! empty( $items ) ? array_values( array_filter( $items, array( $this, 'tfhb_verify_booking_ownership' ) ) ) : $items;
 
 		$booking = new Booking();
 		if($status == 'delete'){

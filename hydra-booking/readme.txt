@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -216,13 +216,17 @@ There are several well-known appointment booking plugins available for WordPress
 10. Design & Appearance Settings
 11. Email Notification Customization
 12. Notification Controls
-13. Slack, Twilio, Telegram settings
+13. Slack, Twilio, Telegram Settings
 
 == Changelog ==
 
+= 1.2.2 – Jul 08, 2026 =
+ 
+- Fixed: Security issue has been resolved.
+
 = 1.2.1 – Jun 28, 2026 =
  
-- Fixed: Timezone issue on email template
+- Fixed: Timezone issue in the email template
 
 = 1.2.0 – Jun 24, 2026 =
  

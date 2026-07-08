@@ -837,6 +837,8 @@ namespace HydraBooking\Admin\Controller;
             '8' => _x('8', 'Calendar number', 'hydra-booking'),
             '9' => _x('9', 'Calendar number', 'hydra-booking'),
             
+            'Use Global Email Notification Settings' =>  __('Use Global Email Notification Settings', 'hydra-booking'),  
+            'Sync with Global Settings' =>  __('Sync with Global Settings', 'hydra-booking'),  
             'Payment Method Required.' =>  __('Payment Method Required.', 'hydra-booking'),  
 
        );

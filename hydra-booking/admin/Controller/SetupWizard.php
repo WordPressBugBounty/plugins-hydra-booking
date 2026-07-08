@@ -205,7 +205,7 @@ class SetupWizard {
 			update_user_meta( $user_id, '_tfhb_host', $data );
 
 			// Hosts Lists
-			$host_data = $host->get( $user_id );
+			$host_data = $host->getHostByUserId( $user_id );
 
 		}
 

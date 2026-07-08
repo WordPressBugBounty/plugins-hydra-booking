@@ -6,12 +6,14 @@ namespace HydraBooking\Admin\Controller;
 use HydraBooking\Admin\Controller\RouteController;
 use HydraBooking\Admin\Controller\DateTimeController;
 use HydraBooking\Admin\Controller\CountryController;
+use HydraBooking\Admin\Controller\SetupWizard;
 use HydraBooking\Services\Integrations\Woocommerce\WooBooking;
 use HydraBooking\Admin\Controller\Helper;
 
 // Use DB
 use HydraBooking\DB\Meeting;
 use HydraBooking\DB\Host;
+use HydraBooking\DB\Availability;
 
 if (! defined('ABSPATH')) {
 	exit;
@@ -685,12 +687,46 @@ class MeetingController
 
 		// if host is not found, return error 
 		if (empty($host_data)) {
-			return rest_ensure_response(
-				array(
-					'status'  => false,
-					'message' =>  __('Host not found', 'hydra-booking'),
-				)
-			);
+			
+			// Create default host if not found, and current user role is administrator
+			if (current_user_can('administrator')) {
+				$availability_settings =  !empty( get_option( '_tfhb_availability_settings' ) ) && get_option( '_tfhb_availability_settings' ) != 'false' ? get_option( '_tfhb_availability_settings' ) : array();
+				//  find avaibilty id which default_status is true
+				$default_availability = array_filter($availability_settings, function ($availability) {
+					return isset($availability['default_status']) && $availability['default_status'] === true;
+				});
+
+				if ( ! empty( $default_availability )) {
+					$default_availability_entry = reset( $default_availability );
+					$availability_id            = $default_availability_entry['id'];
+				} else {
+					if ( count( $availability_settings ) > 0 ) {
+						// get first availability id
+						$first_availability_entry = reset( $availability_settings );
+						$availability_id           = $first_availability_entry['id'];
+					} else {
+						// No default availability exists yet, import a system default based on the current user's timezone
+						$availability_id = $this->createDefaultAvailability();
+					}
+				}
+
+				$SetupWizard = new SetupWizard();
+				$host_data   = $SetupWizard->CreateHost( $current_user, $availability_id );
+
+				// Dynamically add the host role to the current user, keeping their existing role(s) intact
+				if ( ! in_array( 'tfhb_host', (array) $current_user->roles, true ) ) {
+					$current_user->add_role( 'tfhb_host' );
+				}
+			}
+			else {
+				return rest_ensure_response(
+					array(
+						'status'  => false,
+						'message' =>  __('Host not found for the current user.', 'hydra-booking'),
+					)
+				);
+			}
+
 		}
 
 		if (tfhb_is_pro_active() == false && $request_data['meeting_type'] == 'one-to-group') {
@@ -753,6 +789,50 @@ class MeetingController
 		);
 
 		return rest_ensure_response($data);
+	}
+
+	// Import a system default availability (Sun-Sat, 09:00-17:00) using the site's timezone
+	private function createDefaultAvailability()
+	{
+		$days       = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+		$time_slots = array();
+		foreach ($days as $day) {
+			$time_slots[] = array(
+				'day'    => $day,
+				'status' => 1,
+				'times'  => array(
+					array(
+						'start' => '09:00',
+						'end'   => '17:00',
+					),
+				),
+			);
+		}
+
+		$availability_settings = !empty(get_option('_tfhb_availability_settings')) && get_option('_tfhb_availability_settings') != 'false' ? get_option('_tfhb_availability_settings') : array();
+		$last_data              = !empty($availability_settings) ? end($availability_settings) : array();
+		$new_id                 = isset($last_data['id']) ? $last_data['id'] + 1 : 1;
+
+		$availabilityDataSingle = array(
+			'id'             => $new_id,
+			'title'          => __('Default Availability', 'hydra-booking'),
+			'time_zone'      => wp_timezone_string(),
+			'date_status'    => 0,
+			'default_status' => true,
+			'time_slots'     => $time_slots,
+			'date_slots'     => array(),
+		);
+
+		$Availability         = new Availability();
+		$insert_availability  = $Availability->add($availabilityDataSingle);
+		if (!empty($insert_availability['status'])) {
+			$availabilityDataSingle['id'] = $insert_availability['insert_id'];
+		}
+
+		$availability_settings[] = $availabilityDataSingle;
+		update_option('_tfhb_availability_settings', $availability_settings, true);
+
+		return $availabilityDataSingle['id'];
 	}
 
 	// Delete Meeting

@@ -42,9 +42,19 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 				do_action( 'hydra_booking/before_meeting_confirmation' );
 
 			?>
+			<?php
+				$status_labels = array(
+					'pending'   => __( 'Pending', 'hydra-booking' ),
+					'confirmed' => __( 'Confirmed', 'hydra-booking' ),
+					'canceled'  => __( 'Canceled', 'hydra-booking' ),
+					'completed' => __( 'Completed', 'hydra-booking' ),
+					'schedule'  => __( 'Scheduled', 'hydra-booking' ),
+				);
+				$status_label = isset( $status_labels[ $data->status ] ) ? $status_labels[ $data->status ] : ucfirst( $data->status );
+			?>
 			<div class="tfhb-confirmation-seccess">
-				<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/sucess.gif'); ?>" alt="Success"> 
-				<h3><?php echo esc_html( __( 'Booking', 'hydra-booking' ) ); ?> <?php echo esc_html( $data->status ); ?></h3> 
+				<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/sucess.gif'); ?>" alt="Success">
+				<h3><?php echo esc_html( __( 'Booking', 'hydra-booking' ) ); ?> <?php echo esc_html( $status_label ); ?></h3>
 			</div>
 
 			<div class="tfhb-meeting-hostinfo">
@@ -55,33 +65,36 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 							<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/user.svg'); ?>" alt="User">
 						</div>
 						<?php echo ! empty( $data->first_name ) ? '' . esc_html( $data->first_name ) . '  ' . esc_html( $data->last_name ) . '' : ''; ?>
-						<span>Host</span>
-					</li> 
+						<span><?php esc_html_e( 'Host', 'hydra-booking' ); ?></span>
+					</li>
 					<?php if ( ! empty( $data->start_time ) ) { ?>
 					<li class="tfhb-flexbox tfhb-gap-8">
 						<div class="tfhb-icon">
 							<img src="<?php echo esc_url(TFHB_URL . 'assets/app/images/Meeting.svg'); ?>" alt="User">
 						</div>
 						<!--date stored in this format  2024-05-24  9:00pm-9:45pm, Saturday, April 25 -->
-						<?php 
-							$meeting_dates = explode( ',', $data->meeting_dates ); 
+						<?php
+							$meeting_dates = explode( ',', $data->meeting_dates );
+
+							$general_settings = get_option( '_tfhb_general_settings' );
+							$time_format = isset( $general_settings['time_format'] ) && '24' === $general_settings['time_format'] ? '24' : '12';
 
 							$start_time = $data->start_time;
 							$end_time = $data->end_time;
-							$date = $meeting_dates[0]; 
+							$date = $meeting_dates[0];
 							$booking_availability_time_zone = !empty($data->availability_time_zone) ? $data->availability_time_zone : $availability_time_zone;
-							$start_time = $date_time->convert_time_based_on_timezone( $date, $start_time, $booking_availability_time_zone,  $data->attendee_time_zone, '' );
-							
-							$end_time   = $date_time->convert_time_based_on_timezone($date, $end_time, $booking_availability_time_zone, $data->attendee_time_zone , '' ); 
+							$start_time = $date_time->convert_time_based_on_timezone( $date, $start_time, $booking_availability_time_zone,  $data->attendee_time_zone, $time_format );
+
+							$end_time   = $date_time->convert_time_based_on_timezone($date, $end_time, $booking_availability_time_zone, $data->attendee_time_zone , $time_format );
 							$date_strings = '';
 						foreach ( $meeting_dates as $key => $date ) {
 							$formate_date = $date_time->convert_time_based_on_timezone( $date, $data->start_time, $booking_availability_time_zone, $data->attendee_time_zone , '' );
-							$date_strings .= $formate_date->format( $display_date_format );
+							$date_strings .= wp_date( $display_date_format, $formate_date->getTimestamp(), $formate_date->getTimezone() );
 							$date_strings .= '| ';
 						}
-						$date_strings = rtrim( $date_strings, '| ' ); 
+						$date_strings = rtrim( $date_strings, '| ' );
 
-							echo ! empty( $start_time->format('h:i A') ) ? '' . esc_html( $start_time->format('h:i A') ) . ' - ' . esc_html( $end_time->format('h:i A') ) . ', ' . esc_html( $date_strings ) . '' : ''
+							echo ! empty( $start_time ) ? '' . esc_html( $start_time ) . ' - ' . esc_html( $end_time ) . ', ' . esc_html( $date_strings ) . '' : ''
 						?>
 					</li>
 					<?php } ?>
@@ -135,7 +148,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 
 					
 			<div class="tfhb-meeting-bookmark-action tfhb-text-center">
-				<p><?php echo esc_html(__('Add to calender', 'hydra_booking')) ?></p>
+				<p><?php echo esc_html(__('Add to calender', 'hydra-booking')) ?></p>
 				<div class="tfhb-meeting-bookmark-list">
 					<!-- Bookmarks -->
 					<?php 
@@ -162,7 +175,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 						),
 						home_url()
 					);
-					echo '<a href="' . esc_attr( $cancel ) . '">'.esc_html__('Cancel booking', 'hydra_booking').'</a>';
+					echo '<a href="' . esc_attr( $cancel ) . '">'.esc_html__('Cancel booking', 'hydra-booking').'</a>';
 				}
 				if ( true == $data->attendee_can_reschedule ) {
 
@@ -176,7 +189,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 						home_url()
 					);
 
-					echo '<a href="' . esc_url( $reschedule_url ) . '">'.esc_html__('Reschedule', 'hydra_booking').'</a>';
+					echo '<a href="' . esc_url( $reschedule_url ) . '">'.esc_html__('Reschedule', 'hydra-booking').'</a>';
 				}
 				?>
 			</div>
