@@ -46,7 +46,7 @@ class iCalendarController
                 'methods'  => 'GET',
                 'callback' => array($this, 'GetICalSettings'),
                 'permission_callback' => function () {
-                    return current_user_can('tfhb_manage_settings');
+                    return current_user_can('manage_options') || current_user_can('tfhb_manage_settings');
                 },
             )
         );
@@ -57,7 +57,7 @@ class iCalendarController
                 'methods'  => 'POST',
                 'callback' => array($this, 'ResetICalSecret'),
                 'permission_callback' => function () {
-                    return current_user_can('tfhb_manage_settings');
+                    return current_user_can('manage_options') || current_user_can('tfhb_manage_settings');
                 },
             )
         );
@@ -68,7 +68,7 @@ class iCalendarController
                 'methods'  => 'GET',
                 'callback' => array($this, 'GetMeetings'),
                 'permission_callback' => function () {
-                    return current_user_can('tfhb_manage_settings');
+                    return current_user_can('manage_options') || current_user_can('tfhb_manage_settings');
                 },
             )
         );
@@ -79,7 +79,7 @@ class iCalendarController
                 'methods'  => 'POST',
                 'callback' => array($this, 'GenerateMeetingICalUrl'),
                 'permission_callback' => function () {
-                    return current_user_can('tfhb_manage_settings');
+                    return current_user_can('manage_options') || current_user_can('tfhb_manage_settings');
                 },
             )
         );

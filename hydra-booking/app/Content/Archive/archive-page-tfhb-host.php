@@ -27,7 +27,7 @@ get_header();
 <div class="tfhb-meeting-archive">
     <div class="tfhb-category-list">
         <div class="tfhb-category-list__heading">
-            <h2><?php echo esc_html( __('Host: ', 'hydra-booking') );?> <?php echo $hostData->first_name ?> <?php echo $hostData->last_name ?></h2>
+            <h2><?php echo esc_html( __('Host: ', 'hydra-booking') );?> <?php echo esc_html( $hostData->first_name ) ?> <?php echo esc_html( $hostData->last_name ) ?></h2>
           
         </div>  
         <div class="tfhb-meeting-list__wrap">

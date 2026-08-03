@@ -153,13 +153,15 @@ class Login {
       public function tfhb_sign_in_callback(){
 
         $response = [
-            'success' => false,
+            'success'     => false,
+            'fieldErrors' => array(),
         ];
 
         $required_fields = array( 'tfhb_login_user', 'tfhb_password' );
         // Check nonce security
         if ( ! isset( $_POST['tfhb_login_nonce'] ) || ! wp_verify_nonce( $_POST['tfhb_login_nonce'], 'tfhb_check_login_nonce' ) ) {
             $response['message'] = esc_html(__( 'Sorry, your nonce did not verify.', 'hydra-booking' ));
+            wp_send_json( $response );
         } else {
 
             foreach ( $required_fields as $required_field ) {

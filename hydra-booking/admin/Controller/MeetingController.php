@@ -28,6 +28,31 @@ class MeetingController
 
 	public function init() {}
 
+	/**
+	 * Verify the current user owns (or, as an admin, may manage) the given meeting.
+	 * Mirrors BookingController::tfhb_verify_booking_ownership().
+	 */
+	private function tfhb_verify_meeting_ownership($meeting_id)
+	{
+		$current_user      = wp_get_current_user();
+		$current_user_role = ! empty($current_user->roles[0]) ? $current_user->roles[0] : '';
+
+		if ('administrator' === $current_user_role && current_user_can('tfhb_manage_settings')) {
+			return true;
+		}
+		$host      = new Host();
+		$host_data = $host->getHostByUserId(get_current_user_id());
+		if (empty($host_data) || empty($host_data->id)) {
+			return false;
+		}
+		$meeting        = new Meeting();
+		$meeting_record = $meeting->get(absint($meeting_id));
+		if (empty($meeting_record)) {
+			return false;
+		}
+		return (int) $meeting_record->host_id === (int) $host_data->id;
+	}
+
 	public function create_endpoint()
 	{
 		register_rest_route(
@@ -383,6 +408,15 @@ class MeetingController
 	{
 		$request = json_decode(file_get_contents('php://input'), true);
 
+		if (empty($request['meeting_id']) || ! $this->tfhb_verify_meeting_ownership($request['meeting_id'])) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Get Meeting
 		$meeting     = new Meeting();
 		$MeetingData = $meeting->get($request['meeting_id']);
@@ -440,6 +474,15 @@ class MeetingController
 	// Webhook Delete
 	public function deleteMeetingWebhook($request)
 	{
+		if (empty($request['meeting_id']) || ! $this->tfhb_verify_meeting_ownership($request['meeting_id'])) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Get Meeting
 		$meeting     = new Meeting();
 		$MeetingData = $meeting->get($request['meeting_id']);
@@ -490,6 +533,16 @@ class MeetingController
 	public function updateMeetingIntegration()
 	{
 		$request = json_decode(file_get_contents('php://input'), true);
+
+		if (empty($request['meeting_id']) || ! $this->tfhb_verify_meeting_ownership($request['meeting_id'])) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// tfhb_print_r($request);
 		// Get Meeting
 		$meeting     = new Meeting();
@@ -551,6 +604,15 @@ class MeetingController
 	// Integration Delete
 	public function deleteMeetingIntegration($request)
 	{
+		if (empty($request['meeting_id']) || ! $this->tfhb_verify_meeting_ownership($request['meeting_id'])) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Get Meeting
 		$meeting     = new Meeting();
 		$MeetingData = $meeting->get($request['meeting_id']);
@@ -841,12 +903,20 @@ class MeetingController
 		$request = json_decode(file_get_contents('php://input'), true);
 		// Check if user is selected
 		$meeting_id = $request['id'];
-		$post_id    = $request['post_id'];
 		if (empty($meeting_id) || $meeting_id == 0) {
 			return rest_ensure_response(
 				array(
 					'status'  => false,
 					'message' =>  __('Invalid Meeting', 'hydra-booking'),
+				)
+			);
+		}
+
+		if (! $this->tfhb_verify_meeting_ownership($meeting_id)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to delete this meeting.', 'hydra-booking'),
 				)
 			);
 		}
@@ -857,7 +927,10 @@ class MeetingController
 		$current_user_id   = $current_user->ID;
 
 		// Delete Meeting
-		$meeting       = new Meeting();
+		$meeting     = new Meeting();
+		$MeetingData = $meeting->get($meeting_id);
+		// Only ever delete the post that actually belongs to this meeting, never a client-supplied post_id.
+		$post_id       = ! empty($MeetingData->post_id) ? $MeetingData->post_id : 0;
 		$meetingDelete = $meeting->delete($meeting_id);
 		if (! $meetingDelete) {
 
@@ -963,6 +1036,16 @@ class MeetingController
 				)
 			);
 		}
+
+		if (! $this->tfhb_verify_meeting_ownership($id)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to view this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Get Meeting
 		$meeting     = new Meeting();
 		$MeetingData = $meeting->get($id);
@@ -1387,6 +1470,15 @@ class MeetingController
 			);
 		}
 
+		if (! $this->tfhb_verify_meeting_ownership($meeting_id)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Get Current User
 		$current_user = wp_get_current_user();
 		// get user id
@@ -1540,6 +1632,16 @@ class MeetingController
 		$current_user_id = $current_user->ID;
 
 		$get_meeting_id = $request['id'];
+
+		if (! $this->tfhb_verify_meeting_ownership($get_meeting_id)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to clone this meeting.', 'hydra-booking'),
+				)
+			);
+		}
+
 		$meeting = new Meeting();
 		$meeting_data = (array) $meeting->getWithID($get_meeting_id);
 		unset($meeting_data['id']);

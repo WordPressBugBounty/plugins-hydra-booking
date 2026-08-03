@@ -203,7 +203,7 @@ class MailChimp {
 			// json_decode the response
 			$response_body = json_decode($response_body);
  
-			if (isset($response_body->status) && !$response_body->status == 400) { 
+			if (isset($response_body->status) && $response_body->status != 400) {
 				return true;
 			} else {
 				return false;

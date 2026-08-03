@@ -51,7 +51,7 @@ class FrontendDashboard {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'GetFdUserAuth' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_hosts_permission'),
 			)
 		); 
         // Logout
@@ -61,7 +61,7 @@ class FrontendDashboard {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'LogoutFdUser' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_hosts_permission'),
 			)
 		); 
 
@@ -203,22 +203,23 @@ class FrontendDashboard {
         $userAuthData = isset($request['userAuthData']) ? $request['userAuthData'] : array();
         $user = wp_get_current_user();
         $user_id = $user->ID;
-       
-        if($userAuthData['id'] != $user_id){
-            
+
+        if(! isset($userAuthData['id']) || (int) $userAuthData['id'] !== $user_id){
+
             // return response
             $data = array(
                 'status' => false,
                 'message' => __( 'You are not authorized to access this endpoint.', 'hydra-booking' )
             );
-    
-            // log out 
+
+            // log out
             wp_logout();
             return rest_ensure_response($data);
-            
+
         }
-        $host = new Host(); 
-        $host_data = $host->getHostById( $userAuthData['host_id'] ); 
+        $host = new Host();
+        // Resolve the host record from the authenticated session, never from a client-supplied host_id.
+        $host_data = $host->getHostByUserId( $user_id );
 
         $settings = !empty(get_option('_tfhb_frontend_dashboard_settings')) ? get_option('_tfhb_frontend_dashboard_settings') : array();  
         $site_settings = [];
@@ -289,13 +290,17 @@ class FrontendDashboard {
      public function UpdateFdUserProfile(){
         $request =  json_decode(file_get_contents('php://input'), true);
         $userAuth = isset($request['userAuth']) ? $request['userAuth'] : array();
-        $userEmail = isset($userAuth['email']) ? $userAuth['email'] : '';
-        
+        $userEmail = isset($userAuth['email']) ? sanitize_email($userAuth['email']) : '';
+
         $user = wp_get_current_user();
         $user_id = $user->ID;
         $user_data = array();
         $user_data['ID'] = $user_id;
-        if($user_id != $userAuth['user_id']){ 
+
+        // Resolve the host record that belongs to the current user; never trust a client-supplied host/user id.
+        $host = new Host();
+        $HostData = $host->getHostByUserId($user_id);
+        if (empty($HostData)) {
             // return response
             $data = array(
                 'status' => false,
@@ -304,7 +309,7 @@ class FrontendDashboard {
             return rest_ensure_response($data);
         }
         // Check user email change or not
-        if($user->user_email != $userEmail){
+        if($userEmail !== '' && $user->user_email != $userEmail){
             // check user email already exist or not
             $user_by_email = get_user_by( 'email', $userEmail );
             if ( !empty($user_by_email) ) {
@@ -316,17 +321,28 @@ class FrontendDashboard {
                 return rest_ensure_response($data);
             }
             $user_data['user_email'] = $userEmail;
-             
+
         }
         // update first name
-        $user_data['first_name'] = isset($userAuth['first_name']) ? $userAuth['first_name'] : '';
-        // update last name 
-        $user_data['last_name'] = isset($userAuth['last_name']) ? $userAuth['last_name'] : '';
-        // update display name 
-        
-        $host = new Host();
-       
-        $hostUpdate = $host->update( $userAuth);
+        $user_data['first_name'] = isset($userAuth['first_name']) ? sanitize_text_field($userAuth['first_name']) : '';
+        // update last name
+        $user_data['last_name'] = isset($userAuth['last_name']) ? sanitize_text_field($userAuth['last_name']) : '';
+        // update display name
+
+        // Build the host DB update from a whitelist of sanitized fields, keyed to the
+        // host record we resolved above rather than any id/user_id supplied by the client.
+        $hostUpdateData = array(
+            'id'             => $HostData->id,
+            'first_name'     => $user_data['first_name'],
+            'last_name'      => $user_data['last_name'],
+            'email'          => $userEmail !== '' ? $userEmail : $HostData->email,
+            'phone_number'   => isset($userAuth['phone_number']) ? sanitize_text_field($userAuth['phone_number']) : $HostData->phone_number,
+            'about'          => isset($userAuth['about']) ? wp_kses_post($userAuth['about']) : $HostData->about,
+            'avatar'         => isset($userAuth['avatar']) ? sanitize_text_field($userAuth['avatar']) : $HostData->avatar,
+            'featured_image' => isset($userAuth['featured_image']) ? sanitize_text_field($userAuth['featured_image']) : $HostData->featured_image,
+        );
+
+        $hostUpdate = $host->update( $hostUpdateData );
         // tfhb_print_r($user_data);
         wp_update_user($user_data);
       

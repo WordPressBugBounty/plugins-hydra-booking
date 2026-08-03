@@ -74,6 +74,7 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 		if ( ! empty( $booking_data ) ) {
 			echo '<input type="hidden" id="booking_hash" name="booking_hash" value="' . esc_attr( $booking_data->hash ) . '">';
 			echo '<input type="hidden" id="action_type" name="action_type" value="' . esc_attr( 'reschedule' ) . '">';
+			echo '<input type="hidden" id="reschedule_nonce" name="reschedule_nonce" value="' . esc_attr( wp_create_nonce( 'tfhb_reschedule_' . $booking_data->hash ) ) . '">';
 		}
 		?>
 	</div>  

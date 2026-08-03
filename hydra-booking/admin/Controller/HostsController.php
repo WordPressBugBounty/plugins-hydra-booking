@@ -71,7 +71,7 @@ class HostsController
 			array(
 				'methods'  => 'GET',
 				'callback' => array($this, 'getTheHostData'),
-				'permission_callback' =>  array(new RouteController(), 'tfhb_manage_integrations_permission'),
+				'permission_callback' =>  array(new RouteController(), 'tfhb_manage_options_permission'),
 			)
 		);
 		register_rest_route(
@@ -164,7 +164,7 @@ class HostsController
 			array(
 				'methods'  => 'GET',
 				'callback' => array($this, 'filterHosts'),
-				'permission_callback' =>  array(new RouteController(), 'tfhb_manage_integrations_permission'),
+				'permission_callback' =>  array(new RouteController(), 'tfhb_manage_options_permission'),
 				'args'     => array(
 					'title' => array(
 						'sanitize_callback' => 'sanitize_text_field',
@@ -387,8 +387,24 @@ class HostsController
 				)
 			);
 		}
+		$host = new Host();
+
+		// Verify the target user is actually a tfhb_host, and that the host row belongs to them,
+		// before deleting anything.
+		require_once ABSPATH . 'wp-admin/includes/user.php';
+		$user_meta  = get_userdata($user_id);
+		$user_roles = ! empty($user_meta->roles[0]) ? $user_meta->roles[0] : '';
+		$HostData   = $host->getHostById($host_id);
+		if (empty($HostData) || (int) $HostData->user_id !== (int) $user_id || empty($user_roles) || 'tfhb_host' !== $user_roles) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('Invalid Host', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Delete Host
-		$host       = new Host();
 		$hostDelete = $host->delete($host_id);
 		if (! $hostDelete) {
 			return rest_ensure_response(
@@ -400,12 +416,7 @@ class HostsController
 		}
 
 		// Delete the user
-		require_once ABSPATH . 'wp-admin/includes/user.php';
-		$user_meta  = get_userdata($user_id);
-		$user_roles = ! empty($user_meta->roles[0]) ? $user_meta->roles[0] : '';
-		if (! empty($user_roles) && 'tfhb_host' == $user_roles) {
-			$deleted = wp_delete_user($user_id);
-		}
+		$deleted = wp_delete_user($user_id);
 
 		// Update user Option
 		delete_user_meta($user_id, '_tfhb_host');
@@ -518,21 +529,31 @@ class HostsController
 			);
 		}
 
+		// Only allow admins, or the host themselves, to update this host record
+		if (! current_user_can('manage_options') && (int) $HostData->user_id !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this host.', 'hydra-booking'),
+				)
+			);
+		}
+
 		// Update Host
 		$data       = array(
 			'id'                 => $request['id'],
-			'first_name'         => $request['first_name'],
-			'last_name'          => $request['last_name'],
-			'email'              => $request['email'],
-			'phone_number'       => $request['phone_number'],
-			'about'              => $request['about'],
-			'avatar'             => $request['avatar'],
-			'featured_image'     => $request['featured_image'],
-			'availability_type'  => $request['availability_type'],
-			'others_information' => $request['others_information'],
+			'first_name'         => sanitize_text_field($request['first_name']),
+			'last_name'          => sanitize_text_field($request['last_name']),
+			'email'              => sanitize_email($request['email']),
+			'phone_number'       => sanitize_text_field($request['phone_number']),
+			'about'              => wp_kses_post($request['about']),
+			'avatar'             => sanitize_text_field($request['avatar']),
+			'featured_image'     => sanitize_text_field($request['featured_image']),
+			'availability_type'  => sanitize_text_field($request['availability_type']),
+			'others_information' => self::sanitize_others_information($request['others_information']),
 			'availability_id'    => $request['availability_id'],
-			'time_zone'          => $request['time_zone'],
-			'status'             => $request['status'],
+			'time_zone'          => sanitize_text_field($request['time_zone']),
+			'status'             => sanitize_text_field($request['status']),
 		);
 		$hostUpdate = $host->update($data);
 		if (! $hostUpdate['status']) {
@@ -636,6 +657,26 @@ class HostsController
 		$host_id  = $request['id'];
 		$host     = new Host();
 		$hostData = $host->get($host_id);
+
+		if (empty($hostData)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('Invalid Host', 'hydra-booking'),
+				)
+			);
+		}
+
+		// Only allow admins, or the host themselves, to view these integration settings
+		if (! current_user_can('manage_options') && (int) $hostData->user_id !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to view this host.', 'hydra-booking'),
+				)
+			);
+		}
+
 		$user_id  = $hostData->user_id;
 
 
@@ -840,6 +881,27 @@ class HostsController
 		$data    = $request['value'];
 		$host_id = $request['id'];
 		$user_id = $request['user_id'];
+
+		// Only allow admins, or the host themselves, to update these integration settings
+		if (! current_user_can('manage_options') && (int) $user_id !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this host.', 'hydra-booking'),
+				)
+			);
+		}
+		$host     = new Host();
+		$hostData = $host->get($host_id);
+		if (empty($hostData) || (int) $hostData->user_id !== (int) $user_id) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('Invalid Host', 'hydra-booking'),
+				)
+			);
+		}
+
 		$_tfhb_host_integration_settings = is_array(get_user_meta($user_id, '_tfhb_host_integration_settings', true)) ? get_user_meta($user_id, '_tfhb_host_integration_settings', true) : array();
 
 		$_tfhb_integration_settings = get_option('_tfhb_integration_settings');
@@ -1038,6 +1100,16 @@ class HostsController
 	{
 		$request = json_decode(file_get_contents('php://input'), true);
 
+		// Only allow admins, or the host themselves, to view this host's availability
+		if (! current_user_can('manage_options') && (int) $request['id'] !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to view this host.', 'hydra-booking'),
+				)
+			);
+		}
+
 		$DateTimeZone = new DateTimeController('UTC');
 		$time_zone    = $DateTimeZone->TimeZone();
 
@@ -1069,6 +1141,25 @@ class HostsController
 
 		$host     = new Host();
 		$HostData = $host->get($request['host_id']);
+
+		if (empty($HostData)) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('Invalid Host', 'hydra-booking'),
+				)
+			);
+		}
+
+		// Only allow admins, or the host themselves, to view this host's availability
+		if (! current_user_can('manage_options') && (int) $HostData->user_id !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to view this host.', 'hydra-booking'),
+				)
+			);
+		}
 
 		// If Host Use existing availability
 		if (! empty($HostData->availability_type) && 'settings' == $HostData->availability_type) {
@@ -1135,6 +1226,16 @@ class HostsController
 				'message' =>  __('Something Went Wrong, Please Try Again Later.', 'hydra-booking'),
 			);
 			return rest_ensure_response($data);
+		}
+
+		// Only allow admins, or the host themselves, to update this host's availability
+		if (! current_user_can('manage_options') && (int) $request['user_id'] !== get_current_user_id()) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('You do not have permission to update this host.', 'hydra-booking'),
+				)
+			);
 		}
 
 		$_tfhb_host_info        = !empty(get_user_meta($request['user_id'], '_tfhb_host', true)) ? get_user_meta($request['user_id'], '_tfhb_host', true) : array();
@@ -1258,6 +1359,21 @@ class HostsController
 	}
 
 
+
+	/**
+	 * Recursively sanitize the host "others_information" custom-fields map,
+	 * which is stored as-is (json-encoded) and must never carry raw HTML.
+	 */
+	private static function sanitize_others_information($value)
+	{
+		if (is_array($value)) {
+			return array_map(array(__CLASS__, 'sanitize_others_information'), $value);
+		}
+		if (is_string($value)) {
+			return sanitize_text_field($value);
+		}
+		return $value;
+	}
 
 	/**
 	 * Fetch Integration Settings

@@ -178,6 +178,7 @@ class FrontendDashboard {
         // Check nonce security
         if ( ! isset( $_POST['tfhb_forgot_nonce'] ) || ! wp_verify_nonce( $_POST['tfhb_forgot_nonce'], 'tfhb_check_forgot_nonce' ) ) {
             $response['message'] = esc_html__( 'Sorry, your nonce did not verify.', 'hydra-booking' );
+            wp_send_json( $response );
         } else {
 
             foreach ( $required_fields as $required_field ) {

@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 5.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -219,6 +219,10 @@ There are several well-known appointment booking plugins available for WordPress
 13. Slack, Twilio, Telegram Settings
 
 == Changelog ==
+
+= 1.2.3 – Aug 03, 2026 =
+ 
+- Fixed: Security issue has been resolved.
 
 = 1.2.2 – Jul 08, 2026 =
  
@@ -482,71 +486,6 @@ There are several well-known appointment booking plugins available for WordPress
 - Introduced: Free license creation settings.
 - Fixed: PayPal payment issue resolved.
 - Enhanced: Security for import/export functionality.
-
-= 1.0.31 – March 13, 2025 =
-
-- Fixed: The Timezone issue has been resolved.
-
-= 1.0.30 – March 08, 2025 =
-
-- Fixed: Woocommerce Block theme Checkout issue fixed.
-- Fixed: Meeting forms translate issue fixed on frontend.
-
-= 1.0.29 – February 25, 2025 =
-
-- Fixed: Stripe currency data processing issue resolved.
-- Fixed: Translate string functionality issue corrected.
-
-= 1.0.28 – February 16, 2025 =
-
-- Fixed: The booking schedule error has now been resolved.
-- Improved: Booking question field control options updated.
-- Improved: The Host banner image control settings added.
-
-= 1.0.27 - 09/02/2025 =
-
-- Improved: The mandatory address field has been removed from the booking form.
-- Added: A booking comment/message field with flexible control settings.
-
-= 1.0.26 - 08/02/2025 =
-
-- Updated: Readme.txt file and plugin information.
-- Compatibility: Compatible with WooCommerce (v9.6.1).
-- Compatibility: Compatible with Contact Form 7 (v6.0.3).
-
-= 1.0.25 - 06/02/2025 =
-
-- Fixed: Single meeting host and data migration issues.
-
-= 1.0.24 - 06/02/2025 =
-
-- Fixed: The host availability issue has been resolved.
-
-= 1.0.23 - 06/02/2025 =
-
-- Fixed: Resolved issue with host selection.
-
-= 1.0.22 - 03/02/2025 =
-
-- Updated: Readme.txt file and plugin information.
-- Fixed: Various issues for a smoother experience.
-
-= 1.0.21 - 03/02/2025 =
-
-- Added: Booking details page.
-- Added: Filter feature for the booking list page.
-- Improved: Revamped the booking list page design.
-
-= 1.0.20 - 30/01/2025 =
-
-- Compatibility: Compatible with WooCommerce (v9.6.0).
-- Improved: Woo Payments integration feature.
-
-= 1.0.19 - 19/01/2025 =
-
-- Compatibility: Compatible with Fluent Forms (v5.2.10).
-- Fixed: Resolved minor bugs and design inconsistencies.
-- Improved: Enhanced system stability for improved performance.
 
 = 1.0.0 - 11/11/2024 =
 - Initial stable release

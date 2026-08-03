@@ -21,9 +21,11 @@ class UpdateController {
 
         // Remove it after few releases
         $this->tfhb_check_and_add_upload_cap();
- 
-		 
-	} 
+
+        // Remove it after few releases
+        $this->tfhb_check_and_remove_host_settings_cap();
+
+	}
 
     /**
      * Update Database table structure
@@ -156,9 +158,24 @@ class UpdateController {
      public function tfhb_check_and_add_upload_cap() {
         $role_name = 'tfhb_host'; // Change this to the role you want to modify
         $role = get_role($role_name);
-    
+
         if ($role && !$role->has_cap('upload_files')) {
             $role->add_cap('upload_files');
+        }
+    }
+
+    // Remove the explicit `false` value for 'tfhb_manage_settings' from the
+    // tfhb_host role, left over from before this capability was made
+    // "omitted" instead of "false". An explicit false on one of a user's
+    // roles overrides a true granted by another role of theirs (e.g. an
+    // administrator who was also auto-added as a host), which was hiding
+    // the Settings/Integrations/Notifications menu in the Frontend
+    // Dashboard for such users even though they're admins.
+     public function tfhb_check_and_remove_host_settings_cap() {
+        $role = get_role('tfhb_host');
+
+        if ($role && isset($role->capabilities['tfhb_manage_settings']) && false === $role->capabilities['tfhb_manage_settings']) {
+            $role->remove_cap('tfhb_manage_settings');
         }
     }
 

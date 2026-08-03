@@ -321,6 +321,11 @@ class HydraBookingShortcode {
 			wp_send_json_error( array( 'message' => __('Invalid Meeting ID', 'hydra-booking') ) );
 		}
 
+		// Lightweight per-IP rate limit to reduce unauthenticated slot-exhaustion / booking-spam abuse.
+		if ( $this->tfhb_is_booking_rate_limited( absint( $_POST['meeting_id'] ) ) ) {
+			wp_send_json_error( array( 'message' => __( 'Too many requests. Please try again in a few minutes.', 'hydra-booking' ) ) );
+		}
+
 		$data     = array();
 		$attendee_data     = array();
 		$response = array();
@@ -560,7 +565,7 @@ class HydraBookingShortcode {
 			$booking_status = 'confirmed';
 		}
 
-		if(!$attendee_data['payment_method'] == 'free' && $attendee_data['payment_status'] == 'pending'){
+		if('free' !== $attendee_data['payment_method'] && $attendee_data['payment_status'] == 'pending'){
 			$booking_status = 'pending';
 		}
 		if(true == $meta_data['payment_status'] && 'woo_payment'==$meta_data['payment_method'] && !empty($meta_data['payment_meta']['product_id'])){
@@ -616,9 +621,18 @@ class HydraBookingShortcode {
 	
 		// Get booking Data using Hash
 		if ( isset( $_POST['action_type'] ) && 'reschedule' == $_POST['action_type'] ) {
-			
+
+			// Require a nonce bound to this specific booking hash, mirroring the cancel flow,
+			// so possessing the site-wide public nonce alone is not enough to reschedule a booking.
+			$reschedule_nonce_valid = isset( $_POST['reschedule_nonce'] ) && ! empty( $meeting_hash )
+				&& wp_verify_nonce( $_POST['reschedule_nonce'], 'tfhb_reschedule_' . $meeting_hash );
+
+			if ( ! $reschedule_nonce_valid ) {
+				wp_send_json_error( array( 'message' => esc_html( __( 'Nonce verification failed', 'hydra-booking' ) ) ) );
+			}
+
 			// if general_settings['allowed_reschedule_before_meeting_start'] is available exp 100 then check the time before reschedule
-			$this->tfhb_reschedule_booking( $data, $attendee_data,$meeting_hash, $meta_data,  $general_settings, $check_booking ); 
+			$this->tfhb_reschedule_booking( $data, $attendee_data,$meeting_hash, $meta_data,  $general_settings, $check_booking );
 		}
 		$this->tfhb_create_new_booking($data, $attendee_data, $meta_data, $MeetingData, $host_meta, $general_settings );
 
@@ -826,7 +840,7 @@ class HydraBookingShortcode {
 		}
  
 		
-		if(!$attendeeBooking){
+		if ( ! $attendeeBooking || ! hash_equals( $attendeeBooking->hash, $meeting_hash ) ) {
 			wp_send_json_error( array( 'message' => esc_html(__('Invalid Booking ID', 'hydra-booking')) ) );
 		}
 		if($attendeeBooking->status == 'completed'){
@@ -1435,6 +1449,25 @@ class HydraBookingShortcode {
 		// Return success message.
 		$response['message'] = esc_html__( 'Payment Completed Successfully', 'hydra-booking' );
 		wp_send_json_success( $response );
+	}
+
+	/**
+	 * Lightweight per-IP, per-meeting rate limit for the public (nopriv) booking submit endpoint,
+	 * to reduce automated slot-exhaustion / booking-spam abuse. Not a substitute for a captcha,
+	 * but cheap defense-in-depth against naive scripted abuse.
+	 */
+	private function tfhb_is_booking_rate_limited( $meeting_id, $max_attempts = 8, $window_seconds = 300 ) {
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		if ( empty( $ip ) ) {
+			return false;
+		}
+		$key   = 'tfhb_booking_rl_' . md5( $ip . '_' . $meeting_id );
+		$count = (int) get_transient( $key );
+		if ( $count >= $max_attempts ) {
+			return true;
+		}
+		set_transient( $key, $count + 1, $window_seconds );
+		return false;
 	}
 }
 

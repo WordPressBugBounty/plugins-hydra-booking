@@ -542,6 +542,11 @@ class Booking {
 		$query .= $wpdb->prepare(" AND (m.title LIKE %s OR h.first_name LIKE %s OR h.last_name LIKE %s)", $title, $title, $title);
 		}
 
+		// Scope results to a single host (used to restrict a tfhb_host caller to their own bookings)
+		if ( ! empty( $filterData['host_id'] ) ) {
+			$query .= $wpdb->prepare( " AND b.host_id = %d", $filterData['host_id'] );
+		}
+
 		return $wpdb->get_results( $query );
 
 	}

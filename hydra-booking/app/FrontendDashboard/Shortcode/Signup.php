@@ -244,7 +244,8 @@ class Signup {
      public function tfhb_registration_callback(){
 
         $response = [
-            'success' => false,
+            'success'     => false,
+            'fieldErrors' => array(),
         ];
 
         $field = [];
@@ -255,9 +256,10 @@ class Signup {
         $user_role = 'tfhb_host';
 
         $required_fields = array( 'tfhb_first_name', 'tfhb_last_name', 'tfhb_username', 'tfhb_email', 'tfhb_password', 'tfhb_confirm_password' );
-        
+
         if ( ! isset( $field['tfhb_reg_nonce'] ) || ! wp_verify_nonce( $field['tfhb_reg_nonce'], 'tfhb_check_reg_nonce' ) ) {
             $response['message'] = esc_html__( 'Sorry, your nonce did not verify.', 'hydra-booking' );
+            wp_send_json( $response );
         } else {
             foreach ( $required_fields as $required_field ) {
                 if ( $required_field === 'tfhb_email' ) {

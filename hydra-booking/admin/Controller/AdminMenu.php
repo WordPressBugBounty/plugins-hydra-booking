@@ -71,12 +71,12 @@ class AdminMenu {
 			array(
 				'id'         => 'settings',
 				'Title'      => esc_html__( 'Settings', 'hydra-booking' ),
-				'capability' => 'tfhb_manage_settings',
+				'capability' => 'tfhb_manage_options',
 			),
 			array(
 				'id'         => 'setup-wizard',
 				'Title'      => esc_html__( 'Setup Wizard', 'hydra-booking' ),
-				'capability' => 'tfhb_manage_settings',
+				'capability' => 'tfhb_manage_options',
 			),
 
 		);

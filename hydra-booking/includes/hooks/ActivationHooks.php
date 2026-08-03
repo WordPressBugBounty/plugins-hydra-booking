@@ -51,7 +51,12 @@ class ActivationHooks {
 					'tfhb_manage_dashboard'           => true, // true allows this capability.
 					'tfhb_manage_meetings'            => true, // true allows this capability.
 					'tfhb_manage_booking'             => true, // true allows this capability.
-					'tfhb_manage_settings'            => false, // true allows this capability.
+					// 'tfhb_manage_settings' intentionally omitted (not set to false):
+					// a host who is *also* an administrator (e.g. auto-added via
+					// MeetingController::createMeeting) merges caps from both roles,
+					// and an explicit false here would override the true granted by
+					// the administrator role. Omitting the key means a pure host still
+					// has no access, but a dual-role admin+host user keeps theirs.
 					'tfhb_manage_hosts'               => true, // true allows this capability.
 					'tfhb_manage_custom_availability' => true, // true allows this capability.
 					'tfhb_manage_integrations'        => true, // true allows this capability.

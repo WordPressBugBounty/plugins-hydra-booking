@@ -51,15 +51,6 @@ class RouteController
 		add_action('rest_api_init', array($class, $function));
 	}
 
-	public function permission_callback(\WP_REST_Request $request)
-	{
-		// get header data form request "capability'
-		$capability = $request->get_header('capability');
-
-		// check current user have capability
-		return current_user_can($capability);
-	}
-
 	public function tfhb_manage_options_permission()
 	{
 		return current_user_can('tfhb_manage_options');
@@ -75,5 +66,14 @@ class RouteController
 	public function tfhb_manage_custom_availability_permission()
 	{
 		return current_user_can('tfhb_manage_custom_availability');
+	}
+	public function tfhb_manage_settings_permission()
+	{
+		// manage_options is core WordPress and only real administrators hold it, so it's a
+		// reliable bypass regardless of what the tfhb_host role's own capability is set to.
+		if (current_user_can('manage_options')) {
+			return true;
+		}
+		return current_user_can('tfhb_manage_settings');
 	}
 }

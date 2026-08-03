@@ -29,10 +29,12 @@ class BookingController {
 	}
 
 	private function tfhb_verify_booking_ownership( $booking_id ) {
-		$current_user      = wp_get_current_user();
-		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
-
-		if ( 'administrator' === $current_user_role && current_user_can( 'tfhb_manage_settings' ) ) {
+		// Use manage_options directly rather than roles[0]/tfhb_manage_settings: a user holding
+		// both 'administrator' and 'tfhb_host' roles can have roles[0] be either one depending on
+		// assignment order, and WordPress's role-capability merge can let tfhb_host's explicit
+		// false for tfhb_manage_settings win over administrator's true. manage_options is core
+		// WordPress and is never touched by the tfhb_host role, so it's a reliable admin check.
+		if ( current_user_can( 'manage_options' ) ) {
 			return true;
 		}
 		$host      = new Host();
@@ -840,6 +842,18 @@ class BookingController {
 	// Booking Filter
 	public function filterBookings( $request ) {
 		$filterData = $request->get_param( 'filterData' );
+		if ( ! is_array( $filterData ) ) {
+			$filterData = array();
+		}
+
+		// Scope a tfhb_host caller to their own bookings only; admins see everything.
+		$current_user      = wp_get_current_user();
+		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
+		if ( 'tfhb_host' === $current_user_role ) {
+			$host      = new Host();
+			$host_data = $host->getHostByUserId( get_current_user_id() );
+			$filterData['host_id'] = ! empty( $host_data->id ) ? $host_data->id : -1;
+		}
 
 		// Booking Lists
 		$booking      = new Booking();
@@ -906,13 +920,13 @@ class BookingController {
 			$data = array(
 				'id'                 => isset( $request['id'] ) ? $request['id'] : '',
 				'meeting_id'         => isset( $request['meeting'] ) ? $request['meeting'] : '',
-				'attendee_name'      => isset( $request['name'] ) ? $request['name'] : '',
-				'email'              => isset( $request['email'] ) ? $request['email'] : '',
-				'attendee_time_zone' => isset( $request['time_zone'] ) ? $request['time_zone'] : '',
+				'attendee_name'      => isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : '',
+				'email'              => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : '',
+				'attendee_time_zone' => isset( $request['time_zone'] ) ? sanitize_text_field( $request['time_zone'] ) : '',
 				'start_time'         => isset( $request['time']['start'] ) ? $request['time']['start'] : '',
 				'end_time'           => isset( $request['time']['end'] ) ? $request['time']['end'] : '',
 				'meeting_dates'      => isset( $request['date'] ) ? $request['date'] : '',
-				'status'             => isset( $request['status'] ) ? $request['status'] : '',
+				'status'             => isset( $request['status'] ) ? sanitize_text_field( $request['status'] ) : '',
 			);
 
 			// Booking Update
@@ -920,9 +934,9 @@ class BookingController {
 		} else {
 			$data = array(
 				'meeting_id'         => isset( $request['meeting'] ) ? $request['meeting'] : '',
-				'attendee_name'      => isset( $request['name'] ) ? $request['name'] : '',
-				'email'              => isset( $request['email'] ) ? $request['email'] : '',
-				'attendee_time_zone' => isset( $request['time_zone'] ) ? $request['time_zone'] : '',
+				'attendee_name'      => isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : '',
+				'email'              => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : '',
+				'attendee_time_zone' => isset( $request['time_zone'] ) ? sanitize_text_field( $request['time_zone'] ) : '',
 				'host_id'            => isset( $request['host'] ) ? $request['host'] : '',
 				'meeting_dates'      => isset( $request['date'] ) ? $request['date'] : '',
 				'start_time'         => isset( $request['time']['start'] ) ? $request['time']['start'] : '',
@@ -991,8 +1005,7 @@ class BookingController {
 
 		$request       = json_decode( file_get_contents( 'php://input' ), true );
 		$booking_id    = $request['id'];
-		$booking_owner = $request['host'];
-	
+
 		if ( empty( $booking_id ) || $booking_id == 0 ) {
 			return rest_ensure_response(
 				array(
@@ -1013,7 +1026,8 @@ class BookingController {
 			do_action( 'hydra_booking/after_booking_deleted', $single_booking_meta );
 		}
 		$bookingDelete = $booking->delete( $booking_id );
-		$current_user  = get_userdata( $booking_owner );
+		// Resolve the acting user's role from the authenticated session, never from client input.
+		$current_user  = wp_get_current_user();
 		// get user role
 		$current_user_role = ! empty( $current_user->roles[0] ) ? $current_user->roles[0] : '';
 		$current_user_id   = $current_user->ID;
@@ -1593,7 +1607,6 @@ class BookingController {
 	 public function  cancelBookingAttendee( $request ) {
 
 		$attendee_id = $request['id'];
-		$booking_id = $request['booking_id'];
 		$status     =  $request['status'];
 		$cancel_reason =  $request['cancel_reason'];
 		if ( empty( $attendee_id ) || $attendee_id == 0 ) {
@@ -1605,11 +1618,30 @@ class BookingController {
 			);
 		}
 
-		if ( ! empty( $booking_id ) && ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
+		$Attendee = new Attendees();
+
+		// Derive the booking id from the attendee record itself - never trust a client-supplied
+		// booking_id, which could belong to a different booking than the attendee being mutated.
+		$existingAttendeeBooking = $Attendee->getAttendeeWithBooking(
+			array(
+				array( 'id', '=', $attendee_id ),
+			),
+			1,
+			'DESC'
+		);
+		if ( empty( $existingAttendeeBooking ) || empty( $existingAttendeeBooking->booking_id ) ) {
+			return rest_ensure_response(
+				array(
+					'status'  => false,
+					'message' => __('Invalid Attendee', 'hydra-booking'),
+				)
+			);
+		}
+		$booking_id = $existingAttendeeBooking->booking_id;
+
+		if ( ! $this->tfhb_verify_booking_ownership( $booking_id ) ) {
 			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
 		}
-
-		$Attendee = new Attendees();
 
 		 $update_data = array(
 
