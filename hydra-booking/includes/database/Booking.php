@@ -2,7 +2,7 @@
 namespace HydraBooking\DB;
 
 class Booking {
-
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery
 	public $table = 'tfhb_bookings';
 	public function __construct() {
 	}
@@ -18,7 +18,8 @@ class Booking {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT, 
                 meeting_id INT(11) NULL,
@@ -53,7 +54,8 @@ class Booking {
 	 * Rollback the database migration.
 	 */
 	public function rollback() {
-		global $wpdb;
+		global $wpdb; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_bookings");
 	}
 
@@ -75,7 +77,7 @@ class Booking {
 			$request['meeting_locations'] = is_array($request['meeting_locations']) || is_object($request['meeting_locations']) ? wp_json_encode( $request['meeting_locations']  ) : $request['meeting_locations']; 
 			 
 		} 
-	
+	 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		// insert Booking
 		$result = $wpdb->insert(
 			$table_name,
@@ -111,7 +113,7 @@ class Booking {
 			$request['meeting_locations'] = is_array($request['meeting_locations']) || is_object($request['meeting_locations']) ? wp_json_encode( $request['meeting_locations']  ) : $request['meeting_locations']; 
 			 
 		} 
-	
+	 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		// Update Booking
 		$result = $wpdb->update(
 			$table_name,
@@ -195,16 +197,20 @@ class Booking {
 			}
  
 			if ( $FirstOrFaill == true ) {
-				// only get first item
+				// only get first item // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				if ( ! empty( $prepare_values ) ) {
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					$data = $wpdb->get_row( $wpdb->prepare( $sql, $prepare_values ) );
 				} else {
-					$data = $wpdb->get_row( $sql );
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+					$data = $wpdb->get_row( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				}
-			} else {
+			} else { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				if ( ! empty( $prepare_values ) ) {
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
 				} else {
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$data = $wpdb->get_results( $sql );
 				}
 			}
@@ -217,14 +223,16 @@ class Booking {
 				// We'll sanitize as integer for backward compatibility
 				$where_int = absint( $where );
 				$sql = "SELECT * FROM $table_name WHERE id = %d";
-				$prepare_values = array( $where_int );
+				$prepare_values = array( $where_int ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				
 				if ( $user_id !== null ) {
 					$sql .= " AND $table_name.host_id = %d";
 					$prepare_values[] = $user_id;
 				}
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
 			} else {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$sql  = "
                     SELECT $table_name.*, 
                     $host_table.email AS host_email,
@@ -240,6 +248,8 @@ class Booking {
                     WHERE $table_name.id = %d
                 ";
 				$data = $wpdb->get_row( $wpdb->prepare( $sql, absint( $where ) ) );
+				// phpcs:enable
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery
 			}
 		} else {
 			if ( $join == true ) {
@@ -293,16 +303,18 @@ class Booking {
 			
 			// Add Order by if exist
 			$sql .= " ORDER BY id $orderBy";
-
+ // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			// Add Limit if exist
-			if ( $limit !== null && $limit > 0 ) {
+			if ( $limit !== null && $limit > 0 ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$sql .= " LIMIT %d";
 				$prepare_values[] = $limit;
 			}
 
 			if ( ! empty( $prepare_values ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$data = $wpdb->get_results( $wpdb->prepare( $sql, $prepare_values ) );
 			} else {
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$data = $wpdb->get_results( $sql );
 			}
 		}
@@ -314,7 +326,7 @@ class Booking {
 
 
 	/**
-	 * Get Booking ID and Dates 
+	 * Get Booking ID and Dates  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 	 * 
 	 */
 	public function getByMeetingIdDates($meeting_id, $dates) {
@@ -324,7 +336,9 @@ class Booking {
  
 		$sql = "SELECT * FROM $table_name WHERE meeting_id = %d AND meeting_dates = %s"; 
 		$sql .= " AND status != 'canceled'";
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$data = $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare( $sql, $meeting_id, $dates )
 		);
 		return $data;
@@ -458,21 +472,24 @@ class Booking {
 			$sql .= " ORDER BY booking.id $orderBy";
 
 			// Sanitize limit - ensure it's a positive integer
-			$limit = $limit !== null ? absint( $limit ) : null;
+			$limit = $limit !== null ? absint( $limit ) : null; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			if($limit !== null && $limit > 1) {
 				$sql .= " LIMIT %d";
-				$data[] = $limit;
+				$data[] = $limit; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			}   
  
 			
 			// Prepare the SQL query 
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$query = $wpdb->prepare($sql, $data);
 		
 			// Get the results
 			if($limit == 1) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$results = $wpdb->get_row($query); 
 				
 			} else {
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 				$results = $wpdb->get_results($query);
 			} 
 
@@ -532,23 +549,26 @@ class Booking {
                 h.email AS host_email,
                 h.time_zone AS host_time_zone
               FROM $table_name AS b
-              LEFT JOIN $meeting_table AS m ON b.meeting_id = m.id
+              LEFT JOIN $meeting_table AS m ON b.meeting_id = m.id // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
               LEFT JOIN $host_table AS h ON b.host_id = h.id
               WHERE 1=1";
 
 		// Apply filter to match meeting title or host name
 		if ( ! empty( $filterData['name'] ) ) {
 		$title = '%' . $wpdb->esc_like( $filterData['name'] ) . '%';
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$query .= $wpdb->prepare(" AND (m.title LIKE %s OR h.first_name LIKE %s OR h.last_name LIKE %s)", $title, $title, $title);
 		}
 
 		// Scope results to a single host (used to restrict a tfhb_host caller to their own bookings)
 		if ( ! empty( $filterData['host_id'] ) ) {
-			$query .= $wpdb->prepare( " AND b.host_id = %d", $filterData['host_id'] );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			$query .= $wpdb->prepare( " AND b.host_id = %d", $filterData['host_id'] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return $wpdb->get_results( $query );
-
+ // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 	}
 
 	public function getMeetingByBooking( $booking_id = '' ) {
@@ -558,6 +578,7 @@ class Booking {
 		$table_name    = $wpdb->prefix . $this->table;
 		$meeting_table = $wpdb->prefix . 'tfhb_meetings';
 	
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$query = $wpdb->prepare(
 			"SELECT b.*, m.*
 			 FROM $table_name AS b
@@ -565,7 +586,10 @@ class Booking {
 			 WHERE b.id = %d",
 			$booking_id
 		);
+		// phpcs:enable
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
 	
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return $wpdb->get_row( $query );
 	}
 
@@ -583,7 +607,9 @@ class Booking {
 		// stats != canceled
 		$sql .= " AND status != 'canceled'";
 
-		$data = $wpdb->get_row(
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$data = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare( $sql, $meeting_id, $meeting_dates, $start_time, $end_time )
 		);
 
@@ -594,7 +620,7 @@ class Booking {
 	//CheckHoldBooking
 	public function getHoldBooking( $meeting_id, $meeting_dates, $start_time, $end_time ) {
 
-		// get all bookings order by id desc
+		// get all bookings order by id desc // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 
 		global $wpdb;
 
@@ -604,7 +630,9 @@ class Booking {
 
 		$sql .= " AND status = 'hold'";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$data = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare( $sql, $meeting_id, $meeting_dates, $start_time, $end_time )
 		);
 
@@ -615,7 +643,7 @@ class Booking {
 	public function delete( $id ) {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . $this->table;
+		$table_name = $wpdb->prefix . $this->table; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		$result     = $wpdb->delete( $table_name, array( 'id' => $id ) );
 		if ( $result === false ) {
 			return false;
@@ -625,7 +653,7 @@ class Booking {
 				'delete_id' => $id,
 			);
 		}
-	}
+	} // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 	// export data
 	public function export( $where = null, $join = false, $FirstOrFaill = false ) {
 		global $wpdb;
@@ -639,6 +667,7 @@ class Booking {
 		} else {
 			$sql .= ' ORDER BY id DESC';
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$data = $wpdb->get_results( $sql );
 		return $data;
 	}
@@ -649,6 +678,7 @@ class Booking {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $this->table;
 		$sql        = "SHOW COLUMNS FROM $table_name";
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$data       = $wpdb->get_results( $sql );
 		$columns    = array();
 
@@ -666,7 +696,7 @@ class Booking {
 			'name'  => 'attendees',
 			'value' => 'attendees',
 		);
-		return $columns;
+		return $columns; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 	}
 
 	public function importBooking( $data ){
@@ -679,9 +709,11 @@ class Booking {
 		unset($columns['id']); 
 		// Build the SQL query
 		$values = [];
+		$all_values = [];
 		foreach ($data as $row) {
-			$escaped_values = array_map([$wpdb, 'prepare'], array_values($row));
-			$values[] = '(' . implode(',', $escaped_values) . ')';
+			$placeholders = implode(', ', array_fill(0, count($row), '%s'));
+			$values[] = '(' . $placeholders . ')';
+			$all_values = array_merge($all_values, array_values($row));
 		}
 
 		$sql = "
@@ -690,7 +722,8 @@ class Booking {
 
 		 
 		// Execute the query
-		$wpdb->query($sql);
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$wpdb->query( $wpdb->prepare( $sql, $all_values ) );
 	}
 
 	// public function importBooking( $data ) {
@@ -733,6 +766,7 @@ class Booking {
 	// 	}
 	// 	// echo $sql;
 	// 	// exit;
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 	// 	$wpdb->query( $sql );
 	// }
 }

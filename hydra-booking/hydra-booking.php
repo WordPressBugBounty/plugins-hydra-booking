@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Plugin Name: Hydra Booking — Appointment Scheduling & Booking Calendar
  * Plugin URI: https://hydrabooking.com/
  * Description: Appointment Booking Plugin with Automated Scheduling - Apple/Outlook/ Google Calendar, WooCommerce, Zoom, Fluent Forms, Zapier, Mailchimp & CRM Integration.
- * Version: 1.2.3
+ * Version: 1.2.4
  * Tested up to: 7.0
  * Author: Themefic
  * Author URI: https://themefic.com/
@@ -15,7 +16,6 @@
 
 // don't load directly 
 defined('ABSPATH') || exit;
-require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 use HydraBooking\Admin\Controller\Enqueue;
 
@@ -29,10 +29,10 @@ class THB_INIT
 		define('TFHB_PATH', plugin_dir_path(__FILE__));
 		define('TFHB_URL', plugin_dir_url(__FILE__));
 
-		define( 'TFHB_VERSION', '1.2.3' );
-		define( 'TFHB_BASE_FILE', __FILE__);
-		define( 'TFHB_DEV_MODE', false ); // Set true to enable dev mode
-		
+		define('TFHB_VERSION', '1.2.4');
+		define('TFHB_BASE_FILE', __FILE__);
+		define('TFHB_DEV_MODE', false); // Set true to enable dev mode
+
 
 		// Load Vendor Auto Load
 		if (file_exists(TFHB_PATH . '/vendor/autoload.php')) {
@@ -55,19 +55,19 @@ class THB_INIT
 
 	function tfhb_load_textdomain()
 	{
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
 		load_plugin_textdomain('hydra-booking', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 	}
-	
+
 
 	public function init()
 	{
 
 
 		//Register text domain
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
 		load_plugin_textdomain('hydra-booking', false, basename(dirname(__FILE__)) . '/languages');
 
-		// Load Appsero Tracker
-		$this->tfhb_appsero_init_tracker_hydra_booking();
 
 		new HydraBooking\Admin\Controller\ScheduleController();
 
@@ -102,6 +102,7 @@ class THB_INIT
 	public function tfhb_get_plugin_screen()
 	{
 		$current_screen = get_current_screen();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if (isset($_GET['page']) && $_GET['page'] === 'hydra-booking') {
 			// remove admin notice
 			add_action('in_admin_header', array($this, 'tfhb_hide_notices'), 99);
@@ -112,26 +113,6 @@ class THB_INIT
 	{
 		remove_all_actions('user_admin_notices');
 		remove_all_actions('admin_notices');
-	}
-
-
-	/**
-	 * Initialize the plugin tracker
-	 *
-	 * @return void
-	 */
-	function tfhb_appsero_init_tracker_hydra_booking()
-	{
-
-		if (! class_exists('Appsero\Client')) {
-			require_once __DIR__ . '/appsero/src/Client.php';
-		}
-
-		$client = new Appsero\Client('685ed86d-9a98-46e2-9f07-79206f5fd69b', 'Hydra Booking &#8211; All-in-One Appointment Management Solution', __FILE__);
-		$notice = sprintf($client->__trans('Want to help make <strong>%1$s</strong> even more awesome? Allow %1$s to collect non-sensitive diagnostic data and usage information. I agree to get Important Product Updates & Discount related information on my email from  %1$s (I can unsubscribe anytime).'), $client->name);
-		$client->insights()->notice($notice);
-		// Active insights
-		$client->insights()->init();
 	}
 }
 

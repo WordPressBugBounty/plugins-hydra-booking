@@ -3,6 +3,7 @@
 <?php 
 // exit
 if ( ! defined( 'ABSPATH' ) ) { exit; } 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
 
 use HydraBooking\DB\Host;
 use HydraBooking\Hooks\Mailer;
@@ -45,7 +46,7 @@ get_header();
                    <h3><?php echo esc_html(__('You are already logged in', 'hydra-booking')) ?></h3>
                     <!-- go to dashboard button -->
                     <br>
-                    <a class="tfhb-from-btn" href="<?php echo get_permalink( $tfhb_dashboard_page_id ) ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
+                    <a class="tfhb-from-btn" href="<?php echo esc_url( get_permalink( $tfhb_dashboard_page_id ) ); ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
                     
                  <?php 
                     
@@ -55,6 +56,7 @@ get_header();
                     $host  = new Host();
                     $getHost = $host->getHostByUserId($user_id);
                     if($getHost) { 
+                        /* translators: 1: opening tag, 2: closing tag and opening link, 3: closing link */
                         printf( esc_html__( '%1$sYour email has been successfully verified! %2$sLogin here%3$s', 'hydra-booking' ), '<h3>', '</h3><br><a class="tfhb-from-btn" href="' .esc_url(get_permalink( $login_page_id )). '">', '</a>' );
                         update_user_meta($user_id, 'tfhb_user_is_activated', 1);
                         delete_user_meta($user_id, 'tfhb_user_activation_code');
@@ -83,7 +85,8 @@ get_header();
                             'recipient_name' => 'Dear '. $name,
                             'title'          => esc_html__( 'Your account has been successfully activated.', 'hydra-booking' ), 
                             'brand_name'     => get_bloginfo( 'name' ),
-                            'footer_text'    => esc_html__( 'This is an automated email from ' . get_bloginfo( 'name' ) . ', please do not reply.', 'hydra-booking' ),
+                            /* translators: %s: Site name */
+                            'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
                         ]); 
                         
                         Mailer::send( $email, $subject, $body, $headers );
@@ -91,22 +94,27 @@ get_header();
 
                 } elseif (!empty($saved_code) && $saved_code != $data_code) {
 
-                    printf( esc_html__( '%1$s Invalid email verification url! %2$sResend email%3$', 'hydra-booking' ), '<h3>', '<br><a class="tfhb-from-btn" href="" class="resend-email-verification" data-id="' .esc_attr($user_id). '">', '</a></h3>' );
+                    /* translators: 1: opening tag, 2: closing tag and opening link, 3: closing link */
+                    printf( esc_html__( '%1$s Invalid email verification url! %2$sResend email%3$s', 'hydra-booking' ), '<h3>', '<br><a class="tfhb-from-btn" href="" class="resend-email-verification" data-id="' .esc_attr($user_id). '">', '</a></h3>' );
 
                 } elseif (empty($saved_code) && $tfhb_user_is_activated == '1') {
 
+                    /* translators: 1: opening tag, 2: closing tag and opening link, 3: closing link */
                     printf( esc_html__( '%1$sYour email is already verified. %2$sLogin here%3$s', 'hydra-booking' ), '<h3>', '</h3> <br><a class="tfhb-from-btn" href="' .esc_url(get_permalink( $login_page_id )). '">', '</a>' );
                     
                 } elseif (empty($saved_code) && $tfhb_user_is_activated == '0') {
 
-                    printf( esc_html__( '%1$s No email verification url found! %2$sResend email%3$', 'hydra-booking' ), '<h3>', '<br><a class="tfhb-from-btn" href="" class="resend-email-verification" data-id="' .esc_attr($user_id). '">', '</a></h3>' );
+                    /* translators: 1: opening tag, 2: closing tag and opening link, 3: closing link */
+                    printf( esc_html__( '%1$s No email verification url found! %2$sResend email%3$s', 'hydra-booking' ), '<h3>', '<br><a class="tfhb-from-btn" href="" class="resend-email-verification" data-id="' .esc_attr($user_id). '">', '</a></h3>' );
                     
                 } elseif (empty($saved_code) && empty($tfhb_user_is_activated)) {
 
+                    /* translators: 1: opening tag, 2: closing tag */
                     printf( esc_html__( '%1$s Invalid or not found email verification url! %2$s', 'hydra-booking' ), '<h3>', '</h3>' );
                     
                 } else {
 
+                    /* translators: 1: opening tag, 2: closing tag */
                     printf( esc_html__( '%1$s Verification failed! %2$s', 'hydra-booking' ), '<h3>', '</h3>' );
                     
                 }

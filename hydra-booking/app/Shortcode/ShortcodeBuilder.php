@@ -125,7 +125,7 @@ class ShortcodeBuilder {
                         $terms_archive_url = get_term_link($terms); 
                         $permalink = get_permalink($meeting->post_id);
                         // tfhb_print_r($terms);
-                        $price = !empty($meeting->meeting_price) ? $meeting->meeting_price : esc_html(__('Free', 'hydra_booking'));
+                        $price = !empty($meeting->meeting_price) ? $meeting->meeting_price : esc_html(__('Free', 'hydra-booking'));
                 ?>
                 <div class="tfhb-meeting-list__wrap__items">
                    
@@ -137,7 +137,7 @@ class ShortcodeBuilder {
                         <?php endif; ?>
                         <div class="tfhb-meeting-list__wrap__items__wrap__content">
                             <h3>
-                                <a href="<?php echo esc_url($permalink) ?>"><?php echo $meeting->title ? esc_html($meeting->title) : esc_html(__('No Title', 'hydra_booking')); ?></a>
+                                <a href="<?php echo esc_url($permalink) ?>"><?php echo $meeting->title ? esc_html($meeting->title) : esc_html(__('No Title', 'hydra-booking')); ?></a>
                             </h3>
                             <!-- <p><?php echo esc_html($meeting->description) ?></p> -->
                             <div class="tfhb-meeting-list__wrap__items__wrap__content__tags"> 
@@ -166,7 +166,7 @@ class ShortcodeBuilder {
 
                 <?php endforeach; else: ?>
                     <div class="tfhb-meeting-list__wrap__no-found">
-                        <p><?php esc_html_e('No meetings found.', 'hydra_booking')?></p>
+                        <p><?php esc_html_e('No meetings found.', 'hydra-booking')?></p>
                     </div>
                 <?php endif;?>
 
@@ -282,7 +282,7 @@ class ShortcodeBuilder {
 
                 <?php endforeach; else: ?>
                     <div class="tfhb-meeting-list__wrap__no-found">
-                        <p><?php esc_html_e('No meetings found.', 'hydra_booking')?></p>
+                        <p><?php esc_html_e('No meetings found.', 'hydra-booking')?></p>
                     </div>
                 <?php endif;?>
 
@@ -385,7 +385,7 @@ class ShortcodeBuilder {
 
                 <?php endforeach; else: ?>
                     <div class="tfhb-meeting-list__wrap__no-found">
-                        <p><?php esc_html_e('No meetings found.', 'hydra_booking')?></p>
+                        <p><?php esc_html_e('No meetings found.', 'hydra-booking')?></p>
                     </div>
                 <?php endif;?>
 

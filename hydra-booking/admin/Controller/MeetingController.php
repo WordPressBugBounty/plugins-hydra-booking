@@ -242,7 +242,7 @@ class MeetingController
 		// get user role
 		$current_user_role = ! empty($current_user->roles[0]) ? $current_user->roles[0] : '';
 		$current_user_id   = $current_user->ID;
-	
+
 		// Meeting Lists
 		$meeting      = new Meeting();
 		$MeetingsList = array();
@@ -253,7 +253,7 @@ class MeetingController
 			$MeetingsList = $meeting->get(null, null, $current_user_id);
 		}
 
-		if ( empty( $MeetingsList ) || ! is_array( $MeetingsList ) ) {
+		if (empty($MeetingsList) || ! is_array($MeetingsList)) {
 			return array();
 		}
 
@@ -271,7 +271,7 @@ class MeetingController
 	// Meeting List
 	public function getMeetingsData()
 	{
-		
+
 		$MeetingsList = $this->getMeetingList();
 
 		// Return response
@@ -749,22 +749,22 @@ class MeetingController
 
 		// if host is not found, return error 
 		if (empty($host_data)) {
-			
+
 			// Create default host if not found, and current user role is administrator
 			if (current_user_can('administrator')) {
-				$availability_settings =  !empty( get_option( '_tfhb_availability_settings' ) ) && get_option( '_tfhb_availability_settings' ) != 'false' ? get_option( '_tfhb_availability_settings' ) : array();
+				$availability_settings =  !empty(get_option('_tfhb_availability_settings')) && get_option('_tfhb_availability_settings') != 'false' ? get_option('_tfhb_availability_settings') : array();
 				//  find avaibilty id which default_status is true
 				$default_availability = array_filter($availability_settings, function ($availability) {
 					return isset($availability['default_status']) && $availability['default_status'] === true;
 				});
 
-				if ( ! empty( $default_availability )) {
-					$default_availability_entry = reset( $default_availability );
+				if (! empty($default_availability)) {
+					$default_availability_entry = reset($default_availability);
 					$availability_id            = $default_availability_entry['id'];
 				} else {
-					if ( count( $availability_settings ) > 0 ) {
+					if (count($availability_settings) > 0) {
 						// get first availability id
-						$first_availability_entry = reset( $availability_settings );
+						$first_availability_entry = reset($availability_settings);
 						$availability_id           = $first_availability_entry['id'];
 					} else {
 						// No default availability exists yet, import a system default based on the current user's timezone
@@ -773,14 +773,13 @@ class MeetingController
 				}
 
 				$SetupWizard = new SetupWizard();
-				$host_data   = $SetupWizard->CreateHost( $current_user, $availability_id );
+				$host_data   = $SetupWizard->CreateHost($current_user, $availability_id);
 
 				// Dynamically add the host role to the current user, keeping their existing role(s) intact
-				if ( ! in_array( 'tfhb_host', (array) $current_user->roles, true ) ) {
-					$current_user->add_role( 'tfhb_host' );
+				if (! in_array('tfhb_host', (array) $current_user->roles, true)) {
+					$current_user->add_role('tfhb_host');
 				}
-			}
-			else {
+			} else {
 				return rest_ensure_response(
 					array(
 						'status'  => false,
@@ -788,10 +787,9 @@ class MeetingController
 					)
 				);
 			}
-
 		}
 
-		if (tfhb_is_pro_active() == false && $request_data['meeting_type'] == 'one-to-group') {
+		if (tfhb_is_hydra_booking_pro_active() == false && $request_data['meeting_type'] == 'one-to-group') {
 			return rest_ensure_response(
 				array(
 					'status'  => false,
@@ -1294,12 +1292,12 @@ class MeetingController
 			// Check if table exists
 			$fluent_crm_tags    = $wpdb->prefix . 'fc_tags';
 			$fluent_crm_lists   = $wpdb->prefix . 'fc_lists';
-			$tags_table_exists  = $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}fc_tags'") == $fluent_crm_tags;
-			$lists_table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}fc_lists'") == $fluent_crm_lists;
+			$tags_table_exists  = $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}fc_tags'") == $fluent_crm_tags; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			$lists_table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}fc_lists'") == $fluent_crm_lists; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 
 			if ($tags_table_exists) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fc_tags", ARRAY_A);
+				$results = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fc_tags", ARRAY_A); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 
 				// Check if results are not empty
 				if (! empty($results)) {
@@ -1317,7 +1315,7 @@ class MeetingController
 
 			if ($lists_table_exists) {
 				// Table exists, retrieve data
-				$results = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fc_lists", ARRAY_A);
+				$results = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fc_lists", ARRAY_A); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 
 				// Check if results are not empty
 				if (! empty($results)) {
@@ -1558,7 +1556,7 @@ class MeetingController
 					return $item['name'] == $baseName;
 				}, $data['questions'])));
 				if ($count > 0) {
-					$uniqueName = $baseName . '_' . substr(md5(mt_rand()), 0, 2);
+					$uniqueName = $baseName . '_' . substr(md5(wp_rand()), 0, 2);
 				} else {
 					$uniqueName = $baseName;
 				}
@@ -1796,22 +1794,20 @@ class MeetingController
 
 		$url = "https://$server_prefix.api.mailchimp.com/3.0/$path";
 
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-		$headers = array(
-			"Authorization: Bearer $api_key",
+		$args = array(
+			'headers' => array(
+				'Authorization' => "Bearer $api_key",
+			),
+			'sslverify' => false,
 		);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-		// for debug only!
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-		$resp = curl_exec($curl);
-		curl_close($curl);
+		$response = wp_remote_get($url, $args);
 
-		return $resp;
+		if (is_wp_error($response)) {
+			return false;
+		}
+
+		return wp_remote_retrieve_body($response);
 	}
 
 	/* Modules Fileds */
@@ -1829,28 +1825,21 @@ class MeetingController
 			// The Zoho CRM API URL to get all modules
 			$api_url = 'https://www.zohoapis.com/crm/v6/settings/fields?module=' . $request['module'];
 
-			// Initialize cURL session
-			$ch = curl_init();
-			// Set the URL and other necessary options
-			curl_setopt($ch, CURLOPT_URL, $api_url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-			// Set the headers, including the authorization token
-			$headers = array(
-				'Authorization: Zoho-oauthtoken ' . $access_token,
-				'Content-Type: application/json',
+			$args = array(
+				'headers' => array(
+					'Authorization' => 'Zoho-oauthtoken ' . $access_token,
+					'Content-Type' => 'application/json',
+				),
 			);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-			// Execute the cURL session and fetch the response
-			$response = curl_exec($ch);
+			$api_response = wp_remote_get($api_url, $args);
 
-			// Check for cURL errors
-			if (curl_errno($ch)) {
-				echo 'Error:' . esc_attr(curl_error($ch));
+			if (is_wp_error($api_response)) {
+				echo 'Error:' . esc_attr($api_response->get_error_message());
+				$response = '';
+			} else {
+				$response = wp_remote_retrieve_body($api_response);
 			}
-			// Close the cURL session
-			curl_close($ch);
 
 			// Decode the JSON response
 			$response_data = json_decode($response, true);
@@ -1969,22 +1958,20 @@ class MeetingController
 		$server_prefix = $server_prefix[1];
 
 		$url  = "https://$server_prefix.api.mailchimp.com/3.0/lists/$module/merge-fields";
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-		$headers = array(
-			"Authorization: Bearer $api_key",
+		$args = array(
+			'headers' => array(
+				'Authorization' => "Bearer $api_key",
+			),
+			'sslverify' => false,
 		);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-		// for debug only!
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-		$resp = curl_exec($curl);
-		curl_close($curl);
+		$api_response = wp_remote_get($url, $args);
 
-		return $resp;
+		if (is_wp_error($api_response)) {
+			return false;
+		}
+
+		return wp_remote_retrieve_body($api_response);
 	}
 
 	// Refresh Token
@@ -2005,18 +1992,21 @@ class MeetingController
 			'refresh_token' => $refresh_token,
 		);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+		$args = array(
+			'body'    => $data,
+			'headers' => array(
+				'Content-Type' => 'application/x-www-form-urlencoded',
+			),
+		);
 
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {
-			echo 'Error:' . esc_attr(curl_error($ch));
+		$api_response = wp_remote_post($url, $args);
+
+		if (is_wp_error($api_response)) {
+			echo 'Error:' . esc_attr($api_response->get_error_message());
+			$response = '';
+		} else {
+			$response = wp_remote_retrieve_body($api_response);
 		}
-		curl_close($ch);
 
 		$response_data = json_decode($response, true);
 
@@ -2099,7 +2089,7 @@ class MeetingController
 		} elseif ($form_type == 'fluent-forms') {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$results    = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fluentform_forms");
+			$results    = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}fluentform_forms"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			foreach ($results as $form) {
 				$questionForms[] = array(
 					'name'  => $form->title,
@@ -2109,7 +2099,7 @@ class MeetingController
 		} elseif ($form_type == 'gravityforms') {
 			// Query arguments get custom fluentform_forms data all into custom database table
 			global $wpdb;
-			$results    = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}gf_form");
+			$results    = $wpdb->get_results("SELECT id, title FROM {$wpdb->prefix}gf_form"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			foreach ($results as $form) {
 				$questionForms[] = array(
 					'name'  => $form->title,

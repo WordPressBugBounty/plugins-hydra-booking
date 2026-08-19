@@ -149,7 +149,7 @@ class HydraBooking {
          
         update_option($lic_key_name,$license_key) || add_option($lic_key_name,$license_key);
         update_option("HydraBooking_lic_email",$license_email) || add_option("HydraBooking_lic_email",$license_email);
-        update_option('_site_transient_update_plugins','');
+
         wp_safe_redirect(admin_url( 'admin.php?page='.$this->slug));
     }
     function action_deactivate_license() {
@@ -159,7 +159,7 @@ class HydraBooking {
 	    $lic_key_name =HydraBookingBase::get_lic_key_param($main_lic_key);
         if(HydraBookingBase::remove_license_key(__FILE__,$message)){
             update_option($lic_key_name,"") || add_option($lic_key_name,"");
-            update_option('_site_transient_update_plugins','');
+
         }
         wp_safe_redirect(admin_url( 'admin.php?page='.$this->slug));
     }

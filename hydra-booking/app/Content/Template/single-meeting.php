@@ -1,4 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
+<?php // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals ?>
 <?php get_header('tfhb-meeting' ); ?>
 
 <?php 

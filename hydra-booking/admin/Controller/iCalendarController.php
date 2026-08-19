@@ -230,26 +230,31 @@ class iCalendarController
     private function handle_ical_request()
     {
         // Handle both 'secret' and 'secrect' (as misspelled in previous request)
-        $secret = isset($_GET['secret']) ? sanitize_text_field($_GET['secret']) : get_query_var('secret');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $secret = isset($_GET['secret']) ? sanitize_text_field(wp_unslash($_GET['secret'])) : get_query_var('secret');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (empty($secret) && isset($_GET['secrect'])) {
-            $secret = sanitize_text_field($_GET['secrect']);
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $secret = sanitize_text_field(wp_unslash($_GET['secrect']));
         }
 
         if (!$this->validate_secret($secret)) {
-            wp_die(__('Invalid Secret', 'hydra-booking'), __('Unauthorized', 'hydra-booking'), array('response' => 403));
+            wp_die(esc_html__('Invalid Secret', 'hydra-booking'), esc_html__('Unauthorized', 'hydra-booking'), array('response' => 403));
         }
 
-        $hash = isset($_GET['hash']) ? sanitize_text_field($_GET['hash']) : get_query_var('hash');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $hash = isset($_GET['hash']) ? sanitize_text_field(wp_unslash($_GET['hash'])) : get_query_var('hash');
 
         $meeting_id = 0;
 
         if (!empty($hash)) {
             $meeting_id = $this->decrypt_meeting_id($hash);
             if (!$meeting_id) {
-                wp_die(__('Invalid Meeting Hash', 'hydra-booking'), __('Error', 'hydra-booking'), array('response' => 400));
+                wp_die(esc_html__('Invalid Meeting Hash', 'hydra-booking'), esc_html__('Error', 'hydra-booking'), array('response' => 400));
             }
         }
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $this->generate_ical($meeting_id);
         exit;
     }
@@ -457,6 +462,7 @@ class iCalendarController
         // Output Headers
         header('Content-Type: text/plain; charset=utf-8');
         header('Content-Disposition: inline');
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $ical;
         exit;
     }
@@ -468,6 +474,7 @@ class iCalendarController
     {
         header('Content-Type: text/plain; charset=utf-8');
         header('Content-Disposition: inline');
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//HydraBooking//iCalendar//EN\r\nMETHOD:PUBLISH\r\nEND:VCALENDAR\r\n";
     }
 

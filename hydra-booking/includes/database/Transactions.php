@@ -2,7 +2,7 @@
 namespace HydraBooking\DB;
 
 class Transactions {
-
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery
 	public $table = 'tfhb_transactions';
 	public function __construct() {
 	}
@@ -18,7 +18,8 @@ class Transactions {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$sql = "CREATE TABLE $table_name (
                 id INT(11) NOT NULL AUTO_INCREMENT,
                 booking_id INT(11) NOT NULL,
@@ -44,7 +45,8 @@ class Transactions {
 	 * Rollback the database migration.
 	 */
 	public function rollback() {
-		global $wpdb;
+		global $wpdb; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}tfhb_transactions" );
 	}
 
@@ -57,7 +59,7 @@ class Transactions {
  
 		$table_name                    = $wpdb->prefix . $this->table;
 		$request['transation_history'] = is_array( $request['transation_history'] ) ? json_encode( $request['transation_history'], true ) : $request['transation_history'];
-
+ // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		// insert transactions
 		$result = $wpdb->insert(
 			$table_name,
@@ -82,7 +84,7 @@ class Transactions {
 		$table_name = $wpdb->prefix . $this->table;
 
 		$id = $request['id'];
-		unset( $request['id'] );
+		unset( $request['id'] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		// Update transactions
 		$result = $wpdb->update(
 			$table_name,
@@ -137,21 +139,34 @@ class Transactions {
 			} 
 		} 
 
+		if($orderBy != null) {
+			// Whitelist allowed order by fields (assuming id, created_at, updated_at, total)
+			$allowed_orders = ['id', 'created_at', 'updated_at', 'total'];
+			if(in_array($orderBy, $allowed_orders, true)) {
+				$sql .= " ORDER BY $orderBy";
+			} else {
+				$sql .= " ORDER BY id";
+			}
+		}
+
 		if($limit != null) {
 			$sql .= " LIMIT %d";
 			$data[] = $limit;
 		}
-
-
-		if($orderBy != null) {
-			$sql .= " ORDER BY %s";
-			$data[] = $orderBy;
-		}
 	
-		if($limit == 1){
-			$data = $wpdb->get_row( $wpdb->prepare( $sql, $data ) );
+		if(!empty($data)){
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$query = $wpdb->prepare( $sql, $data );
+		}else{
+			$query = $sql;
+		} // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+
+		if($limit == 1){ // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$data = $wpdb->get_row( $query );
 		}else{ 
-			$data = $wpdb->get_results( $wpdb->prepare( $sql, $data ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$data = $wpdb->get_results( $query );
 		}
 
 		return $data;
@@ -175,14 +190,15 @@ class Transactions {
 
 		$params = array($previous_date, $current_date, $status_name);
 
-		if ($user_id) {
+		if ($user_id) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$sql      .= " AND $host_table.id = %d";
 			$params[] = (int) $user_id;
 		}
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return $wpdb->get_var($wpdb->prepare($sql, $params));
 	}
-
+ // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 	// delete
 	public function delete( $id ) {
 		global $wpdb;

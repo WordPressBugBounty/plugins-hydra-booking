@@ -25,11 +25,11 @@ class NoticeController
     {
         check_ajax_referer('wp_rest', 'nonce');
 
-        if (!isset($_POST['email']) || !is_email($_POST['email'])) {
+        if (!isset($_POST['email']) || !is_email(wp_unslash($_POST['email']))) {
             wp_send_json_error(['message' => __('Invalid email address.', 'hydra-booking')]);
         }
 
-        $email = sanitize_email($_POST['email']);
+        $email = sanitize_email(wp_unslash($_POST['email']));
         $api_url = $this->api_base_url . '?action=tfur_user_register';
         $response = wp_remote_post($api_url, [
             'timeout' => 10,
@@ -42,6 +42,7 @@ class NoticeController
 
 
         if (is_wp_error($response)) {
+            /* translators: %s: Error message */
             wp_send_json_error(['message' => sprintf(__('API request failed: %s', 'hydra-booking'), $response->get_error_message())]);
         }
 
@@ -72,7 +73,7 @@ class NoticeController
             wp_send_json_error(['message' => __('Invalid Key.', 'hydra-booking')]);
         }
 
-        $key = sanitize_text_field($_POST['key']);
+        $key = sanitize_text_field(wp_unslash($_POST['key']));
         $api_url = $this->api_base_url . '?action=tfur_user_add_to_cart';
 
         $response = wp_remote_post($api_url, [
@@ -85,6 +86,7 @@ class NoticeController
         ]);
 
         if (is_wp_error($response)) {
+            /* translators: %s: Error message */
             wp_send_json_error(['message' => sprintf(__('API request failed: %s', 'hydra-booking'), $response->get_error_message())]);
         }
 

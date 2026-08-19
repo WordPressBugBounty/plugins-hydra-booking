@@ -1,5 +1,6 @@
 <?php
 defined( 'ABSPATH' ) || exit;
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
 
 /**
  * The public-facing functionality of the plugin.
@@ -80,7 +81,7 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 	</div>  
 	<div class="tfhb-host-info" style="background-image: url(<?php echo esc_url($host_feature_image_link); ?>) ;">
 		<div class="tfhb-host-profile tfhb-flexbox tfhb-gap-8">
-			<?php echo ! empty( $host['avatar'] ) ? '<img src="' . esc_url( $host['avatar'] ) . '" alt="">' : '<img src="' . TFHB_URL.'assets/images/avator.png' . '" alt="">'; ?>
+			<?php echo ! empty( $host['avatar'] ) ? '<img src="' . esc_url( $host['avatar'] ) . '" alt="">' : '<img src="' . esc_url( TFHB_URL.'assets/images/avator.png' ) . '" alt="">'; ?>
 			
 			<div class="tfhb-host-name">
 				<?php echo ! empty( $host['first_name'] ) ? '<h3>' . esc_html( $host['first_name'] ) . '  ' . esc_html( $host['last_name'] ) . '</h3>' : ''; ?>
@@ -175,7 +176,7 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 					echo '<li class="tfhb-flexbox tfhb-gap-8">
                                 <input type="hidden" id="meeting_locations[' . esc_attr($key) . '][location]" name="meeting_locations[' . esc_attr($key) . '][location]" value="' . esc_attr( $location['location'] ) . '">
                                 <input type="hidden" id="meeting_locations[' . esc_attr($key) . '][address]" name="meeting_locations[' . esc_attr($key) . '][address]" value="' . esc_attr( $location['address'] ) . '">
-                                <div class="tfhb-icon">'.$icon.'</div> 
+                                <div class="tfhb-icon">'.wp_kses_post($icon).'</div> 
                                 ' . esc_html( $location_value ) . '
                             </li>';
 				}

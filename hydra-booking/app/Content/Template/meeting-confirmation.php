@@ -1,5 +1,6 @@
 <?php
 defined( 'ABSPATH' ) || exit;
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
 
 #
 
@@ -135,7 +136,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 							}
 							echo '<li class="tfhb-flexbox tfhb-gap-8">
 										<div class="tfhb-icon">
-											'.$icon.'  
+											'. wp_kses_post($icon) .'  
 										</div> 
 										' . 
 										esc_html( $address ) . '
@@ -153,8 +154,8 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 					<!-- Bookmarks -->
 					<?php 
 						foreach ($getBookmark as $key => $bookmark){
-							echo '<a href="'.$bookmark['url'].'" target="_blank">
-								<img src="'.esc_url($bookmark['icon']).'" alt="'.$bookmark['title'].'" />
+							echo '<a href="'.esc_url($bookmark['url']).'" target="_blank">
+								<img src="'.esc_url($bookmark['icon']).'" alt="'.esc_attr($bookmark['title']).'" />
 							</a>';
 						}
 					?>
@@ -175,7 +176,7 @@ $getBookmark = $Bookmark->getMeetingBookmarks($data );
 						),
 						home_url()
 					);
-					echo '<a href="' . esc_attr( $cancel ) . '">'.esc_html__('Cancel booking', 'hydra-booking').'</a>';
+					echo '<a href="' . esc_url( $cancel ) . '">'.esc_html__('Cancel booking', 'hydra-booking').'</a>';
 				}
 				if ( true == $data->attendee_can_reschedule ) {
 

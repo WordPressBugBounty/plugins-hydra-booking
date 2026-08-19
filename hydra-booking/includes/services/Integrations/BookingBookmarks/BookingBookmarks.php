@@ -1,22 +1,26 @@
 <?php
+
 namespace HydraBooking\Services\Integrations\BookingBookmarks;
 // exit
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if (! defined('ABSPATH')) {
+    exit;
+}
 
 
 use HydraBooking\DB\Attendees;
-use HydraBooking\Services\Integrations\BookingBookmarks\BookingBookmarks; 
+// use HydraBooking\Services\Integrations\BookingBookmarks\BookingBookmarks;
+
 /**
  * 
  * BookingBookmarks
  */
-class BookingBookmarks { 
+class BookingBookmarks
+{
 
-	public function __construct( ) { 
+    public function __construct() {}
 
-	}
-
-    public function GetBookingConfirmationUrl ($data){ 
+    public function GetBookingConfirmationUrl($data)
+    {
 
         $confirmation = add_query_arg(
             array(
@@ -30,7 +34,8 @@ class BookingBookmarks {
         return $confirmation;
     }
 
-    public function GetBookingIcsUrl ($data){
+    public function GetBookingIcsUrl($data)
+    {
         $confirmation = add_query_arg(
             array(
                 'hydra-booking' => 'booking',
@@ -42,38 +47,38 @@ class BookingBookmarks {
         );
         return $confirmation;
     }
-    public function getMeetingBookmarks($data ){ 
+    public function getMeetingBookmarks($data)
+    {
         $bookingTitle = $data->meeting_title . ' Between ' . $data->host_first_name . ' ' . $data->host_last_name . ' and ' . $data->attendee_name;
         $location = '';
         if (!empty($data->meeting_locations)) {
             $location_data = json_decode($data->meeting_locations, true);
-        
+
             foreach ($location_data as $key => $value) {
-                $location .= $value['location'] ." - ". $value['address'] ; 
+                $location .= $value['location'] . " - " . $value['address'];
                 if ($key < count($location_data) - 1) {
                     $location .= ", ";
                 }
-
-            }  
+            }
         }
-         
+
         $availability_time_zone = $data->availability_time_zone; // Example: "America/New_York"
 
         // meeting_dates can be a comma separated list; use the first date for the bookmark links.
-        $meeting_dates = explode( ',', $data->meeting_dates );
-        $meeting_date  = trim( $meeting_dates[0] );
+        $meeting_dates = explode(',', $data->meeting_dates);
+        $meeting_date  = trim($meeting_dates[0]);
 
         // Convert to required format with the correct timezone
         $dtStart = new \DateTime("{$meeting_date} {$data->start_time}", new \DateTimeZone($availability_time_zone));
         $dtEnd = new \DateTime("{$meeting_date} {$data->end_time}", new \DateTimeZone($availability_time_zone));
-        $details = '<p>'.esc_html($data->meeting_title).'</p>'; 
+        $details = '<p>' . esc_html($data->meeting_title) . '</p>';
 
         // Format for Google Calendar (Including Timezone)
         $start_time_google = $dtStart->format("Ymd\THis");
-        $end_time_google = $dtEnd->format("Ymd\THis"); 
+        $end_time_google = $dtEnd->format("Ymd\THis");
         // Google Calendar Link with Timezone
         $bookmarks['google'] = [
-            'title' => __('Google Calendar', 'fluent-booking'),
+            'title' => __('Google Calendar', 'hydra-booking'),
             'url'   => add_query_arg([
                 'dates'    => $start_time_google . '/' . $end_time_google,
                 'text'     => $bookingTitle,
@@ -86,11 +91,11 @@ class BookingBookmarks {
         ];
 
         // Format for Outlook (ISO 8601 format with time zone)
-        $start_time_outlook = $dtStart->format("Y-m-d\TH:i:s"); 
+        $start_time_outlook = $dtStart->format("Y-m-d\TH:i:s");
         $end_time_outlook = $dtEnd->format("Y-m-d\TH:i:s");
         // Outlook Calendar Link
         $bookmarks['outlook'] = [
-            'title' => __('Outlook', 'fluent-booking'),
+            'title' => __('Outlook', 'hydra-booking'),
             'url'   => add_query_arg([
                 'startdt'  => $start_time_outlook,
                 'enddt'    => $end_time_outlook,
@@ -100,12 +105,12 @@ class BookingBookmarks {
                 'rru'      => 'addevent',
                 'location' => $location,
             ], 'https://outlook.live.com/calendar/0/deeplink/compose'),
-            'icon'  => esc_url(TFHB_URL . 'assets/app/images/outlook-calendar.svg'), 
+            'icon'  => esc_url(TFHB_URL . 'assets/app/images/outlook-calendar.svg'),
         ];
 
         // // Microsoft Office 365 Calendar Link
         // $bookmarks['msoffice'] = [
-        //     'title' => __('Microsoft Office', 'fluent-booking'),
+        //     'title' => __('Microsoft Office', 'hydra-booking'),
         //     'url'   => add_query_arg([
         //         'startdt'  => $start_time_outlook,
         //         'enddt'    => $end_time_outlook,
@@ -120,7 +125,7 @@ class BookingBookmarks {
 
 
         // Format start time for Yahoo (UTC format with 'Z') - convert a clone so $dtStart stays in the local timezone for the calculations below
-        $start_time_yahoo = ( clone $dtStart )->setTimezone( new \DateTimeZone( 'UTC' ) )->format("Ymd\THis\Z");
+        $start_time_yahoo = (clone $dtStart)->setTimezone(new \DateTimeZone('UTC'))->format("Ymd\THis\Z");
 
         // Calculate duration in minutes
         $duration = $dtStart->diff($dtEnd);
@@ -128,11 +133,11 @@ class BookingBookmarks {
         // Format duration for Yahoo Calendar (HHMM format)
         $formatted_duration = str_pad(floor($duration_minutes / 60), 2, '0', STR_PAD_LEFT) . str_pad($duration_minutes % 60, 2, '0', STR_PAD_LEFT);
 
-     
+
 
         // Yahoo Calendar Link with dynamic duration
         $bookmarks['yahoo'] = [
-            'title' => __('Yahoo Calendar', 'fluent-booking'),
+            'title' => __('Yahoo Calendar', 'hydra-booking'),
             'url'   => add_query_arg([
                 'v'        => 60,
                 'view'     => 'd',
@@ -143,23 +148,22 @@ class BookingBookmarks {
                 'desc'     => $details,
                 'in_loc'   => $location,
             ], 'http://calendar.yahoo.com/'),
-            'icon' => esc_url(TFHB_URL . 'assets/app/images/yahoo-calendar.svg'), 
+            'icon' => esc_url(TFHB_URL . 'assets/app/images/yahoo-calendar.svg'),
         ];
         $bookmarks['other']    = [
-            'title' => __('Other Calendar', 'fluent-booking'), 
-            'url'   => $this->GetBookingIcsUrl($data), 
-            'icon' => esc_url(TFHB_URL . 'assets/app/images/other-calendar.svg'), 
+            'title' => __('Other Calendar', 'hydra-booking'),
+            'url'   => $this->GetBookingIcsUrl($data),
+            'icon' => esc_url(TFHB_URL . 'assets/app/images/other-calendar.svg'),
         ];
-        
-        return $bookmarks;
 
+        return $bookmarks;
     }
 
     public  function generateBookingICS($data)
     {
         // meeting_dates can be a comma separated list; use the first date for the ICS event.
-        $meeting_dates = explode( ',', $data->meeting_dates );
-        $meeting_date  = trim( $meeting_dates[0] );
+        $meeting_dates = explode(',', $data->meeting_dates);
+        $meeting_date  = trim($meeting_dates[0]);
 
         // Convert time to UTC format for ICS
         $start = new \DateTime("{$meeting_date} {$data->start_time}", new \DateTimeZone($data->availability_time_zone));
@@ -196,14 +200,15 @@ class BookingBookmarks {
         // Send Headers
         header('Content-Type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="booking-event.ics"');
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $ics_content;
         exit;
     }
- 
+
 
     // generate full booking ics 
     public function generateFullBookingICS($data)
-    {  
+    {
         // iCal header
         // Start iCal file
         $ical = "BEGIN:VCALENDAR\r\n";
@@ -211,18 +216,18 @@ class BookingBookmarks {
         $ical .= "PRODID:-//Your Company//Meeting Scheduler//EN\r\n";
         $ical .= "CALSCALE:GREGORIAN\r\n";
         $ical .= "METHOD:PUBLISH\r\n";
-        foreach ($data as $meeting) { 
-           
-            if($meeting->meeting_dates == '' || $meeting->start_time == ''){
+        foreach ($data as $meeting) {
+
+            if ($meeting->meeting_dates == '' || $meeting->start_time == '') {
                 continue;
             }
-            $meeting_dates = explode( ',', $meeting->meeting_dates );
-            foreach ( $meeting_dates as $meeting_date ) {
+            $meeting_dates = explode(',', $meeting->meeting_dates);
+            foreach ($meeting_dates as $meeting_date) {
                 $uid = uniqid();
                 $time_zone = !empty($meeting->availability_time_zone) ? $meeting->availability_time_zone : $meeting->host_time_zone;
                 $dtStart = $this->formatToUTC($meeting_date, $meeting->start_time, $time_zone);
                 $dtEnd = $this->formatToUTC($meeting_date, $meeting->end_time, $time_zone);
-            
+
                 $ical .= "BEGIN:VEVENT\r\n";
                 $ical .= "UID:$uid\r\n";
                 $ical .= "DTSTAMP:" . gmdate("Ymd\THis\Z") . "\r\n";
@@ -240,19 +245,18 @@ class BookingBookmarks {
                     }
                     $ical .= "LOCATION:" . implode(", ", $locationString) . "\r\n";
                 }
-                
+
                 // Add attendees
                 if (!empty($meeting->attendees)) {
                     foreach ($meeting->attendees as $attendee) {
                         $ical .= "ATTENDEE;CN={$attendee->attendee_name}:mailto:{$attendee->email}\r\n";
                     }
                 }
-            
+
                 $ical .= "END:VEVENT\r\n";
             }
-            
         }
-            
+
         // iCal footer
         $ical .= "END:VCALENDAR\r\n";
 
@@ -260,20 +264,21 @@ class BookingBookmarks {
     }
 
     // Get booking ICS URL for the current user
-    public function generateSingleBookingICS($meeting){ 
+    public function generateSingleBookingICS($meeting)
+    {
         // Start iCal file
         $ical = "BEGIN:VCALENDAR\r\n";
         $ical .= "VERSION:2.0\r\n";
         $ical .= "PRODID:-//Your Company//Meeting Scheduler//EN\r\n";
         $ical .= "CALSCALE:GREGORIAN\r\n";
-        $ical .= "METHOD:PUBLISH\r\n"; 
-        $meeting_dates = explode( ',', $meeting->meeting_dates );
-        foreach ( $meeting_dates as $meeting_date ) {
+        $ical .= "METHOD:PUBLISH\r\n";
+        $meeting_dates = explode(',', $meeting->meeting_dates);
+        foreach ($meeting_dates as $meeting_date) {
             $uid = uniqid();
-        
+
             $dtStart = $this->formatToUTC($meeting_date, $meeting->start_time, $meeting->availability_time_zone);
             $dtEnd = $this->formatToUTC($meeting_date, $meeting->end_time, $meeting->availability_time_zone);
-        
+
             $ical .= "BEGIN:VEVENT\r\n";
             $ical .= "UID:$uid\r\n";
             $ical .= "DTSTAMP:" . gmdate("Ymd\THis\Z") . "\r\n";
@@ -281,7 +286,7 @@ class BookingBookmarks {
             $ical .= "DTEND:$dtEnd\r\n";
             $ical .= "SUMMARY:" . $meeting->title . "\r\n";
             $ical .= "STATUS:" . strtoupper($meeting->status) . "\r\n";
-    
+
             // Decode meeting locations
             $locations = json_decode($meeting->meeting_locations, true);
             if (!empty($locations)) {
@@ -291,27 +296,26 @@ class BookingBookmarks {
                 }
                 $ical .= "LOCATION:" . implode(", ", $locationString) . "\r\n";
             }
-            
+
             // Add attendees
             if (!empty($meeting->attendees)) {
                 foreach ($meeting->attendees as $attendee) {
                     $ical .= "ATTENDEE;CN={$attendee->attendee_name}:mailto:{$attendee->email}\r\n";
                 }
             }
-        
-            $ical .= "END:VEVENT\r\n"; 
-                
 
+            $ical .= "END:VEVENT\r\n";
         }
-       
+
         // iCal footer
         $ical .= "END:VCALENDAR\r\n";
 
         return $ical;
     }
 
-     // Convert date and time to UTC format
-	 public function formatToUTC($date, $time, $timezone){
+    // Convert date and time to UTC format
+    public function formatToUTC($date, $time, $timezone)
+    {
         if (empty($timezone)) {
             $timezone = 'UTC';
         }
@@ -333,19 +337,20 @@ class BookingBookmarks {
     }
 
     // sent bookmark add to calender link in email notification
-    public function sendBookmarkFormEmail($hash){ 
+    public function sendBookmarkFormEmail($hash)
+    {
         // allowed types: download_ics, confirmation, cancel
-   
+
         // decode hash to get booking data
         // encoded format: $hash = base64_encode( wp_json_encode( $hash ) );
-        $decoded_hash = base64_decode($hash, true); 
+        $decoded_hash = base64_decode($hash, true);
         if ($decoded_hash === false) {
             return false; // Invalid base64 string
         }
         $booking_data = json_decode($decoded_hash, true);
         $type = $booking_data['type'] ?? '';
         $allowed_types = ['google', 'outlook', 'yahoo', 'other'];
-        if ( !in_array($type, $allowed_types) ) {
+        if (!in_array($type, $allowed_types)) {
             return false;
         }
 
@@ -353,14 +358,14 @@ class BookingBookmarks {
             return false; // Invalid JSON
         }
         $Attendee = new Attendees();
-		$attendeeBooking =  $Attendee->getAttendeeWithBooking( 
-			array(
-				array('id', '=',$booking_data['attendee_id']),
-			),
-			1,
-			'DESC'
-		); 
-        if(!$attendeeBooking){
+        $attendeeBooking =  $Attendee->getAttendeeWithBooking(
+            array(
+                array('id', '=', $booking_data['attendee_id']),
+            ),
+            1,
+            'DESC'
+        );
+        if (!$attendeeBooking) {
             return false;
         }
         // Get bookmarks
@@ -370,9 +375,7 @@ class BookingBookmarks {
             return false;
         }
 
-        wp_redirect($bookmarks[$type]['url']);
+        wp_safe_redirect($bookmarks[$type]['url']);
         exit;
     }
-
- 
 }

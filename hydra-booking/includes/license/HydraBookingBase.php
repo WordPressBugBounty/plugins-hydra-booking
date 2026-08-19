@@ -45,11 +45,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		if($this->has_check_update) {
 			if(function_exists("add_action")){
 				add_action( 'admin_post_hydra-booking_fupc', function(){
-					update_option('_site_transient_update_plugins','');
-					update_option('_site_transient_update_themes','');
-					set_site_transient('update_themes', null);
+					delete_site_transient( 'update_plugins' );
+					delete_site_transient( 'update_themes' );
 					delete_transient($this->product_base."_up");
-					wp_redirect(  admin_url( 'plugins.php' ) );
+					wp_safe_redirect(  admin_url( 'plugins.php' ) );
 					exit;
 				});
 				add_action( 'init', [$this,"init_action_handler"]);
@@ -70,12 +69,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 	}
 	function init_action_handler(){
 		$handler=hash("crc32b",$this->product_id.$this->key.$this->get_domain())."_handle";
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if(isset($_GET['action']) && $_GET['action']==$handler){
 			$this->handle_server_request();
 			exit;
 		}
 	}
 	function handle_server_request(){
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$type = isset( $_GET['type'] ) ? strtolower(sanitize_text_field(wp_unslash($_GET['type']))) : '';
 		switch ($type) {
 			case "rl": //remove license
@@ -147,8 +148,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		return 0;
 	}
 	public function clean_update_info(){
-		update_option('_site_transient_update_plugins','');
-		update_option('_site_transient_update_themes','');
+		delete_site_transient( 'update_plugins' );
+		delete_site_transient( 'update_themes' );
 		delete_transient($this->product_base."_up");
 	}
 	public function update_message_cb($data, $response){
@@ -365,7 +366,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 		if(empty($password)){
 			$password=$this->key;
 		}
-		$plain_text=rand(10,99).$plain_text.rand(10,99);
+		$plain_text=wp_rand(10,99).$plain_text.wp_rand(10,99);
 		$method = 'aes-256-cbc';
 		$key = substr( hash( 'sha256', $password, true ), 0, 32 );
 		$iv = substr(strtoupper(md5($password)),0,16);

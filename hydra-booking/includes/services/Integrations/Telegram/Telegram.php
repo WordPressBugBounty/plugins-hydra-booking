@@ -90,7 +90,7 @@ class Telegram {
             $mailbody = $this->replace_mail_tags($body, $attendees->id);
 			$html = preg_replace('/<\s*(br|hr)\s*\/?>/i', "\n", $mailbody);
 			$html = preg_replace('/<\/?(p|div|h[1-6])[^>]*>/i', "\n", $html);
-			$text = strip_tags($html);
+			$text = wp_strip_all_tags($html);
 			$text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5);
 			$lines = array_filter(array_map('trim', explode("\n", $text)));
 			$mailbody = implode("\n", $lines);
@@ -113,6 +113,7 @@ class Telegram {
 
 
 			if ( is_wp_error( $response ) ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 				error_log( 'Telegram API request failed: ' . $response->get_error_message() );
 			}
         }

@@ -44,7 +44,7 @@ class PromoNotice {
 
     public function __construct() {
         
-        if(in_array(date('F'), $this->months)){  
+        if(in_array(gmdate('F'), $this->months)){  
 
             $tfhb_promo__schedule_start_from = !empty(get_option( 'tfhb_promo__schedule_start_from' )) ? get_option( 'tfhb_promo__schedule_start_from' ) : 0;
 
@@ -82,7 +82,7 @@ class PromoNotice {
             $service_banner = isset($this->tfhb_promo_option['service_banner']) ? $this->tfhb_promo_option['service_banner'] : array();
             $promo_banner = isset($this->tfhb_promo_option['promo_banner']) ? $this->tfhb_promo_option['promo_banner'] : array();
 
-            $current_day = date('l'); 
+            $current_day = gmdate('l'); 
             if(isset($service_banner['enable_status']) && $service_banner['enable_status'] == true && in_array($current_day, $service_banner['display_days'])){ 
              
                 $start_date = isset($service_banner['start_date']) ? $service_banner['start_date'] : '';
@@ -387,7 +387,7 @@ class PromoNotice {
         $schedules['every_day'] = array(
             'interval' => 86400, // Every 24 hours
             // 'interval' => 5, // Every 24 hours
-            'display' => __('Every 24 hours')
+            'display' => __('Every 24 hours', 'hydra-booking')
         );
         return $schedules;
     }
@@ -435,11 +435,11 @@ class PromoNotice {
                 }
             </style>
             <div class="notice notice-success tf_black_friday_20222_admin_notice"> 
-                <a href="<?php echo esc_attr( $deal_link ); ?>" style="display: block; line-height: 0;" target="_blank" >
-                    <img  style="width: 100%;" src="<?php echo esc_attr($image_url) ?>" alt="">
+                <a href="<?php echo esc_url( $deal_link ); ?>" style="display: block; line-height: 0;" target="_blank" >
+                    <img  style="width: 100%;" src="<?php echo esc_url( $image_url ); ?>" alt="">
                 </a> 
                 <?php if( isset($dashboard_banner['dismiss_status']) && $dashboard_banner['dismiss_status'] == true): ?>
-                <button type="button" class="notice-dismiss tf_black_friday_notice_dismiss"><span class="screen-reader-text"><?php echo __('Dismiss this notice.', 'hydra-booking' ) ?></span></button>
+                <button type="button" class="notice-dismiss tf_black_friday_notice_dismiss"><span class="screen-reader-text"><?php esc_html_e('Dismiss this notice.', 'hydra-booking' ); ?></span></button>
                 <?php  endif; ?>
             </div>
             <script>
@@ -489,7 +489,7 @@ class PromoNotice {
         $promo_banner = isset($this->tfhb_promo_option['promo_banner']) ? $this->tfhb_promo_option['promo_banner'] : array();
         
 
-        $current_day = date('l'); 
+        $current_day = gmdate('l'); 
         if( isset($service_banner['enable_status']) && $service_banner['enable_status'] == true && in_array($current_day, $service_banner['display_days'])){ 
            
             $image_url = esc_url($service_banner['banner_url']);
@@ -507,11 +507,11 @@ class PromoNotice {
             ?>
            
             <div class="tfhb_promo_side_preview" style="text-align: center; overflow: hidden; margin-top: 15px; position: relative;">
-                <a href="<?php echo esc_attr($deal_link); ?>" target="_blank" >
-                    <img  style="width: 100%;" src="<?php echo esc_attr($image_url); ?>" alt="">
+                <a href="<?php echo esc_url($deal_link); ?>" target="_blank" >
+                    <img  style="width: 100%;" src="<?php echo esc_url($image_url); ?>" alt="">
                 </a>  
                 <?php if( isset($dismiss_status) && $dismiss_status == true): ?>
-                    <button type="button" class="notice-dismiss tfhb_promo_side_notice_dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                    <button type="button" class="notice-dismiss tfhb_promo_side_notice_dismiss"><span class="screen-reader-text"><?php esc_html_e('Dismiss this notice.', 'hydra-booking'); ?></span></button>
                 <?php  endif; ?>
                 
             </div>

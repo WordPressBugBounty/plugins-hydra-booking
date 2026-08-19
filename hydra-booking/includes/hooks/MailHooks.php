@@ -138,7 +138,7 @@ class MailHooks {
 		$bookingMeta = new BookingMeta();
 		$bookingMeta->add([
 			'booking_id' => $booking_id,
-			'meta_key'   => 'booking_activity',
+			'meta_key'   => 'booking_activity', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'value'      => array(
 				'datetime'    => $this->get_activity_datetime(),
 				'title'       => $activity_title,
@@ -474,8 +474,9 @@ class MailHooks {
 				continue;
 			}
 
-			$timestamp = strtotime( $part );
-			$output[]  = false !== $timestamp ? wp_date( $date_format, $timestamp ) : $part;
+			// $part is the localized date string. Parse and format in UTC so wp_date() does not shift it.
+			$timestamp = strtotime( $part . ' UTC' );
+			$output[]  = false !== $timestamp ? wp_date( $date_format, $timestamp, new \DateTimeZone( 'UTC' ) ) : $part;
 		}
 
 		if ( empty( $output ) ) {

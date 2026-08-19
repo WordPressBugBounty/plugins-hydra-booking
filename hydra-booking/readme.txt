@@ -1,10 +1,10 @@
 === Hydra Booking — Appointment Scheduling & Booking Calendar ===
 Contributors: themefic, hasanet, mdrejon, kamrul0424, jahidcse, akanda22
 Tags: appointments, booking, calendar, scheduling, appointment booking
-Requires at least: 5.4
+Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -120,7 +120,7 @@ Create and customize appointment booking forms to simplify the booking process.
 * Use form insights to enhance customer service.
 
 = 🎉 ADVANCED AVAILABILITY & SCHEDULING OPTION =
-Effortlessly set and manage your availability for appointments & schedule booking so you can focus on delivering quality service.
+Effortlessly set and manage your availability for appointments & schedule bookings so you can focus on delivering quality service.
 
 * Define weekly availability hours and days for appointments.
 * Set availability for specific date ranges or open-ended future dates.
@@ -150,8 +150,6 @@ Join our [Facebook group](https://www.facebook.com/groups/hydra-booking) to stay
 
 We provide full support on the WordPress.org forums & [Our Website](https://portal.themefic.com/support/). Check our [Support Policy](https://themefic.com/support-policy/).
 
-### Privacy Policy
-Hydra Booking uses [Appsero](https://appsero.com/) SDK to collect some telemetry data. Appsero SDK does not gather any data by default. The SDK only starts gathering basic telemetry data when a user allows it via the admin notice. Appsero SDK DOES NOT IMMEDIATELY start gathering data, without confirmation from users in any case. We use this data to troubleshoot problems faster, make product improvements & ensure a great user experience for all our users.
 
 ###  Our Plugins
 * [Travel and Hotel Booking Solution - Tourfic](https://wordpress.org/plugins/tourfic)
@@ -167,7 +165,7 @@ Hydra Booking uses [Appsero](https://appsero.com/) SDK to collect some telemetry
 == Installation ==
 
 1. Download and unzip the plugin. Upload the unzipped folder to the wp-content/plugins folder of your WordPress installation. Activate the plugin from the WordPress Plugins administration page
-2. OR, Go to WP admin panel, click 'Plugins' -> 'Add new'. In the search input box, type 'Hydra Booking'.
+2. OR, go to the WP admin panel, click 'Plugins' -> 'Add New'. In the search input box, type 'Hydra Booking'.
 3. Install and activate the plugin.
 4. Go through the Quick Setup wizard for the basic setup.
 5. Check our Documentation & YouTube videos for further instructions.
@@ -197,9 +195,9 @@ You can configure bookings as free or paid and accept payments through WooCommer
 Yes, Hydra Booking allows host assignments with specific roles and permissions for a flexible booking management experience.
 
 =  Can I migrate from other Appointment Booking plugins? =
-Currently, No. But we are working on this to offer seamless migration from Amelia plugin, BookingPress, Fluent Booking, LatePoint, WP Timetics etc.
+Currently, No. But we are working on this to offer seamless migration from the Amelia plugin, BookingPress, Fluent Booking, LatePoint, WP Timetics etc.
 
-=  Suggest some of the appointment booking plugins for WordPress & Calendar plugin WordPress? =
+=  Suggest some of the appointment booking plugins for WordPress & calendar plugins for WordPress? =
 There are several well-known appointment booking plugins available for WordPress, such as "Amelia Booking", "Simply Schedule" Appointments, and others. Hydra Booking is another powerful option that offers a flexible setup, user-friendly interface, and extensive integration capabilities with tools like WooCommerce, Zoom, and Google Calendar.
 
 == Screenshots ==
@@ -219,6 +217,13 @@ There are several well-known appointment booking plugins available for WordPress
 13. Slack, Twilio, Telegram Settings
 
 == Changelog ==
+
+= 1.2.4 – Aug 19, 2026 =
+
+- Security: Fixed reported authorization issues.
+- Security: Restricted sensitive settings to `manage_options`.
+- Security: Strengthened REST API permissions.
+- Updated: Addressed WordPress.org reported issues.
 
 = 1.2.3 – Aug 03, 2026 =
  

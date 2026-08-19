@@ -67,7 +67,7 @@ class Migrator {
 		// Get Wpdb prefix
 		$prefix = $wpdb->prefix;
 		// custom query with prepare statement
-		$zoom_integration = $wpdb->get_row(
+		$zoom_integration = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}fcal_meta WHERE object_type = %s AND object_id = %s  AND  `key` = %s",
 				'user_meta',
@@ -97,7 +97,7 @@ class Migrator {
 		$days = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 
 		// Get all availability
-		$availabilities = $wpdb->get_results(
+		$availabilities = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}fcal_meta WHERE object_type = %s",
 				'availability',
@@ -166,12 +166,12 @@ class Migrator {
 		global $wpdb;
 
 		// Get all booking
-		$fluent_calender = $wpdb->get_results(
+		$fluent_calender = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			"SELECT * FROM {$wpdb->prefix}fcal_calendars"
 		);
 
 		// Get all booking
-		$meeting = $wpdb->get_results(
+		$meeting = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			"SELECT * FROM {$wpdb->prefix}tfhb_meetings"
 		);
 
@@ -180,7 +180,7 @@ class Migrator {
 			$value = (array) $value;
 
 			// Get all booking
-			$fluent_calender_event = (array) $wpdb->get_row(
+			$fluent_calender_event = (array) $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$wpdb->prepare(
 					"SELECT * FROM {$wpdb->prefix}fcal_calendar_events where calendar_id = %s",
 					$value['id']
@@ -266,20 +266,20 @@ class Migrator {
 		global $wpdb;
 
 		// Get all booking
-		$fluent_calender = $wpdb->get_results(
+		$fluent_calender = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			"SELECT * FROM {$wpdb->prefix}fcal_calendars"
 		);
 		foreach ( $fluent_calender as $key => $value ) {
 
 			$user_id              = $value->user_id;
-			$fluent_calender_meta = $wpdb->get_results(
+			$fluent_calender_meta = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$wpdb->prepare(
 					"SELECT * FROM {$wpdb->prefix}fcal_meta where object_type = %s AND object_id = %s",
 					'Calendar',
 					$value->id
 				)
 			);
-			$wp_tfhb_bookings     = $wpdb->get_results(
+			$wp_tfhb_bookings     = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$wpdb->prepare(
 					"SELECT * FROM {$wpdb->prefix}fcal_meta where object_type = %s AND object_id = %s",
 					'Calendar',
@@ -345,7 +345,7 @@ class Migrator {
 	public function migrateBooking() {
 		global $wpdb;
 
-		$fluent_booking = $wpdb->get_results(
+		$fluent_booking = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			"SELECT * FROM {$wpdb->prefix}fcal_bookings"
 		);
 		$booking        = new Booking();

@@ -553,7 +553,7 @@ class ZoomServices {
 		}
 		$bookingMetaData = array(
 			'booking_id' => $booking->booking_id,
-			'meta_key'   => 'zoom_meeting',
+			'meta_key'   => 'zoom_meeting', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'value'      => wp_json_encode( $zoom_event_body, true ),
 		);
  

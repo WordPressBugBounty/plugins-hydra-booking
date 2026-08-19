@@ -6,6 +6,13 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Sabre\\Xml\\' => array($vendorDir . '/sabre/xml/lib'),
+    'Sabre\\VObject\\' => array($vendorDir . '/sabre/vobject/lib'),
+    'Sabre\\Uri\\' => array($vendorDir . '/sabre/uri/lib'),
+    'Sabre\\HTTP\\' => array($vendorDir . '/sabre/http/lib'),
+    'Sabre\\Event\\' => array($vendorDir . '/sabre/event/lib'),
+    'Sabre\\' => array($vendorDir . '/sabre/dav/lib'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'HydraBooking\\Services\\' => array($baseDir . '/includes/services'),
     'HydraBooking\\PostType\\' => array($baseDir . '/includes/post-type'),
     'HydraBooking\\Migration\\' => array($baseDir . '/includes/migration'),
@@ -15,5 +22,4 @@ return array(
     'HydraBooking\\DB\\' => array($baseDir . '/includes/database'),
     'HydraBooking\\App\\' => array($baseDir . '/app'),
     'HydraBooking\\Admin\\' => array($baseDir . '/admin'),
-    'Appsero\\' => array($vendorDir . '/appsero/client/src'),
 );

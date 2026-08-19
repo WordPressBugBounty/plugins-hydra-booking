@@ -56,11 +56,11 @@ class GoogleCalendar
 			return;
 		}
 
-		$start_time = strtotime($booking_data->start_time);
-		$end_time   = strtotime($booking_data->end_time);
+		$start_time = strtotime($booking_data->start_time . ' UTC');
+		$end_time   = strtotime($booking_data->end_time . ' UTC');
 
-		$start_date = gmdate('Y-m-d', strtotime($meeting_date)) . 'T' . gmdate('H:i:s', $start_time);
-		$end_date   = gmdate('Y-m-d', strtotime($meeting_date)) . 'T' . gmdate('H:i:s', $end_time);
+		$start_date = gmdate('Y-m-d', strtotime($meeting_date . ' UTC')) . 'T' . gmdate('H:i:s', $start_time);
+		$end_date   = gmdate('Y-m-d', strtotime($meeting_date . ' UTC')) . 'T' . gmdate('H:i:s', $end_time);
 
 		$event->start = array(
 			'dateTime' => $start_date,
@@ -198,9 +198,11 @@ class GoogleCalendar
 
 	public function GetAccessData($request)
 	{
-		$code  = $request instanceof \WP_REST_Request ? $request->get_param('code') : (isset($_GET['code']) ? wp_unslash($_GET['code']) : '');
-		$state = $request instanceof \WP_REST_Request ? $request->get_param('state') : (isset($_GET['state']) ? wp_unslash($_GET['state']) : '');
-		$error = $request instanceof \WP_REST_Request ? $request->get_param('error') : (isset($_GET['error']) ? wp_unslash($_GET['error']) : '');
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$code  = $request instanceof \WP_REST_Request ? $request->get_param('code') : (isset($_GET['code']) ? sanitize_text_field(wp_unslash($_GET['code'])) : '');
+		$state = $request instanceof \WP_REST_Request ? $request->get_param('state') : (isset($_GET['state']) ? sanitize_text_field(wp_unslash($_GET['state'])) : '');
+		$error = $request instanceof \WP_REST_Request ? $request->get_param('error') : (isset($_GET['error']) ? sanitize_text_field(wp_unslash($_GET['error'])) : '');
+		// phpcs:enable
 
 		$state_data = $this->get_oauth_state_data($state);
 
@@ -489,12 +491,13 @@ class GoogleCalendar
 			$booking_locations_data .= '' . $value->location . ', ';
 		}
 
-		$start_time    = strtotime($booking->start_time); // 03:45 AM
-		$end_time      = strtotime($booking->end_time); // 04:30 AM
+		$start_time    = strtotime($booking->start_time . ' UTC'); // 03:45 AM
+		$end_time      = strtotime($booking->end_time . ' UTC'); // 04:30 AM
+		$meeting_dates = explode(',', $booking->meeting_date);
+
 		foreach ($meeting_dates as $meeting_date) {
-			// Co
-			$start_date = gmdate('Y-m-d', strtotime($meeting_date)) . 'T' . gmdate('H:i:s', $start_time);
-			$end_date   = gmdate('Y-m-d', strtotime($meeting_date)) . 'T' . gmdate('H:i:s', $end_time);
+			$start_date = gmdate('Y-m-d', strtotime($meeting_date . ' UTC')) . 'T' . gmdate('H:i:s', $start_time);
+			$end_date   = gmdate('Y-m-d', strtotime($meeting_date . ' UTC')) . 'T' . gmdate('H:i:s', $end_time);
 
 
 			// Meeting location google meeting
@@ -586,7 +589,7 @@ class GoogleCalendar
 
 		$booking_meta = array(
 			'booking_id' => $booking->booking_id,
-			'meta_key'   => 'booking_calendar',
+			'meta_key'   => 'booking_calendar', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'value'      => wp_json_encode($value, true),
 		);
 
@@ -654,7 +657,7 @@ class GoogleCalendar
 			$BookingMeta->add(
 				[
 					'booking_id' => $booking->booking_id,
-					'meta_key' => 'booking_activity',
+					'meta_key' => 'booking_activity', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					'value' => array(
 						'datetime' => $this->get_activity_datetime(),
 						'title' =>  'Updated Google Calendar Event',  // translate it from Vue
@@ -671,7 +674,7 @@ class GoogleCalendar
 			$BookingMeta->add(
 				[
 					'booking_id' => $booking->booking_id,
-					'meta_key' => 'booking_activity',
+					'meta_key' => 'booking_activity', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					'value' => array(
 						'datetime' => $this->get_activity_datetime(),
 						'title' =>  'Google Calendar Event Created',  // translate it from Vue
@@ -781,7 +784,7 @@ class GoogleCalendar
 				$ActivityMeta = new BookingMeta();
 				$ActivityMeta->add(array(
 					'booking_id' => $attendee->booking_id,
-					'meta_key'   => 'booking_activity',
+					'meta_key'   => 'booking_activity', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					'value'      => array(
 						'datetime'    => $this->get_activity_datetime(),
 						'title'       => 'Updated Google Calendar Event',
@@ -857,7 +860,7 @@ class GoogleCalendar
 				$UpdateBookingMeta->add(
 					[
 						'booking_id' => ! empty($attendee) && isset($attendee->booking_id) ? $attendee->booking_id : $booking_data->id,
-						'meta_key' => 'booking_activity',
+						'meta_key' => 'booking_activity', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 						'value' => array(
 							'datetime' => $this->get_activity_datetime(),
 							'title' =>  'Updated Google Calendar Event',  // translate it from Vue
@@ -1286,12 +1289,12 @@ class GoogleCalendar
 			$event_id = $event->id;
 
 			// update event time date and time zone everyting based on reshedule details
-			$start_time    = strtotime($data->start_time); // 03:45 AM
-			$end_time      = strtotime($data->end_time); // 04:30 AM
+			$start_time    = strtotime($data->start_time . ' UTC'); // 03:45 AM
+			$end_time      = strtotime($data->end_time . ' UTC'); // 04:30 AM
 			$meeting_dates = $bookingDates[$key]; // 2024-07-10,2024-07-17,2024-07-24,2024-07-31
 
-			$start_date = gmdate('Y-m-d', strtotime($meeting_dates)) . 'T' . gmdate('H:i:s', $start_time);
-			$end_date   = gmdate('Y-m-d', strtotime($meeting_dates)) . 'T' . gmdate('H:i:s', $end_time);
+			$start_date = gmdate('Y-m-d', strtotime($meeting_dates . ' UTC')) . 'T' . gmdate('H:i:s', $start_time);
+			$end_date   = gmdate('Y-m-d', strtotime($meeting_dates . ' UTC')) . 'T' . gmdate('H:i:s', $end_time);
 
 			$event->start = array(
 				'dateTime' => $start_date,
@@ -1471,8 +1474,12 @@ class GoogleCalendar
 			}
 
 			try {
-				$start_obj = new \DateTime($busy['start']);
-				$end_obj   = new \DateTime($busy['end']);
+				// Strip fractional seconds to prevent DateTime exception on PHP < 8.0
+				$start_str = preg_replace('/\.\d+([Z+-])/i', '$1', $busy['start']);
+				$end_str   = preg_replace('/\.\d+([Z+-])/i', '$1', $busy['end']);
+
+				$start_obj = new \DateTime($start_str);
+				$end_obj   = new \DateTime($end_str);
 
 				$start_obj->setTimezone(new \DateTimeZone($selected_time_zone));
 				$end_obj->setTimezone(new \DateTimeZone($selected_time_zone));

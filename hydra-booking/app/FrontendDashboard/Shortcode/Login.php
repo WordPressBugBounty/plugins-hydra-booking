@@ -59,7 +59,7 @@ class Login {
                     <h3><?php echo esc_html(__('You are already logged in', 'hydra-booking')) ?></h3>
                     <!-- go to dashboard button -->
                     <br>
-                    <a class="tfhb-from-btn" href="<?php echo get_permalink( $tfhb_dashboard_page_id ) ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
+                    <a class="tfhb-from-btn" href="<?php echo esc_url( get_permalink( $tfhb_dashboard_page_id ) ); ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
                     
                 </div>
             </div>
@@ -134,7 +134,7 @@ class Login {
                     </div>
 
                     <div class="tfhb-frontend-from__field-item tfhb-frontend-from__field-item--center">
-                         <p><?php  echo  esc_html(__('Need an account ?', 'hydra-booking')) ?>  <a href="<?php echo get_permalink( $registration_page_id ) ?>"><?php echo esc_html(__('Sign up', 'hydra-booking')) ?> </a></p>
+                         <p><?php  echo  esc_html(__('Need an account ?', 'hydra-booking')) ?>  <a href="<?php echo esc_url( get_permalink( $registration_page_id ) ); ?>"><?php echo esc_html(__('Sign up', 'hydra-booking')) ?> </a></p>
                     </div>
                    
                 </div>
@@ -159,15 +159,17 @@ class Login {
 
         $required_fields = array( 'tfhb_login_user', 'tfhb_password' );
         // Check nonce security
-        if ( ! isset( $_POST['tfhb_login_nonce'] ) || ! wp_verify_nonce( $_POST['tfhb_login_nonce'], 'tfhb_check_login_nonce' ) ) {
+        $nonce = isset($_POST['tfhb_login_nonce']) ? sanitize_text_field(wp_unslash($_POST['tfhb_login_nonce'])) : '';
+        if ( empty($nonce) || ! wp_verify_nonce( $nonce, 'tfhb_check_login_nonce' ) ) {
             $response['message'] = esc_html(__( 'Sorry, your nonce did not verify.', 'hydra-booking' ));
             wp_send_json( $response );
         } else {
 
             foreach ( $required_fields as $required_field ) {
-                if ( $required_field === 'tfhb_login_user' && empty( $_POST[ $required_field ] ) ) {
+                $field_val = isset($_POST[$required_field]) ? sanitize_text_field(wp_unslash($_POST[$required_field])) : '';
+                if ( $required_field === 'tfhb_login_user' && empty( $field_val ) ) {
                     $response['fieldErrors'][ $required_field] = esc_html(__( 'Username or email is required.', 'hydra-booking' ));
-                } elseif ( $required_field === 'tfhb_password' && empty( $_POST[ $required_field ] ) ) {
+                } elseif ( $required_field === 'tfhb_password' && empty( $field_val ) ) {
                     $response['fieldErrors'][ $required_field] = esc_html(__( 'Password is required.', 'hydra-booking' ));
                 }
             }
@@ -175,8 +177,8 @@ class Login {
 
         if ( ! $response['fieldErrors'] ) {
             // Get data from form
-            $username = sanitize_text_field( $_POST['tfhb_login_user'] );
-            $password = sanitize_text_field( $_POST['tfhb_password'] );
+            $username = isset($_POST['tfhb_login_user']) ? sanitize_text_field( wp_unslash($_POST['tfhb_login_user']) ) : '';
+            $password = isset($_POST['tfhb_password']) ? sanitize_text_field( wp_unslash($_POST['tfhb_password']) ) : '';
 
             // Set them in an array
             $credential = array(

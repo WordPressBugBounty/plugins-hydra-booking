@@ -1,21 +1,27 @@
 <?php
+if (! defined('ABSPATH')) {
+	exit;
+}
 
-if ( ! function_exists( 'tfhb_print_r' ) ) {
-	function tfhb_print_r( $data ) {
+if (! function_exists('tfhb_print_r')) {
+	function tfhb_print_r($data)
+	{
 		echo '<pre>';
-		print_r( $data );
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+		print_r($data);
 		echo '</pre>';
 		// exit;
 	}
 }
 
 
-function tfhb_character_limit_callback( $str, $limit, $dots = true ) {
-	if ( strlen( $str ) > $limit ) {
-		if ( $dots == true ) {
-			return substr( $str, 0, $limit ) . '...';
+function tfhb_character_limit_callback($str, $limit, $dots = true)
+{
+	if (strlen($str) > $limit) {
+		if ($dots == true) {
+			return substr($str, 0, $limit) . '...';
 		} else {
-			return substr( $str, 0, $limit );
+			return substr($str, 0, $limit);
 		}
 	} else {
 		return $str;
@@ -28,8 +34,9 @@ function tfhb_character_limit_callback( $str, $limit, $dots = true ) {
  * @return string
  */
 
- function tfhb_is_pro_active() {
-	if ( class_exists( 'TFHB_INIT_PRO' ) ) { 
+function tfhb_is_hydra_booking_pro_active()
+{
+	if (class_exists('TFHB_INIT_PRO')) {
 		return true;
 	} else {
 		return false;
@@ -43,4 +50,3 @@ function tfhb_character_limit_callback( $str, $limit, $dots = true ) {
  * @param array $data
  * @return string
  */
- 

@@ -43,7 +43,7 @@ class DateTimeController extends \DateTimeZone
 		$timeZoneName = $currentTimeZone->getName();
 
 		// Output the time zone name
-		echo $timeZoneName;
+		echo esc_html($timeZoneName);
 	}
 
 	public function convert_time_based_on_timezone($meeting_date,  $time, $time_zone, $selected_time_zone, $time_format = '')

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
      */
 
      function tfhb_utm_generator( $url, $utm_params = array() ) {
-        $host_url = parse_url( get_site_url(), PHP_URL_HOST );
+        $host_url = wp_parse_url( get_site_url(), PHP_URL_HOST );
         $utm_params = array_merge( array(
             'utm_source'   => 'tfhb_' . $host_url,
             'utm_medium'   => 'plugin',

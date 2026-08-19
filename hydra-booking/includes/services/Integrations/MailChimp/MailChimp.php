@@ -109,22 +109,20 @@ class MailChimp {
 
 		$url = "https://$server_prefix.api.mailchimp.com/3.0/$path";
 
-		$curl = curl_init( $url );
-		curl_setopt( $curl, CURLOPT_URL, $url );
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-
-		$headers = array(
-			"Authorization: Bearer $api_key",
+		$args = array(
+			'headers' => array(
+				'Authorization' => "Bearer $api_key",
+			),
+			'sslverify' => false,
 		);
-		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
-		// for debug only!
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, false );
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, false );
 
-		$resp = curl_exec( $curl );
-		curl_close( $curl );
+		$response = wp_remote_get( $url, $args );
 
-		return $resp;
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		return wp_remote_retrieve_body( $response );
 	}
 
 	/* Add members to mailchimp */

@@ -8,7 +8,7 @@ class Mailer {
  
 		
 		// Clean the subject line - remove HTML tags and decode entities
-		$subject = strip_tags($subject);
+		$subject = wp_strip_all_tags($subject);
 		$subject = html_entity_decode($subject, ENT_QUOTES, 'UTF-8');
 
 		// Normalize headers to array (some callers pass a string)

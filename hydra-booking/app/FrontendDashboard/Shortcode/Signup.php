@@ -66,7 +66,7 @@ class Signup {
                     <!-- go to dashboard button -->
 
                     <br>
-                    <a class="tfhb-from-btn" href="<?php echo get_permalink( $tfhb_dashboard_page_id ) ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
+                    <a class="tfhb-from-btn" href="<?php echo esc_url( get_permalink( $tfhb_dashboard_page_id ) ); ?>"><?php echo esc_html(__('Go to dashboard', 'hydra-booking')) ?></a>
                     
                 </div>
             </div>
@@ -249,8 +249,9 @@ class Signup {
         ];
 
         $field = [];
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
         foreach ( $_POST as $key => $value ) {
-            $field[ $key ] = sanitize_text_field( $value );
+            $field[ $key ] = sanitize_text_field( wp_unslash($value) );
         }
 
         $user_role = 'tfhb_host';
@@ -446,6 +447,7 @@ class Signup {
             'title'          => esc_html__( 'Please click the button below to activate your account', 'hydra-booking' ),
             'body_content'   => '<p><a target="_blank" href="' . $url . '" style="display:inline-block;padding:10px 20px;background-color:#273F2B;color:#fff;text-decoration:none;border-radius:5px;">' . esc_html__( 'Activate Account', 'hydra-booking' ) . '</a></p>',
             'brand_name'     => get_bloginfo( 'name' ),
+            /* translators: %s: Site name */
 			'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
         ]); 
         
@@ -475,6 +477,7 @@ class Signup {
             'recipient_name' => '' . esc_html__( 'Hi', 'hydra-booking' ) . ' ' . $name . '',
             'title'          => esc_html__( 'Your account has been successfully activated', 'hydra-booking' ), 
             'brand_name'     => get_bloginfo( 'name' ),
+            /* translators: %s: Site name */
 			'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
         ]);  
         Mailer::send( $email, $subject, $body, $headers );

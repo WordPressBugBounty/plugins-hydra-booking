@@ -10,7 +10,6 @@ use HydraBooking\Admin\Controller\AuthController;
 use HydraBooking\Admin\Controller\DashboardController;
 use HydraBooking\Services\Integrations\GoogleCalendar\GoogleCalendar;
 use HydraBooking\Admin\Controller\SetupWizard;
-use HydraBooking\Admin\Controller\ImportExport;
 use HydraBooking\Admin\Controller\Notification;
 use HydraBooking\Admin\Controller\FrontendDashboard;
 use HydraBooking\Admin\Controller\licenseController;
@@ -39,7 +38,6 @@ class RouteController
 		$this->create(new GoogleCalendar(), 'create_endpoint');
 		$this->create(new DashboardController(), 'create_endpoint');
 		$this->create(new SetupWizard(), 'create_endpoint');
-		// $this->create( new ImportExport(), 'create_endpoint' );
 		$this->create(new Notification(), 'create_endpoint');
 		$this->create(new FrontendDashboard(), 'create_endpoint');
 		$this->create(new licenseController(), 'create_endpoint');
@@ -53,7 +51,10 @@ class RouteController
 
 	public function tfhb_manage_options_permission()
 	{
-		return current_user_can('tfhb_manage_options');
+		if (current_user_can('manage_options')) {
+			return true;
+		}
+		return current_user_can('tfhb_manage_settings');
 	}
 	public function tfhb_manage_integrations_permission()
 	{
@@ -75,5 +76,9 @@ class RouteController
 			return true;
 		}
 		return current_user_can('tfhb_manage_settings');
+	}
+	public function tfhb_manage_admin_only_permission()
+	{
+		return current_user_can('manage_options');
 	}
 }

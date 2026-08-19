@@ -34,7 +34,7 @@ class licenseController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetLicenseData' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		); 
         register_rest_route(
@@ -43,7 +43,7 @@ class licenseController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateLicenseData' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		); 
 
@@ -53,7 +53,7 @@ class licenseController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'DeactiveLicense' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		); 
 	}
@@ -116,7 +116,7 @@ class licenseController {
         update_option($lic_key_name,$license_key) || add_option($lic_key_name,$license_key);
         update_option($main_lic_key,$license_key) || add_option($main_lic_key,$license_key);
         update_option("HydraBooking_lic_email",$license_email) || add_option("HydraBooking_lic_email",$license_email);
-        update_option('_site_transient_update_plugins',''); 
+
         $HydraBooking = new HydraBooking();
      
         $HydraBooking->response_obj;  
@@ -158,7 +158,7 @@ class licenseController {
         if(HydraBookingBase::remove_license_key(TFHB_BASE_FILE,$message)){
             update_option($lic_key_name,"") || add_option($lic_key_name,"");
             update_option($main_lic_key,"") || add_option($main_lic_key,"");
-            update_option('_site_transient_update_plugins','');
+
         }
 
         wp_send_json_success( array( 
@@ -211,7 +211,10 @@ class licenseController {
             if (!empty($response->license_title) && stripos($response->license_title, 'free') !== false) {
                 self::$cached_result['license_type'] = 'free';
             } else {
-                if ( is_plugin_active( 'hydra-booking-pro/hydra-booking-pro.php'  ) ) {
+                if ( ! function_exists( 'is_plugin_active' ) ) {
+                    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+                }
+                if ( is_plugin_active( 'hydra-booking-pro/hydra-booking-pro.php' ) ) {
                     self::$cached_result['license_type'] = 'pro';
                 }else{
                     self::$cached_result['license_type'] = false; 

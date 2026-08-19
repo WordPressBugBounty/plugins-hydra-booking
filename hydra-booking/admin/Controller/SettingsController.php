@@ -36,7 +36,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetGeneralSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -45,7 +45,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateGeneralSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		// Availability Routes
@@ -55,7 +55,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetAvailabilitySettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -64,7 +64,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateAvailabilitySettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -74,7 +74,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'DeleteAvailabilitySettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -95,7 +95,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'MarkAsDefault' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		// Intrigation
@@ -106,7 +106,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetIntegrationSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -116,7 +116,8 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateIntegrationSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				// SECURITY FIX v1.2.4: Payment credentials must only be writable by administrators.
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_admin_only_permission'),
 			)
 		);
 
@@ -127,7 +128,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetNotificationSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -136,7 +137,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateNotificationSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -147,7 +148,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetHostsSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -156,7 +157,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateGetHostsSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -167,7 +168,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'GetAppearanceSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -176,7 +177,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'UpdateAppearanceSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -187,7 +188,7 @@ class SettingsController {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'getShortcodeSettings' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 		register_rest_route(
@@ -196,7 +197,7 @@ class SettingsController {
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'generateShortPreview' ),
-				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_options_permission'),
+				'permission_callback' =>  array(new RouteController() , 'tfhb_manage_settings_permission'),
 			)
 		);
 
@@ -253,7 +254,10 @@ class SettingsController {
 
 
 		// senitaized
-		$_tfhb_general_settings['admin_email']                               = sanitize_email( $request['admin_email'] );
+		// Only real administrators may change the admin email address.
+		if ( current_user_can( 'manage_options' ) ) {
+			$_tfhb_general_settings['admin_email'] = sanitize_email( $request['admin_email'] );
+		}
 		$_tfhb_general_settings['time_zone']                               = sanitize_text_field( $request['time_zone'] );
 		$_tfhb_general_settings['time_format']                             = sanitize_text_field( $request['time_format'] );
 		$_tfhb_general_settings['week_start_from']                         = sanitize_text_field( $request['week_start_from'] );
@@ -872,12 +876,15 @@ class SettingsController {
 		$request = json_decode( file_get_contents( 'php://input' ), true );
 
 		// activate the plugin
-		$plugin_slug = sanitize_text_field( wp_unslash( $_POST['slug'] ) );
-		$file_name   = sanitize_text_field( wp_unslash( $_POST['file_name'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$plugin_slug = isset($_POST['slug']) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$file_name   = isset($_POST['file_name']) ? sanitize_text_field( wp_unslash( $_POST['file_name'] ) ) : '';
 		$result      = activate_plugin( $plugin_slug . '/' . $file_name . '.php' );
 
 		// install plugins
 		// install woocommerce plugins
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 			// install woocommerce plugins
 			$plugins = array(
@@ -1183,7 +1190,7 @@ class SettingsController {
 					 
 					$count = count( array_filter( array_map( function($item) use ($baseName) { return $item['name'] == $baseName; }, $_tfhb_hosts_settings['others_information']['fields'] ) ) );
 					if ( $count > 0 ) {
-						$uniqueName = $baseName. '_'. substr( md5( mt_rand() ), 0, 2 );
+						$uniqueName = $baseName. '_'. substr( md5( wp_rand() ), 0, 2 );
 					} else {
 						$uniqueName = $baseName;
 					} 

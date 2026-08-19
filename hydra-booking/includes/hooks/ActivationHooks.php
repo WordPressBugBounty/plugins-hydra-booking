@@ -47,7 +47,9 @@ class ActivationHooks {
 					'read'                            => true, // true allows this capability 
 					'upload_files'                    => true, // true allows this capability 
 					// Custom Capabilities
-					'tfhb_manage_options'             => true, // true allows this capability.
+					// SECURITY FIX v1.2.4: tfhb_manage_options intentionally removed.
+					// Admin-only endpoints now use tfhb_manage_admin_only_permission which
+					// checks the real WordPress manage_options capability.
 					'tfhb_manage_dashboard'           => true, // true allows this capability.
 					'tfhb_manage_meetings'            => true, // true allows this capability.
 					'tfhb_manage_booking'             => true, // true allows this capability.

@@ -176,7 +176,8 @@ class FrontendDashboard {
 
         $required_fields = array( 'tfhb_forgot_user');
         // Check nonce security
-        if ( ! isset( $_POST['tfhb_forgot_nonce'] ) || ! wp_verify_nonce( $_POST['tfhb_forgot_nonce'], 'tfhb_check_forgot_nonce' ) ) {
+        $nonce = isset($_POST['tfhb_forgot_nonce']) ? sanitize_text_field(wp_unslash($_POST['tfhb_forgot_nonce'])) : '';
+        if ( empty($nonce) || ! wp_verify_nonce( $nonce, 'tfhb_check_forgot_nonce' ) ) {
             $response['message'] = esc_html__( 'Sorry, your nonce did not verify.', 'hydra-booking' );
             wp_send_json( $response );
         } else {
@@ -190,10 +191,11 @@ class FrontendDashboard {
 
         // Check user exist using username or email or not
         if ( empty( $response['fieldErrors'] ) ) { 
-            $user = get_user_by( 'login', sanitize_text_field( $_POST['tfhb_forgot_user'] ) );
+            $forgot_user = isset($_POST['tfhb_forgot_user']) ? sanitize_text_field(wp_unslash($_POST['tfhb_forgot_user'])) : '';
+            $user = get_user_by( 'login', $forgot_user );
             // if user not found then check email
             if(!$user){ 
-                $user = get_user_by( 'email', sanitize_text_field( $_POST['tfhb_forgot_user'] ) );
+                $user = get_user_by( 'email', $forgot_user );
             }
             if ( ! $user ) {
                 $response['fieldErrors'][ 'tfhb_forgot_user' ] = esc_html__( 'User not found.', 'hydra-booking' );
@@ -223,7 +225,8 @@ class FrontendDashboard {
                     'title'          => esc_html__( 'You have requested to reset your password.', 'hydra-booking' ),
                     'body_content'   => '<p><a target="_blank" href="' . $link . '" style="display:inline-block;padding:10px 20px;background-color:#273F2B;color:#fff;text-decoration:none;border-radius:5px;">' . esc_html__( 'Reset Password', 'hydra-booking' ) . '</a></p> ',
                     'brand_name'     => get_bloginfo( 'name' ),
-                    'footer_text'    => esc_html__( 'This is an automated email from ' . get_bloginfo( 'name' ) . ', please do not reply.', 'hydra-booking' ),
+                    /* translators: %s: Site name */
+                    'footer_text'    => sprintf( esc_html__( 'This is an automated email from %s, please do not reply.', 'hydra-booking' ), get_bloginfo( 'name' ) ),
                 ]);
                  
 
@@ -256,21 +259,23 @@ class FrontendDashboard {
             'success' => false,
         ]; 
         $required_fields = array( 'tfhb_password', 'tfhb_confirm_password' );
+
+        // Nonce check
+        $nonce = isset($_POST['tfhb_reset_password_nonce']) ? sanitize_text_field(wp_unslash($_POST['tfhb_reset_password_nonce'])) : '';
+        if ( empty($nonce) || ! wp_verify_nonce( $nonce, 'tfhb_check_reset_password_nonce' ) ) {
+            $response['message'] = esc_html__( 'Sorry, your nonce did not verify.', 'hydra-booking' );
+            wp_send_json( $response );
+            die();
+        }
+
         $field = [];
         foreach ( $_POST as $key => $value ) {
-            $field[ $key ] = sanitize_text_field( $value );
+            $field[ $key ] = sanitize_text_field( wp_unslash($value) );
         }
 
         $frontend_dashboard_settings = get_option('_tfhb_frontend_dashboard_settings');
         $settings = !empty($frontend_dashboard_settings) ? $frontend_dashboard_settings : array();
         $login_page_id =  isset($settings['login']['login_page']) && !empty($settings['login']['login_page']) ? $settings['login']['login_page'] :  get_option( 'tfhb_login_page_id' );
-
-        // Nonce check
-        if ( ! isset( $field['tfhb_reset_password_nonce'] ) || ! wp_verify_nonce( $field['tfhb_reset_password_nonce'], 'tfhb_check_reset_password_nonce' ) ) {
-            $response['message'] = esc_html__( 'Sorry, your nonce did not verify.', 'hydra-booking' );
-            wp_send_json( $response );
-            die();
-        }
 
         // Validate reset key and user
         if ( empty( $field['code'] ) ) {
@@ -327,8 +332,9 @@ class FrontendDashboard {
             reset_password( $user, $field['tfhb_password'] );
             $response['success'] = true;
             $response['message'] = sprintf(
+                /* translators: %s: Login page URL */
                 __( 'Password changed successfully. You can <a href="%s">login here</a>.', 'hydra-booking' ),
-                get_permalink( $login_page_id )
+                esc_url( get_permalink( $login_page_id ) )
             );
         }
 
@@ -371,11 +377,11 @@ class FrontendDashboard {
                 $get_login_page_url = get_permalink( $login_page_id );
                 // Redirect to the login page if a URL exists
                 if (!empty($get_login_page_url)) {
-                    wp_redirect($get_login_page_url);
+                    wp_safe_redirect($get_login_page_url);
                     exit; // Prevent further script execution after redirection
                 } else {
                     // Handle the case where the login page URL is not set
-                    wp_die( __( 'Login page URL not found. Please configure the settings.', 'hydra-booking' ) );
+                    wp_die( esc_html__( 'Login page URL not found. Please configure the settings.', 'hydra-booking' ) );
                 }
 
             }
@@ -456,6 +462,7 @@ class FrontendDashboard {
 		$page_found = null;
 
 		if ( $slug ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_name = %s LIMIT 1;", $slug ) );
 		}
         
@@ -538,7 +545,7 @@ class FrontendDashboard {
             }else{ 
                 $redirect_url = esc_url($after_login_redirect_custom);
             }
-            wp_redirect($redirect_url);
+            wp_safe_redirect($redirect_url);
             exit; // Prevent further script execution after redirection
              
         }

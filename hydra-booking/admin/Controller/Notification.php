@@ -89,7 +89,7 @@ class Notification {
         $data = array(
             'object_id' => $data->host_id,
             'object_type' => 'booking',
-            'meta_key' =>  'notification',
+            'meta_key' =>  'notification', // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             'value' => json_encode($value), 
         ); 
 

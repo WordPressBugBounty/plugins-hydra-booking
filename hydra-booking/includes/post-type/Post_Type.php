@@ -75,6 +75,7 @@ class Post_Type {
 			'items_list'            => sprintf( esc_html__( '%s list', 'hydra-booking' ), $post_args['name'] )
 		);
 
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 		$labels = apply_filters( $post_args['slug'] . '_labels', $labels );
 
 		$args = array(
@@ -96,6 +97,7 @@ class Post_Type {
 			'supports'           => $post_args['supports'],
 		);
 
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 		$args = apply_filters( $post_args['slug'] . '_args', $args );
 		register_post_type( $post_args['slug'], $args );
 	}
