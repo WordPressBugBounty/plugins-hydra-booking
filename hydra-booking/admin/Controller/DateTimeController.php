@@ -282,12 +282,12 @@ class DateTimeController extends \DateTimeZone
 			function ($slot) use ($disabled_times, $selected_date, $selected_time_zone, $slot_format, $buffer_time_before, $buffer_time_after) {
 				$norm_date = str_replace('/', '-', $selected_date);
 				$slot_start = \DateTime::createFromFormat(
-					$slot_format,
+					'!' . $slot_format,
 					$norm_date . ' ' . $slot['start'],
 					new \DateTimeZone($selected_time_zone)
 				);
 				$slot_end = \DateTime::createFromFormat(
-					$slot_format,
+					'!' . $slot_format,
 					$norm_date . ' ' . $slot['end'],
 					new \DateTimeZone($selected_time_zone)
 				);

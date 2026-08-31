@@ -204,8 +204,11 @@ class HydraBookingShortcode
 				$availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array();
 			}
 		} else {
-
 			$availability_data = isset($data['availability_custom']) ? $data['availability_custom'] : array();
+		}
+
+		if (isset($availability_data['date_slots']) && is_array($availability_data['date_slots'])) {
+			$availability_data['date_slots'] = array_values($availability_data['date_slots']);
 		}
 		// Availability Range
 		$availability_range      = isset($data['availability_range']) ? $data['availability_range'] : array();

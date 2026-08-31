@@ -405,6 +405,8 @@ class SettingsController {
 
 		if(empty($request['date_slots'] )){
 			$availability['date_slots'] = array();
+		} elseif(isset($availability['date_slots']) && is_array($availability['date_slots'])) {
+			$availability['date_slots'] = array_values($availability['date_slots']);
 		}
 
 		if ( $availability['id'] == 0 ) {

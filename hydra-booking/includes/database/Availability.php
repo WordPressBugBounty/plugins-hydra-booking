@@ -62,6 +62,9 @@ class Availability {
 		if(isset($request['date_status'])){
 			$request['date_status'] = maybe_serialize( $request['date_status'] );
 		} 
+		if(isset($request['date_slots'])){
+			$request['date_slots'] = maybe_serialize( $request['date_slots'] );
+		} 
  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 		// insert availability
 		$result = $wpdb->insert(
@@ -86,6 +89,16 @@ class Availability {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . $this->table;
+
+		if(isset($request['time_slots'])){
+			$request['time_slots'] = maybe_serialize( $request['time_slots'] );
+		}
+		if(isset($request['date_status'])){
+			$request['date_status'] = maybe_serialize( $request['date_status'] );
+		}
+		if(isset($request['date_slots'])){
+			$request['date_slots'] = maybe_serialize( $request['date_slots'] );
+		}
 
 		$id = $request['id'];
 		unset( $request['id'] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.SlowDBQuery.slow_db_query_meta_key

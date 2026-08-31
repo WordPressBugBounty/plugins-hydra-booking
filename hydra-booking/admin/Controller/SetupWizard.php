@@ -126,6 +126,11 @@ class SetupWizard {
 				$availabilityDataSingle['date_slots'][ $key ]['times'][ $key2 ]['end']   = sanitize_text_field( $value2['end'] );
 			}
 		}
+		
+		if (isset($availabilityDataSingle['date_slots']) && is_array($availabilityDataSingle['date_slots'])) {
+			$availabilityDataSingle['date_slots'] = array_values($availabilityDataSingle['date_slots']);
+		}
+		
 		$availabilityDataSingle['id'] = $new_id;
 		$availability_settings[]      = $availabilityDataSingle;
 
