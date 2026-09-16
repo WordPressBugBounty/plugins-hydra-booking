@@ -630,8 +630,10 @@ class HydraBookingShortcode
 			// Require a nonce bound to this specific booking hash, mirroring the cancel flow,
 			// so possessing the site-wide public nonce alone is not enough to reschedule a booking.
 			$reschedule_nonce = isset($_POST['reschedule_nonce']) ? sanitize_text_field(wp_unslash($_POST['reschedule_nonce'])) : '';
-			$reschedule_nonce_valid = ! empty($reschedule_nonce) && ! empty($meeting_hash)
-				&& wp_verify_nonce($reschedule_nonce, 'tfhb_reschedule_' . $meeting_hash);
+			$original_booking_hash = isset($_POST['booking_hash']) ? sanitize_text_field(wp_unslash($_POST['booking_hash'])) : '';
+			
+			$reschedule_nonce_valid = ! empty($reschedule_nonce) && ! empty($original_booking_hash)
+				&& wp_verify_nonce($reschedule_nonce, 'tfhb_reschedule_' . $original_booking_hash);
 
 			if (! $reschedule_nonce_valid) {
 				wp_send_json_error(array('message' => esc_html(__('Nonce verification failed', 'hydra-booking'))));
@@ -1150,13 +1152,15 @@ class HydraBookingShortcode
 
 
 
+		$user_id = get_current_user_id();
+		$cancelled_by = $user_id ? $user_id : '';
+
 		$attendee_data = array(
 			'id'           => $attendeeBooking->id,
 			'reason'       => $reason,
 			'status'       => 'canceled',
-			'cancelled_by' => 'attendee',
+			'cancelled_by' => $cancelled_by,
 		);
-
 
 		$Attendee->update($attendee_data);
 
@@ -1184,13 +1188,22 @@ class HydraBookingShortcode
 			$booking->update(
 				array(
 					'id' => $attendeeBooking->booking_id,
-					'status' => 'canceled'
+					'status' => 'canceled',
+					'cancelled_by' => $cancelled_by
 				)
 			);
 		}
 
+		$attendeeBookingUpdated = $Attendee->getAttendeeWithBooking( 
+			array(
+				array('id', '=', $attendeeBooking->id),
+			),
+			1,
+			'DESC'
+		);
+
 		// Before Booking After Cancel
-		do_action('hydra_booking/after_booking_canceled', $attendeeBooking);
+		do_action('hydra_booking/after_booking_canceled', $attendeeBookingUpdated);
 
 		$response['message'] = esc_html(__('Booking Cancelled Successfully', 'hydra-booking'));
 

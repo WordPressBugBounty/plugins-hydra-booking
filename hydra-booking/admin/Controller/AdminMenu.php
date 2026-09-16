@@ -20,6 +20,7 @@ class AdminMenu {
 
 		$this->auth = new AuthController();
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_head', array( $this, 'admin_menu_css' ) );
 	}
 
 
@@ -97,6 +98,16 @@ class AdminMenu {
 
 		// remove Sub Menu
 		remove_submenu_page( 'hydra-booking', 'hydra-booking' );
+
+		// Add Upgrade to Pro link if Pro version is not active
+		if ( ! function_exists( 'tfhb_is_hydra_booking_pro_active' ) || ! tfhb_is_hydra_booking_pro_active() ) {
+			global $submenu;
+			$submenu['hydra-booking'][] = array(
+				'<span class="tfhb-pro-upgrade-btn"><span class="dashicons dashicons-star-filled"></span> Upgrade to Pro</span>',
+				'tfhb_manage_options',
+				'https://hydrabooking.com/'
+			);
+		}
 	}
 
 	public function hydra_booking_page() {
@@ -105,6 +116,37 @@ class AdminMenu {
 	public function hydra_booking_access() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'hydra-booking' ) );
+		}
+	}
+
+	public function admin_menu_css() {
+		if ( ! function_exists( 'tfhb_is_hydra_booking_pro_active' ) || ! tfhb_is_hydra_booking_pro_active() ) {
+			?>
+			<style>
+				.tfhb-pro-upgrade-btn {
+					color: #fff !important;
+					background: var(--tfhb-admin-primary-default, #2E6B38) !important;
+					padding: 6px 12px;
+					border-radius: 8px;
+					display: inline-flex;
+					align-items: center;
+					gap: 3px;
+					font-weight: 700;
+					font-size: 11px;
+					transition: 0.3s;
+				}
+				.tfhb-pro-upgrade-btn:hover {
+					background: var(--tfhb-admin-primary-hover, #4C9959) !important;
+					color: #fff !important;
+				}
+				.tfhb-pro-upgrade-btn .dashicons {
+					font-size: 12px;
+					width: 12px;
+					height: 12px;
+					line-height: 12px;
+				}
+			</style>
+			<?php
 		}
 	}
 }

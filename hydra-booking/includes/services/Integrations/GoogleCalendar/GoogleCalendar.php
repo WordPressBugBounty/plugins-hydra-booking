@@ -493,7 +493,7 @@ class GoogleCalendar
 
 		$start_time    = strtotime($booking->start_time . ' UTC'); // 03:45 AM
 		$end_time      = strtotime($booking->end_time . ' UTC'); // 04:30 AM
-		$meeting_dates = explode(',', $booking->meeting_date);
+		$meeting_dates = ! empty($booking->meeting_dates) ? explode(',', $booking->meeting_dates) : array();
 
 		foreach ($meeting_dates as $meeting_date) {
 			$start_date = gmdate('Y-m-d', strtotime($meeting_date . ' UTC')) . 'T' . gmdate('H:i:s', $start_time);

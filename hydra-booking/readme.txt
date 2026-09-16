@@ -2,9 +2,9 @@
 Contributors: themefic, hasanet, mdrejon, kamrul0424, jahidcse, akanda22
 Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 6.8
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -218,11 +218,14 @@ There are several well-known appointment booking plugins available for WordPress
 
 == Changelog ==
 
-= 1.2.5 – Aug 31, 2026 =
+= 1.2.6 – Sep 16, 2026 =
+- Fixed: Availability and Outlook sync issues.
+- Fixed: Availability time and timezone issues.
+- Fixed: Outlook event blocking precision issue.
 
+= 1.2.5 – Aug 31, 2026 =
 - Fixed: Resolved availability and Outlook sync issues.
 - Fixed: Resolved an issue where dates were not displaying.
-
 
 = 1.2.4 – Aug 19, 2026 =
 

@@ -81,6 +81,8 @@ class Enqueue {
 
 		// enqueue styles
 		wp_enqueue_style( 'tfhb-admin-style', TFHB_URL . 'assets/admin/css/tfhb-admin-style.css', array(), time() );
+
+
  
 		if(defined('TFHB_DEV_MODE') && TFHB_DEV_MODE === true){
 			wp_enqueue_script( 'tfhb-admin-core', apply_filters('tfhb_admin_core_script', 'http://localhost:5173/src/main.js'), array(), time(), true ); 

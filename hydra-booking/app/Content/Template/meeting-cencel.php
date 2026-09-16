@@ -93,7 +93,22 @@ $display_date_format = $helper->get_date_format_from_settings( 'l, F j' );
 				</div> 
 				<?php if ( $data->status == 'canceled' ) : ?>
 					<div class="tfhb-notice notice-error" > 
-						<span><?php echo esc_html__( 'This meeting has been cancelled by the ', 'hydra-booking' ) . esc_attr($data->cancelled_by) . '.'; ?></span>
+						<?php 
+							$cancelled_text = 'the host';
+							if (is_numeric($data->cancelled_by)) {
+								$user = get_userdata($data->cancelled_by);
+								if ($user) {
+									$cancelled_text = $user->display_name;
+								}
+							} elseif (!empty($data->cancelled_by)) {
+								if ($data->cancelled_by === 'attendee' || $data->cancelled_by === 'host') {
+									$cancelled_text = 'the ' . $data->cancelled_by;
+								} else {
+									$cancelled_text = $data->cancelled_by;
+								}
+							}
+						?>
+						<span><?php echo esc_html__( 'This meeting has been cancelled by ', 'hydra-booking' ) . esc_attr($cancelled_text) . '.'; ?></span>
 					</div>
 				<?php else : ?>
 				<div class="hidden-field"> 

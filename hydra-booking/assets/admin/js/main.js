@@ -65,5 +65,9 @@
         });
     });
     
+    $(document).ready(function() {
+        // Open Upgrade to Pro link in new tab
+        $('a[href="https://hydrabooking.com/"]').attr('target', '_blank');
+    });
 
 })(jQuery);

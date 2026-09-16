@@ -662,7 +662,30 @@ class BookingController {
 			}
 		}
 
-		// 
+		// Trigger notifications based on the new status
+		$AttendeeModel = new Attendees();
+		foreach ( $single_booking->attendees as $attendee ) {
+			$attendeeBooking = $AttendeeModel->getAttendeeWithBooking(
+				array(
+					array('id', '=', $attendee->id),
+				),
+				1,
+				'DESC'
+			);
+
+			if ( ! empty( $attendeeBooking ) ) {
+				if ( 'confirmed' === $select_status || 'approved' === $select_status ) {
+					do_action( 'hydra_booking/after_booking_confirmed', $attendeeBooking );
+				} elseif ( 'pending' === $select_status ) {
+					do_action( 'hydra_booking/after_booking_pending', $attendeeBooking );
+				} elseif ( 'canceled' === $select_status ) {
+					do_action( 'hydra_booking/after_booking_canceled', $attendeeBooking );
+				} elseif ( 'schedule' === $select_status || 'reschedule' === $select_status || 'rebook' === $select_status ) {
+					do_action( 'hydra_booking/after_booking_schedule', $booking_id, $attendeeBooking );
+				}
+			}
+		}
+
 		// return witn success message
 		$data = array(
 			'status'    => true,
@@ -1652,12 +1675,15 @@ class BookingController {
 			return new \WP_Error( 'rest_forbidden', __( 'You are not allowed to access this booking.', 'hydra-booking' ), array( 'status' => 403 ) );
 		}
 
+		$user_id = get_current_user_id();
+		$cancelled_by = $user_id ? $user_id : '';
+
 		 $update_data = array(
 
 			'id' => $attendee_id,
 			'status' => $status,
 			'reason' => $cancel_reason,
-			'cancelled_by' => 'host',
+			'cancelled_by' => $cancelled_by,
 		);
 
 		$attendeeUpdate = $Attendee->update( $update_data );
@@ -1738,8 +1764,16 @@ class BookingController {
 		$booking = new Booking();
 		// Booking Update
 		 $booking->update( $data );
- 
-  
+		 
+		if ( 'canceled' === $data['status'] ) {
+			$user_id = get_current_user_id();
+			$cancelled_by = $user_id ? $user_id : '';
+			$booking->update( array(
+				'id' => $data['id'],
+				'status' => 'canceled',
+				'cancelled_by' => $cancelled_by
+			) );
+		}
 		 
 		$where = array(
 			array('id', '=', $request['id']),
