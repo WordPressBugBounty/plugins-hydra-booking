@@ -96,17 +96,19 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 
 		<div class="tfhb-short-description">
             <?php 
-            if(!empty($meeting['description']) && strlen($meeting['description']) > 100 ){
-                echo wp_kses_post(wp_strip_all_tags(tfhb_character_limit_callback($meeting['description'], 100))) . '<span class="tfhb-see-description">'.esc_html(__('See more', 'hydra-booking')).'</span>';
-            }else{
-                echo ! empty( $meeting['description'] ) ? '<p>' . wp_kses_post( $meeting['description'] ) . '</p>' : ''; 
+            if (!empty($meeting['description']) && mb_strlen(wp_strip_all_tags($meeting['description'])) > 100) {
+                echo '<p>' . esc_html(tfhb_character_limit_callback($meeting['description'], 100)) . ' <span class="tfhb-see-description">' . esc_html(__('See more', 'hydra-booking')) . '</span></p>';
+            } else {
+                echo !empty($meeting['description']) ? '<p>' . wp_kses_post($meeting['description']) . '</p>' : ''; 
             }
             ?>
         </div>
         <div class="tfhb-full-description">
             <?php 
-                echo ! empty( $meeting['description'] ) ? '<p>' . wp_kses_post( $meeting['description'] ) . '</p>' : '';
-                echo '<span class="tfhb-see-less-description">'.esc_html(__('See less', 'hydra-booking')).'</span>';
+            if (!empty($meeting['description'])) {
+                echo '<div class="tfhb-full-desc-content"><p>' . wp_kses_post($meeting['description']) . '</p></div>';
+                echo '<span class="tfhb-see-less-description">' . esc_html(__('See less', 'hydra-booking')) . '</span>';
+            }
             ?>
         </div>
 		
@@ -167,7 +169,7 @@ $host_feature_image_link = isset($host['featured_image']) && !empty($host['featu
 					 }elseif($location['location'] == 'zoom'){
 						$icon =  '<img src="'.esc_url(TFHB_URL . 'assets/app/images/zoom.png').'" alt="Zoom">';
 					 }elseif($location['location'] == 'meet'){
-						$icon =  '<img src="'.esc_url(TFHB_URL . 'assets/app/images/google-meet small.png').'" alt="meet">'; 
+						$icon =  '<img src="'.esc_url(TFHB_URL . 'assets/app/images/google-meet-small.png').'" alt="Google Meet">'; 
 					 }elseif($location['location'] == 'MS Teams'){
 						$icon =  '<img src="'.esc_url(TFHB_URL . 'assets/app/images/ms_teams-logo.svg').'" alt="MS Teams">';
 					 }else{

@@ -591,6 +591,7 @@ namespace HydraBooking\Admin\Controller;
             'Connect Your Stripe Account' =>  __('Connect Your Stripe Account', 'hydra-booking'), 
             'Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account' =>  __('Please read the documentation here for step by step guide to know how you can get api credentials from Stripe Account', 'hydra-booking'), 
             'Stripe Public Key' =>  __('Stripe Public Key', 'hydra-booking'), 
+            'Stripe Publishable Key' =>  __('Stripe Publishable Key', 'hydra-booking'), 
             'Enter Your Public Key' =>  __('Enter Your Public Key', 'hydra-booking'), 
             'Stripe Secret Key' =>  __('Stripe Secret Key', 'hydra-booking'), 
             'Enter Your Stripe Secret' =>  __('Enter Your Stripe Secret', 'hydra-booking'), 

@@ -1499,10 +1499,19 @@ class BookingController {
 				array('attendee_id', '=', $attendee->id),
 			);
 			$transaction = $transactions->get( $where, 1 );
-			if($transaction != null || !empty($transaction)){ 
-				$transaction->transation_history = json_decode($transaction->transation_history);
+			if ( null !== $transaction && ! empty( $transaction ) ) {
+				$history = is_string( $transaction->transation_history ) ? json_decode( (string) $transaction->transation_history ) : $transaction->transation_history;
+				if ( is_object( $history ) ) {
+					if ( empty( $history->payment_id ) && ! empty( $history->id ) ) {
+						$history->payment_id = $history->id;
+					}
+					if ( ! empty( $history->payment_id ) && empty( $history->stripe_url ) && ( 'stripe_payment' === $attendee->payment_method || 0 === strpos( (string) $history->payment_id, 'pi_' ) ) ) {
+						$history->stripe_url = 'https://dashboard.stripe.com/payments/' . $history->payment_id;
+					}
+				}
+				$transaction->transation_history = $history;
 
-				$attendeesData[$key]->transaction =  $transaction;
+				$attendeesData[ $key ]->transaction = $transaction;
 			}
 
 		}

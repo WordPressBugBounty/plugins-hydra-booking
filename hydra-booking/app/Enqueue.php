@@ -52,15 +52,15 @@ class Enqueue {
         ";
 		wp_add_inline_style( 'tfhb-style', $tfhb_theme_css );
 		// register script
-		wp_register_script( 'tfhb-stripe-script', '//checkout.stripe.com/checkout.js', array( 'jquery' ), '1.0.0', true );
+		wp_register_script( 'tfhb-stripe-script', 'https://js.stripe.com/v3/', array(), null, true );
 		if(isset($tfhb_paypal['status']) && $tfhb_paypal['status'] == 1){
 			if($tfhb_paypal['environment'] == 'live'){
-				$sdk_url = 'https://www.paypal.com/sdk/js?client-id='.esc_attr($tfhb_paypal['client_id']).'&currency='.esc_attr($currency).'';
+				$sdk_url = 'https://www.paypal.com/sdk/js?client-id='.esc_attr($tfhb_paypal['client_id']).'&currency='.esc_attr($currency);
 			}else{ 
-				$sdk_url = 'https://www.sandbox.paypal.com/sdk/js?client-id='.esc_attr($tfhb_paypal['client_id']).'&currency='.esc_attr($currency).'';
+				$sdk_url = 'https://www.sandbox.paypal.com/sdk/js?client-id='.esc_attr($tfhb_paypal['client_id']).'&currency='.esc_attr($currency);
 			}
 			// if
-			wp_register_script( 'tfhb-paypal-sdk', esc_url($sdk_url), array(), TFHB_VERSION, true );
+			wp_register_script( 'tfhb-paypal-sdk', $sdk_url, array(), null, true );
 		}
 		wp_register_script( 'tfhb-paypal-script', '//paypalobjects.com/api/checkout.js', array( 'jquery' ), '1.0.0', true );
 		wp_register_script( 'tfhb-select2-script', TFHB_URL . 'assets/lib/select2/select2.min.js', array( 'jquery', 'tfhb-app-script' ), TFHB_VERSION, true );

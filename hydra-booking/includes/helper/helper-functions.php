@@ -17,11 +17,18 @@ if (! function_exists('tfhb_print_r')) {
 
 function tfhb_character_limit_callback($str, $limit, $dots = true)
 {
-	if (strlen($str) > $limit) {
-		if ($dots == true) {
-			return substr($str, 0, $limit) . '...';
+	$str = wp_strip_all_tags((string) $str);
+	if ( mb_strlen( $str ) > $limit ) {
+		$sub        = mb_substr( $str, 0, $limit );
+		$last_space = mb_strrpos( $sub, ' ' );
+		if ( false !== $last_space && $last_space > ( $limit * 0.4 ) ) {
+			$sub = mb_substr( $sub, 0, $last_space );
+		}
+		$sub = rtrim( $sub, " \t\n\r\0\x0B.,;:-" );
+		if ( true === $dots ) {
+			return $sub . '...';
 		} else {
-			return substr($str, 0, $limit);
+			return $sub;
 		}
 	} else {
 		return $str;
