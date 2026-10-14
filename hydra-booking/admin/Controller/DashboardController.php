@@ -126,8 +126,17 @@ class DashboardController {
 		$recent_booking = $booking->getBookingWithAttendees( 
 			$recent_booking_where,
 			5,
-			'DESC' 
-		); 
+			'DESC'
+		);
+
+		// Currency always comes from the global setting, not the meeting.
+		$_tfhb_general_settings = get_option( '_tfhb_general_settings', array() );
+		$global_currency        = ! empty( $_tfhb_general_settings['currency'] ) ? $_tfhb_general_settings['currency'] : 'USD';
+		foreach ( array_merge( (array) $upcoming_booking, (array) $recent_booking ) as $booking_item ) {
+			if ( is_object( $booking_item ) ) {
+				$booking_item->payment_currency = $global_currency;
+			}
+		}
 		// count total Booking and collect percentage
 		$total_bookings['total']      = count( $bookings );
 		$total_bookings_previous      = count( $previous_date_bookings );

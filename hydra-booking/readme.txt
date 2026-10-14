@@ -4,7 +4,7 @@ Tags: appointments, booking, calendar, scheduling, appointment booking
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -218,6 +218,10 @@ There are several well-known appointment booking plugins available for WordPress
 
 == Changelog ==
 
+= 1.2.8 – Oct 14, 2026 =
+- Fixed: The Stripe currency issue has been resolved.
+- Improved: System stability has been improved.
+
 = 1.2.7 – Oct 12, 2026 =
 - Updated: PayPal and Stripe payment functionality.
 - Fixed: Resolved the PayPal asset loading issue.
@@ -293,7 +297,7 @@ There are several well-known appointment booking plugins available for WordPress
 - New: Added default email template.
 - Improved: Meeting interval logic updated.
 - Improved: Custom field types.
-- Improved: Host permission for integrations settings.
+- Improved: Host permission for integration settings.
 - Improved: WooCommerce order compatibility with Hydra booking.
 - Improved: Host profile access.
 - Improved: Order cancellation and amount deduction.

@@ -904,7 +904,6 @@ class HydraBookingShortcode
 		// Record Transaction
 		$transactions_model = new Transactions();
 		$amount   = isset($MeetingData->meeting_price) ? (float) $MeetingData->meeting_price : 0.0;
-		$currency = !empty($MeetingData->payment_currency) ? $MeetingData->payment_currency : 'USD';
 
 		$transaction_data = array(
 			'booking_id'         => $booking_id,
@@ -1588,7 +1587,9 @@ class HydraBookingShortcode
 		$meeting       = $meeting_model->get($meeting_id);
 
 		$expected_total    = isset($meeting->meeting_price) ? (float) $meeting->meeting_price : (float) $total;
-		$expected_currency = isset($meeting->payment_currency) ? strtoupper($meeting->payment_currency) : strtoupper($currency);
+		// Currency always comes from the global setting, same as the PayPal order created on the booking page.
+		$_tfhb_general_settings = get_option('_tfhb_general_settings', array());
+		$expected_currency      = ! empty($_tfhb_general_settings['currency']) ? strtoupper($_tfhb_general_settings['currency']) : 'USD';
 
 		$_tfhb_integration_settings = get_option('_tfhb_integration_settings', array());
 		$paypal_settings            = isset($_tfhb_integration_settings['paypal']) ? $_tfhb_integration_settings['paypal'] : array();
